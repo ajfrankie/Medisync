@@ -16,17 +16,18 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->date('dob');
-            $table->text('avatar');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->uuid('id')->primary();
+        $table->uuid('role_id');
+        $table->string('name');
+        $table->string('email')->unique();
+        $table->string('password');
+        $table->string('phone')->nullable();
+        $table->rememberToken();
+        $table->timestamps();
+
+        $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete();
         });
-        User::create(['name' => 'admin','dob'=>'2000-10-10','email' => 'franklinroswer@gmail.com','password' => Hash::make('12345678'),'email_verified_at'=>'2022-01-02 17:04:58','avatar' => 'images/avatar-1.jpg','created_at' => now(),]);
+        User::create(['name' => 'franklin','dob'=>'2001-07-21','email' => 'franklinroswer@gmail.com','password' => Hash::make('12345678'),'phone'=>'0774749125','created_at' => now(),]);
     }
 
     /**
