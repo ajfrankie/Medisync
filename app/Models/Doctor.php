@@ -23,7 +23,7 @@ class Doctor extends Model
     protected $casts = [
         'is_activated' => 'boolean',
     ];
-    
+
     protected static function boot()
     {
         parent::boot();
@@ -34,7 +34,16 @@ class Doctor extends Model
             }
         });
     }
+    public function getSpecializationFormattedAttribute(): string
+    {
+        // Convert 'general_medicine' → 'General Medicine'
+        return ucwords(str_replace('_', ' ', $this->specialization));
+    }
 
+    public function getDepartmentFormattedAttribute(): string
+    {
+        return ucwords(str_replace('_', ' ', $this->department));
+    }
     //releatioships
 
     public function user()
