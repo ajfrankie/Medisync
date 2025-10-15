@@ -4,7 +4,13 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class DoctorRepository
 {
@@ -17,7 +23,8 @@ class DoctorRepository
 
     public function get(Request $request)
     {
-        $query = Doctor::query();
+        $query = Doctor::query()
+            ->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
             $query->where('name', 'LIKE', "%{$request->name}%");
@@ -34,11 +41,41 @@ class DoctorRepository
         return $query;
     }
 
-    public function create(array $input)
+    // public function create(array $input)
+    // {
+    //     $input['is_activated'] = true;
+    //     return Doctor::create($input);
+    // }
+
+
+    public function create(array $input): Doctor
     {
-        $input['is_activated'] = true;
-        return Doctor::create($input);
+        // Get the Doctor role
+        $doctorRole = Role::where('role_name', 'Doctor')->firstOrFail();
+
+        // Create the user
+        $user = User::create([
+            'role_id' => $doctorRole->id,
+            'name'    => $input['name'],
+            'email'   => $input['email'],
+            'password' => Hash::make($input['password']),
+            'phone'   => $input['phone'] ?? null,
+        ]);
+
+        // Create the doctor record linked to user
+        $doctor = Doctor::create([
+            'id'             => Str::uuid(),
+            'user_id'        => $user->id,
+            'specialization' => $input['specialization'],
+            'department'     => $input['department'],
+            'experience'     => $input['experience'] ?? null,
+            'is_activated'   => true,
+        ]);
+
+        return $doctor;
     }
+
+
 
     public function find($id)
     {

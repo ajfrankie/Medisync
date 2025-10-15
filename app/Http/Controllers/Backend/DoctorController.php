@@ -4,20 +4,17 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\storeDoctorRequest;
 use App\Repositories\DoctorRepository;
 
 class DoctorController extends Controller
 {
   protected $doctorRepository;
 
-  public function __construct(DoctorRepository $doctorRepository)
-  {
-    $this->doctorRepository = $doctorRepository;
-  }
 
   public function index(Request $request)
   {
-    $doctors = $this->doctorRepository->get($request)->paginate(10);
+    $doctors = app(DoctorRepository::class)->get($request)->paginate(10);
     return view('backend.doctor.index', compact('doctors', 'request'));
   }
 
@@ -27,7 +24,16 @@ class DoctorController extends Controller
     return view('backend.doctor.create');
   }
 
-  public function store(Request $request) {}
+  public function store(storeDoctorRequest $request)
+  {
+    try {
+      $doctor = app(DoctorRepository::class)->create($request->all());
+      return redirect()->route('admin.doctor.index')->with('success', 'Doctor created successfully.');
+    } catch (\Exception $e) {
+      return back()->withInput()->with('error', 'Failed to create Doctor: ' . $e->getMessage());
+    }
+  }
+
 
   public function edit(Request $request)
   {
