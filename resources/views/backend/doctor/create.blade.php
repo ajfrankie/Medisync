@@ -20,14 +20,14 @@
                 <div class="card-body">
                     <form method="POST" action="{!! route('admin.doctor.store') !!}">
                         @csrf
-<input type="hidden" name="role" value="doctor">
+                        <input type="hidden" name="role" value="doctor">
                         @if (session('success'))
                             <div class="alert alert-success mt-2">{{ session('success') }}</div>
                         @elseif (session('error'))
                             <div class="alert alert-danger mt-2">{{ session('error') }}</div>
                         @endif
 
-                        @if ($errors->any())
+                        {{-- @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -35,7 +35,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
+                        @endif --}}
                         <div class="row">
 
                             <!-- Doctor Name -->
