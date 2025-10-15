@@ -57,7 +57,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li>
-                            <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                            <a href="{{ route('admin.doctor.index') }}" class="waves-effect">
                                 <i class="bx bx-user-circle"></i>
                                 <span key="t-chat">Doctors</span>
                             </a>

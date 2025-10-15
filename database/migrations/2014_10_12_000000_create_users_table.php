@@ -17,17 +17,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-        $table->uuid('role_id');
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->string('password');
-        $table->string('phone')->nullable();
-        $table->rememberToken();
-        $table->timestamps();
+            $table->uuid('role_id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('phone')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
 
-        $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete();
+            $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete();
         });
-        User::create(['name' => 'franklin','dob'=>'2001-07-21','email' => 'franklinroswer@gmail.com','password' => Hash::make('12345678'),'phone'=>'0774749125','created_at' => now(),]);
+        User::create(['name' => 'franklin', 'dob' => '2001-07-21', 'email' => 'franklinroswer@gmail.com', 'password' => Hash::make('12345678'), 'phone' => '0774749125', 'created_at' => now(),]);
     }
 
     /**
