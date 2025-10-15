@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeDoctorRequest;
 use App\Repositories\DoctorRepository;
+use Illuminate\Support\Facades\App;
 
 class DoctorController extends Controller
 {
@@ -35,12 +36,23 @@ class DoctorController extends Controller
   }
 
 
-  public function edit(Request $request)
-  {
-    return view('backend.doctor.edit');
-  }
+    public function edit(Request $request, $id)
+    {
+        $doctor = app(DoctorRepository::class)->find($id);
+        return view('backend.doctor.edit', [
+            'doctor' => $doctor,
+        ]);
+    }
 
-  public function update(Request $request) {}
+  public function update(Request $request, $id)
+  {
+    try {
+      $city = app(DoctorRepository::class)->update($id, $request->all());
+      return redirect()->route('admin.doctor.index')->with('success', 'Doctor updated successfully.');
+    } catch (\Exception $e) {
+      return back()->withInput()->with('error', 'Failed to update Doctor: ' . $e->getMessage());
+    }
+  }
 
   public function destroy(Request $request) {}
 

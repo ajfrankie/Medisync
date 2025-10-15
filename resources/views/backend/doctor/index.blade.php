@@ -32,7 +32,8 @@
                         <table class="table align-middle dt-responsive nowrap w-100 table-check">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Doctor Name</th>
+                                    <th scope="col">Doctor's Name</th>
+                                    <th scope="col">Doctor's Phone</th>
                                     <th scope="col">Specialization</th>
                                     <th scope="col">Department</th>
                                     <th scope="col">Avilabilty</th>
@@ -43,6 +44,7 @@
                                 @foreach ($doctors as $doctor)
                                     <tr>
                                         <td>{{ $doctor->user->name ?? 'N/A' }}</td>
+                                        <td>{{ $doctor->user->phone ?? 'N/A' }}</td>
                                         <td>{{ $doctor->specialization_formatted ?? 'N/A'  }}</td>
                                         <td>{{ $doctor->department_formatted ?? 'N/A'  }}</td>
                                         <td>
