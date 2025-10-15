@@ -42,7 +42,7 @@
                             <tbody>
                                 @foreach ($doctors as $doctor)
                                     <tr>
-                                        <td>{{ $doctor->name ?? 'N/A' }}</td>
+                                        <td>{{ $doctor->user->name ?? 'N/A' }}</td>
                                         <td>{{ $doctor->specialization ?? 'N/A' }}</td>
                                         <td>{{ $doctor->department ?? 'N/A' }}</td>
                                         <td>
