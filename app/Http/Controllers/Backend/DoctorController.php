@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\DoctorRepository;
 
 class DoctorController extends Controller
 {
     public function index(Request $request)
     {
-        return view('backend.doctor.index');
+      $doctors = app(DoctorRepository::class)->get($request)->panigate(10);
+        return view('backend.doctor.index',
+      [
+        'doctors' => $doctors,
+        'request' => $request
+      ]);
     }
 
     public function create(Request $request)
