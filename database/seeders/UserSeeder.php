@@ -19,11 +19,11 @@ class UserSeeder extends Seeder
 
         $users = [];
 
-        // Doctor user
+        // One Admin Officer
         $users[] = [
             'id' => Str::uuid(),
             'role_id' => $roles['Admin Officer'] ?? null,
-            'name' => 'Dr. Franklin',
+            'name' => 'AJ Franklin',
             'email' => 'franklinroswer@gmail.com',
             'password' => Hash::make('12345678'),
             'phone' => $faker->phoneNumber(),
@@ -31,8 +31,8 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ];
 
-        // Generate some random users for each role
-        foreach (['Patient', 'Nurse', 'Admin Officer'] as $roleName) {
+        // Generate random users for each role except Admin Officer
+        foreach (['Patient', 'Nurse', 'Doctor'] as $roleName) {
             for ($i = 0; $i < 30; $i++) {
                 $users[] = [
                     'id' => Str::uuid(),

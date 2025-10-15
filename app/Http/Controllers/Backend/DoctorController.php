@@ -8,43 +8,37 @@ use App\Repositories\DoctorRepository;
 
 class DoctorController extends Controller
 {
-    public function index(Request $request)
-    {
-      $doctors = app(DoctorRepository::class)->get($request)->panigate(10);
-        return view('backend.doctor.index',
-      [
-        'doctors' => $doctors,
-        'request' => $request
-      ]);
-    }
+  protected $doctorRepository;
 
-    public function create(Request $request)
-    {
-        return view('backend.doctor.create');
-    }
+  public function __construct(DoctorRepository $doctorRepository)
+  {
+    $this->doctorRepository = $doctorRepository;
+  }
 
-     public function store(Request $request)
-    {
-    }
+  public function index(Request $request)
+  {
+    $doctors = $this->doctorRepository->get($request)->paginate(10);
+    return view('backend.doctor.index', compact('doctors', 'request'));
+  }
 
-      public function edit(Request $request)
-    {
-        return view('backend.doctor.edit');
-    }
 
-      public function update(Request $request)
-    {
-    }   
-    
-      public function destroy(Request $request)
-    {
-    }   
+  public function create(Request $request)
+  {
+    return view('backend.doctor.create');
+  }
 
-      public function deactivateCategory(Request $request)
-    {
-    }   
+  public function store(Request $request) {}
 
-      public function activateCategory(Request $request)
-    {
-    }
+  public function edit(Request $request)
+  {
+    return view('backend.doctor.edit');
+  }
+
+  public function update(Request $request) {}
+
+  public function destroy(Request $request) {}
+
+  public function deactivateCategory(Request $request) {}
+
+  public function activateCategory(Request $request) {}
 }

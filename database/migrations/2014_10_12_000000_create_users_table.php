@@ -27,7 +27,6 @@ class CreateUsersTable extends Migration
 
             $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete();
         });
-        User::create(['name' => 'franklin', 'dob' => '2001-07-21', 'email' => 'franklinroswer@gmail.com', 'password' => Hash::make('12345678'), 'phone' => '0774749125', 'created_at' => now(),]);
     }
 
     /**
