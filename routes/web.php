@@ -7,7 +7,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
-use App\Http\Controllers\NurseController;
+use App\Http\Controllers\Backend\NurseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [NurseController::class, 'edit'])->name('admin.nurse.edit');
         Route::put('update/{id}', [NurseController::class, 'update'])->name('admin.nurse.update');
         Route::delete('delete/{id}', [NurseController::class, 'destroy'])->name('admin.nurse.destroy');
-        // Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateDoctor'])->name('admin.doctor.deactivate');
-        // Route::post('/activate/{id}', [DoctorController::class, 'activateDoctor'])->name('admin.doctor.activate');
+        Route::post('/deactivate/{id}', [NurseController::class, 'deactivateNurse'])->name('admin.nurse.deactivate');
+        Route::post('/activate/{id}', [NurseController::class, 'activateNurse'])->name('admin.nurse.activate');
     });
 });

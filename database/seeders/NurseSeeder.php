@@ -41,6 +41,7 @@ class NurseSeeder extends Seeder
                     'Afternoon (2 PM - 10 PM)',
                     'Night (10 PM - 6 AM)',
                 ]),
+                'is_activated' => $faker->boolean(90),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
