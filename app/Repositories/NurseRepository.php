@@ -21,7 +21,7 @@ class NurseRepository
 
     public function get(Request $request)
     {
-        $query = Nurse::with('user') 
+        $query = Nurse::with('user')
             ->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
@@ -58,9 +58,11 @@ class NurseRepository
 
     public function create(array $input): Nurse
     {
+        // Fetch the "Nurse" role safely
         $nurseRole = Role::where('role_name', 'Nurse')->firstOrFail();
 
         $user = User::create([
+            'id'       => Str::uuid(),
             'role_id'  => $nurseRole->id,
             'name'     => $input['name'],
             'email'    => $input['email'],
@@ -69,12 +71,11 @@ class NurseRepository
         ]);
 
         return Nurse::create([
-            'id'             => Str::uuid(),
-            'user_id'        => $user->id,
-            'specialization' => $input['specialization'],
-            'department'     => $input['department'],
-            'experience'     => $input['experience'] ?? null,
-            'is_activated'   => true,
+            'id'           => Str::uuid(),
+            'user_id'      => $user->id,
+            'department'   => $input['department'] ?? 'general',
+            'shift_time'   => $input['shift_time'] ?? null,
+            'is_activated' => true,
         ]);
     }
 
@@ -90,7 +91,7 @@ class NurseRepository
             throw new ModelNotFoundException('nurse not found');
         }
 
-     
+
         $user = $nurse->user;
         if ($user) {
             $user->name = $input['name'] ?? $user->name;
@@ -103,12 +104,6 @@ class NurseRepository
 
             $user->save();
         }
-
-        $nurse->update([
-            'specialization' => $input['specialization'] ?? $nurse->specialization,
-            'department'     => $input['department'] ?? $nurse->department,
-            'experience'     => $input['experience'] ?? $nurse->experience,
-        ]);
 
         return $nurse;
     }

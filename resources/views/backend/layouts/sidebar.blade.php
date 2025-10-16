@@ -63,7 +63,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                            <a href="{{ route('admin.nurse.index') }}" class="waves-effect">
                                 <i class="bx bx-user-check"></i>
                                 <span key="t-chat">Nurses</span>
                             </a>
