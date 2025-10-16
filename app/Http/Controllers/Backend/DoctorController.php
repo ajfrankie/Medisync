@@ -36,13 +36,13 @@ class DoctorController extends Controller
   }
 
 
-    public function edit(Request $request, $id)
-    {
-        $doctor = app(DoctorRepository::class)->find($id);
-        return view('backend.doctor.edit', [
-            'doctor' => $doctor,
-        ]);
-    }
+  public function edit(Request $request, $id)
+  {
+    $doctor = app(DoctorRepository::class)->find($id);
+    return view('backend.doctor.edit', [
+      'doctor' => $doctor,
+    ]);
+  }
 
   public function update(Request $request, $id)
   {
@@ -54,9 +54,51 @@ class DoctorController extends Controller
     }
   }
 
-  public function destroy(Request $request) {}
+  public function destroy(string $id)
+  {
+    try {
+      $doctor = app(DoctorRepository::class)->delete($id);
+      return redirect()->route('admin.doctor.index')->with('success', 'Doctor deleted successfully.');
+    } catch (\Exception $e) {
+      return back()->withInput()->with('error', 'Failed to delete doctor: ' . $e->getMessage());
+    }
+  }
 
-  public function deactivateCategory(Request $request) {}
+  public function deactivateDoctor($id)
+  {
+    try {
+      $doctor = app(DoctorRepository::class)->find($id);
 
-  public function activateCategory(Request $request) {}
+      if (!$doctor) {
+        return redirect()->back()->with('error', 'Doctor not found.');
+      }
+
+      app(DoctorRepository::class)->deactivate($id);
+
+      return redirect()->route('admin.doctor.index')
+        ->with('success', 'Doctor deactivated successfully.');
+    } catch (\Exception $e) {
+      $this->logError('deactivateDoctor', $e, $id);
+      return back()->withInput()->with('error', 'Failed to deactivate Doctor: ' . $e->getMessage());
+    }
+  }
+
+  public function activateDoctor($id)
+  {
+    try {
+      $doctor = app(DoctorRepository::class)->find($id);
+
+      if (!$doctor) {
+        return redirect()->back()->with('error', 'Doctor not found.');
+      }
+
+      app(DoctorRepository::class)->activate($id); // ✅ correct method now
+
+      return redirect()->route('admin.doctor.index')
+        ->with('success', 'Doctor activated successfully.');
+    } catch (\Exception $e) {
+      $this->logError('activateDoctor', $e, $id);
+      return back()->withInput()->with('error', 'Failed to activate Doctor: ' . $e->getMessage());
+    }
+  }
 }
