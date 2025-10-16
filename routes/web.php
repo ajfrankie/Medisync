@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
+use App\Http\Controllers\NurseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,5 +56,18 @@ Route::prefix('/admin')->group(function () {
         Route::delete('delete/{id}', [DoctorController::class, 'destroy'])->name('admin.doctor.destroy');
         Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateDoctor'])->name('admin.doctor.deactivate');
         Route::post('/activate/{id}', [DoctorController::class, 'activateDoctor'])->name('admin.doctor.activate');
+    });
+
+    //doctors
+    Route::prefix('/nurse')->middleware('auth')->group(function () {
+        Route::get('/', [NurseController::class, 'index'])->name('admin.nurse.index');
+        Route::get('/create', [NurseController::class, 'create'])->name('admin.nurse.create');
+        Route::post('/store', [NurseController::class, 'store'])->name('admin.nurse.store');
+        Route::get('/show/{id}', [NurseController::class, 'show'])->name('admin.nurse.show');
+        Route::get('/edit/{id}', [NurseController::class, 'edit'])->name('admin.nurse.edit');
+        Route::put('update/{id}', [NurseController::class, 'update'])->name('admin.nurse.update');
+        Route::delete('delete/{id}', [NurseController::class, 'destroy'])->name('admin.nurse.destroy');
+        // Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateDoctor'])->name('admin.doctor.deactivate');
+        // Route::post('/activate/{id}', [DoctorController::class, 'activateDoctor'])->name('admin.doctor.activate');
     });
 });
