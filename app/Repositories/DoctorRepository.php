@@ -21,7 +21,7 @@ class DoctorRepository
 
     public function get(Request $request)
     {
-        $query = Doctor::with('user') // ✅ eager load related user
+        $query = Doctor::with('user') 
             ->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
@@ -29,6 +29,25 @@ class DoctorRepository
                 $q->where('name', 'LIKE', "%{$request->name}%");
             });
         }
+
+        if (!empty($request->phone)) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('phone', 'LIKE', "%{$request->phone}%");
+            });
+        }
+
+        if (!empty($request->department)) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('department', 'LIKE', "%{$request->department}%");
+            });
+        }
+
+        if (!empty($request->specialization)) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('specialization', 'LIKE', "%{$request->specialization}%");
+            });
+        }
+
 
         if ($request->has('is_activated')) {
             $query->where('is_activated', (bool) $request->is_activated);
@@ -71,7 +90,7 @@ class DoctorRepository
             throw new ModelNotFoundException('Doctor not found');
         }
 
-        // ✅ Update related user record
+     
         $user = $doctor->user;
         if ($user) {
             $user->name = $input['name'] ?? $user->name;
@@ -85,7 +104,6 @@ class DoctorRepository
             $user->save();
         }
 
-        // ✅ Update doctor-specific fields
         $doctor->update([
             'specialization' => $input['specialization'] ?? $doctor->specialization,
             'department'     => $input['department'] ?? $doctor->department,

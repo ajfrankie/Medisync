@@ -47,7 +47,7 @@ class DoctorController extends Controller
   public function update(Request $request, $id)
   {
     try {
-      $city = app(DoctorRepository::class)->update($id, $request->all());
+      $doctor = app(DoctorRepository::class)->update($id, $request->all());
       return redirect()->route('admin.doctor.index')->with('success', 'Doctor updated successfully.');
     } catch (\Exception $e) {
       return back()->withInput()->with('error', 'Failed to update Doctor: ' . $e->getMessage());
@@ -61,6 +61,27 @@ class DoctorController extends Controller
       return redirect()->route('admin.doctor.index')->with('success', 'Doctor deleted successfully.');
     } catch (\Exception $e) {
       return back()->withInput()->with('error', 'Failed to delete doctor: ' . $e->getMessage());
+    }
+  }
+
+  public function show($id, Request $request)
+  {
+    try {
+      $doctor = app(DoctorRepository::class)->find($id);
+
+      if (!$doctor) {
+        return redirect()
+          ->route('admin.doctor.index')
+          ->with('error', 'Doctor order not found.');
+      }
+
+      return view('backend.doctor.show', [
+        'doctor' => $doctor,
+        'request' => $request,
+      ]);
+    } catch (\Exception $e) {
+      return back()
+        ->with('error', 'Failed to fetch doctor order details: ' . $e->getMessage());
     }
   }
 
