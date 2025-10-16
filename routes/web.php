@@ -53,7 +53,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [DoctorController::class, 'edit'])->name('admin.doctor.edit');
         Route::put('update/{id}', [DoctorController::class, 'update'])->name('admin.doctor.update');
         Route::delete('delete/{id}', [DoctorController::class, 'destroy'])->name('admin.doctor.destroy');
-        Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateCategory'])->name('admin.doctor.deactivate');
-        Route::post('/activate/{id}', [DoctorController::class, 'activateCategory'])->name('admin.doctor.activate');
+        Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateDoctor'])->name('admin.doctor.deactivate');
+        Route::post('/activate/{id}', [DoctorController::class, 'activateDoctor'])->name('admin.doctor.activate');
     });
 });
