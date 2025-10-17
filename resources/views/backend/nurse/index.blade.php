@@ -45,8 +45,8 @@
                                     <tr>
                                         <td>{{ $nurse->user->name ?? 'N/A' }}</td>
                                         <td>{{ $nurse->user->phone ?? 'N/A' }}</td>
-                                        <td>{{ $nurse->department_formatted ?? 'N/A'  }}</td>
-                                        <td>{{ $nurse->department_formatted ?? 'N/A'  }}</td>
+                                        <td>{{ $nurse->department ?? 'N/A'  }}</td>
+                                        <td>{{ $nurse->shift_time ?? 'N/A'  }}</td>
                                         <td>
                                             @if ($nurse->is_activated)
                                                 <span class="badge bg-success">Avilable</span>
