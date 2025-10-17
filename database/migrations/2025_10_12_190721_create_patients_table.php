@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('gender', 10)->nullable();
             $table->string('blood_group', 5)->nullable();
             $table->string('address')->nullable();
+            $table->string('emergency_person')->nullable();
+            $table->string('emergency_relationship')->nullable();
             $table->string('emergency_contact')->nullable();
             $table->timestamps();
 
