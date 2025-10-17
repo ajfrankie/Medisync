@@ -19,6 +19,10 @@ class UserSeeder extends Seeder
 
         $users = [];
 
+        $mobilePrefixes = ['71', '72', '75', '76', '77', '78'];
+        $prefix = $faker->randomElement($mobilePrefixes);
+        $number = $faker->numerify('#######');
+        $emergencyContact = '+94' . $prefix . $number;
         // One Admin Officer
         $users[] = [
             'id' => Str::uuid(),
@@ -26,7 +30,9 @@ class UserSeeder extends Seeder
             'name' => 'AJ Franklin',
             'email' => 'franklinroswer@gmail.com',
             'password' => Hash::make('12345678'),
-            'phone' => $faker->phoneNumber(),
+            'phone' => $emergencyContact,
+            'nic' => '200120303910',
+            'image_path' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -40,7 +46,9 @@ class UserSeeder extends Seeder
                     'name' => $faker->name(),
                     'email' => $faker->unique()->safeEmail(),
                     'password' => Hash::make('password'),
-                    'phone' => $faker->phoneNumber(),
+                    'phone' => $emergencyContact,
+                    'image_path' => null,
+                    'nic' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

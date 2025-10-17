@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\NurseController;
+use App\Http\Controllers\Backend\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,5 +70,17 @@ Route::prefix('/admin')->group(function () {
         Route::delete('delete/{id}', [NurseController::class, 'destroy'])->name('admin.nurse.destroy');
         Route::post('/deactivate/{id}', [NurseController::class, 'deactivateNurse'])->name('admin.nurse.deactivate');
         Route::post('/activate/{id}', [NurseController::class, 'activateNurse'])->name('admin.nurse.activate');
+    });
+
+     //doctors
+    Route::prefix('/patient')->middleware('auth')->group(function () {
+        Route::get('/', [PatientController::class, 'index'])->name('admin.patient.index');
+        Route::get('/create', [PatientController::class, 'create'])->name('admin.patient.create');
+        Route::post('/store', [PatientController::class, 'store'])->name('admin.patient.store');
+        Route::get('/show/{id}', [PatientController::class, 'show'])->name('admin.patient.show');
+        Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('admin.patient.edit');
+        Route::put('update/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
+        Route::delete('delete/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
+       
     });
 });

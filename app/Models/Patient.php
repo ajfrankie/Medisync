@@ -18,8 +18,10 @@ class Patient extends Model
         'dob',
         'gender',
         'blood_group',
+        'emergency_person',
+        'emergency_relationship',
         'address',
-        'emergency_contact'
+        'emergency_contact',
     ];
 
     protected static function boot()

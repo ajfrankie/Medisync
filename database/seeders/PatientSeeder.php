@@ -13,7 +13,6 @@ class PatientSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Fetch the Patient role
         $patientRole = DB::table('roles')->where('role_name', 'Patient')->first();
 
         if (!$patientRole) {
@@ -21,7 +20,6 @@ class PatientSeeder extends Seeder
             return;
         }
 
-        // Fetch all users with that role
         $patientUsers = DB::table('users')->where('role_id', $patientRole->id)->get();
 
         if ($patientUsers->isEmpty()) {
@@ -30,6 +28,11 @@ class PatientSeeder extends Seeder
         }
 
         foreach ($patientUsers as $user) {
+            $mobilePrefixes = ['71', '72', '75', '76', '77', '78']; 
+            $prefix = $faker->randomElement($mobilePrefixes);
+            $number = $faker->numerify('#######'); 
+            $emergencyContact = '+94' . $prefix . $number;
+
             DB::table('patients')->insert([
                 'id' => Str::uuid(),
                 'user_id' => $user->id,
@@ -37,7 +40,9 @@ class PatientSeeder extends Seeder
                 'gender' => $faker->randomElement(['Male', 'Female', 'Other']),
                 'blood_group' => $faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
                 'address' => $faker->address(),
-                'emergency_contact' => $faker->phoneNumber(),
+                'emergency_person' => $faker->name(),
+                'emergency_relationship' => $faker->randomElement(['Father', 'Mother', 'Sibling', 'Spouse', 'Friend']),
+                'emergency_contact' => $emergencyContact, 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
