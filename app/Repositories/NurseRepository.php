@@ -42,9 +42,9 @@ class NurseRepository
             });
         }
 
-        if (!empty($request->specialization)) {
+        if (!empty($request->shift_time)) {
             $query->whereHas('user', function ($q) use ($request) {
-                $q->where('specialization', 'LIKE', "%{$request->specialization}%");
+                $q->where('shift_time', 'LIKE', "%{$request->shift_time}%");
             });
         }
 
