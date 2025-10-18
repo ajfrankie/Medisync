@@ -21,7 +21,7 @@ class DoctorRepository
 
     public function get(Request $request)
     {
-        $query = Doctor::with('user') 
+        $query = Doctor::with('user')
             ->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
@@ -64,6 +64,10 @@ class DoctorRepository
             'role_id'  => $doctorRole->id,
             'name'     => $input['name'],
             'email'    => $input['email'],
+            'nic'   => $input['nic'] ?? null,
+            'dob'   => $input['dob'] ?? null,
+            'gender'   => $input['gender'] ?? null,
+            'image_path'   => $input['image_path'] ?? null,
             'password' => Hash::make($input['password']),
             'phone'    => $input['phone'] ?? null,
         ]);
@@ -90,15 +94,26 @@ class DoctorRepository
             throw new ModelNotFoundException('Doctor not found');
         }
 
-     
+
         $user = $doctor->user;
         if ($user) {
             $user->name = $input['name'] ?? $user->name;
             $user->email = $input['email'] ?? $user->email;
             $user->phone = $input['phone'] ?? $user->phone;
+            $user->nic = $input['nic'] ?? $user->nic;
+            $user->gender = $input['gender'] ?? $user->nic;
 
             if (!empty($input['password'])) {
                 $user->password = Hash::make($input['password']);
+            }
+
+            // Handle image
+            if (!empty($input['image_path'])) {
+                if ($input['image_path'] instanceof \Illuminate\Http\UploadedFile) {
+                    $user->image_path = $input['image_path']->store('patients', 'public');
+                } else {
+                    $user->image_path = $input['image_path'];
+                }
             }
 
             $user->save();

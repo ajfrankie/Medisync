@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->date('dob')->nullable();
-            $table->string('gender', 10)->nullable();
             $table->string('blood_group', 5)->nullable();
             $table->string('address')->nullable();
             $table->string('emergency_person')->nullable();

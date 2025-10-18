@@ -10,7 +10,7 @@
             Nurse
         @endslot
         @slot('title')
-            Edit
+            Create
         @endslot
     @endcomponent
 
@@ -18,7 +18,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.nurse.update', $nurse->id) }}">
+                    <form method="POST" action="{{ route('admin.nurse.store', $nurse->id) }}">
                         @csrf
                         @method('PUT')
 
