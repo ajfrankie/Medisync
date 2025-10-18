@@ -5,9 +5,9 @@ namespace App\Repositories;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PatientRepository
@@ -21,8 +21,7 @@ class PatientRepository
 
     public function get(Request $request)
     {
-        $query = Patient::with('user')
-            ->orderBy('created_at', 'desc');
+        $query = Patient::with('user')->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
             $query->whereHas('user', function ($q) use ($request) {
@@ -36,37 +35,35 @@ class PatientRepository
             });
         }
 
-       
-
-
         return $query;
     }
 
     public function create(array $input): Patient
     {
-        // Fetch the "patient" role safely
         $patientRole = Role::where('role_name', 'Patient')->firstOrFail();
 
         $user = User::create([
-            'id'       => Str::uuid(),
-            'role_id'  => $patientRole->id,
-            'name'     => $input['name'],
-            'email'    => $input['email'],
-            'password' => Hash::make($input['password']),
-            'phone'    => $input['phone'] ?? null,
+            'id'         => Str::uuid(),
+            'role_id'    => $patientRole->id,
+            'name'       => $input['name'],
+            'email'      => $input['email'],
+            'nic'        => $input['nic'] ?? null,
+            'dob'        => $input['dob'] ?? null,
+            'gender'     => $input['gender'] ?? null,
+            'image_path' => $input['image_path'] ?? null,
+            'password'   => Hash::make($input['password']),
+            'phone'      => $input['phone'] ?? null,
         ]);
 
         return Patient::create([
-            'id'           => Str::uuid(),
-            'user_id'      => $user->id,
-            'dob'   => $input['dob'] ?? 'general',
-            'gender'   => $input['gender'] ?? null,
-            'blood_group'   => $input['blood_group'] ?? null,
-            'address'   => $input['address'] ?? null,
-            'emergency_person'   => $input['emergency_person'] ?? null,
-            'emergency_relationship'   => $input['emergency_relationship'] ?? null,
-            'emergency_contact'   => $input['emergency_contact'] ?? null,
-            'image_path'   => $input['image_path'] ?? null,
+            'id'                   => Str::uuid(),
+            'user_id'              => $user->id,
+            'dob'                  => $input['dob'] ?? null,
+            'blood_group'          => $input['blood_group'] ?? null,
+            'address'              => $input['address'] ?? null,
+            'emergency_person'     => $input['emergency_person'] ?? null,
+            'emergency_relationship'=> $input['emergency_relationship'] ?? null,
+            'emergency_contact'    => $input['emergency_contact'] ?? null,
         ]);
     }
 
@@ -78,23 +75,39 @@ class PatientRepository
     public function update($id, array $input)
     {
         $patient = $this->find($id);
-        if (!$patient) {
-            throw new ModelNotFoundException('patient not found');
-        }
-
+        if (!$patient) throw new ModelNotFoundException('Patient not found');
 
         $user = $patient->user;
         if ($user) {
             $user->name = $input['name'] ?? $user->name;
-            $user->email = $input['email'] ?? $user->email;
             $user->phone = $input['phone'] ?? $user->phone;
+            $user->nic = $input['nic'] ?? $user->nic;
+            $user->gender = $input['gender'] ?? $user->nic;
 
             if (!empty($input['password'])) {
                 $user->password = Hash::make($input['password']);
             }
 
+            // Handle image
+            if (!empty($input['image_path'])) {
+                if ($input['image_path'] instanceof \Illuminate\Http\UploadedFile) {
+                    $user->image_path = $input['image_path']->store('patients', 'public');
+                } else {
+                    $user->image_path = $input['image_path'];
+                }
+            }
+
             $user->save();
         }
+
+        $patient->dob = $input['dob'] ?? $patient->dob;
+        $patient->blood_group = $input['blood_group'] ?? $patient->blood_group;
+        $patient->address = $input['address'] ?? $patient->address;
+        $patient->emergency_person = $input['emergency_person'] ?? $patient->emergency_person;
+        $patient->emergency_relationship = $input['emergency_relationship'] ?? $patient->emergency_relationship;
+        $patient->emergency_contact = $input['emergency_contact'] ?? $patient->emergency_contact;
+
+        $patient->save();
 
         return $patient;
     }
@@ -102,9 +115,7 @@ class PatientRepository
     public function delete($id)
     {
         $patient = $this->find($id);
-        if ($patient) {
-            $patient->delete();
-        }
+        if ($patient) $patient->delete();
     }
 
     public function deactivate($id)
@@ -115,8 +126,7 @@ class PatientRepository
             $patient->save();
             return $patient;
         }
-
-        throw new \Exception('patient not found');
+        throw new \Exception('Patient not found');
     }
 
     public function activate($id)
@@ -127,7 +137,6 @@ class PatientRepository
             $patient->save();
             return $patient;
         }
-
-        throw new \Exception('patient not found');
+        throw new \Exception('Patient not found');
     }
 }
