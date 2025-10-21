@@ -33,6 +33,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">Doctor's Name</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Pacient's Name</th>
                                     <th scope="col">Appointment Date</th>
                                     <th scope="col">Next Appointment</th>
@@ -47,6 +48,7 @@
                                         <td>{{ $appointment->patient->user->name ?? 'N/A' }}</td>
                                         <td>{{ $appointment->appointment_date ?? 'N/A' }}</td>
                                         <td>{{ $appointment->next_appointment_date ?? 'N/A' }}</td>
+                                        <td>{{ $appointment->doctor->department ?? 'N/A' }}</td>
                                         <td>
                                             @php
                                                 $statusColors = [

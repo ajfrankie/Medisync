@@ -15,6 +15,7 @@
     <link href="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet"
         type="text/css" />
     <link rel="stylesheet" href="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
 @section('content')
@@ -43,11 +44,11 @@
 
                         <div class="row">
                             <!-- Doctor -->
-                            <div class="col-xl-3">
+                            <div class="col-xl-4">
                                 <div class="mt-3">
                                     <label class="form-label">Doctor's Name</label>
                                     <select class="form-select select2 @error('doctor_id') is-invalid @enderror"
-                                        id="doctor_id" name="doctor_id" required>
+                                        id="doctor_id" name="doctor_id">
                                         <option value="">Select Doctor...</option>
                                         @foreach ($doctors as $doctor)
                                             <option value="{{ $doctor->id }}">{{ $doctor->user->name }}</option>
@@ -59,13 +60,31 @@
                                 </div>
                             </div>
 
+                            <!-- Doctor Department (Display only) -->
+                            <div class="col-md-4">
+                                <div class="mt-3">
+                                    <label class="form-label">Doctor's Department</label>
+                                    <input type="text" id="department" class="form-control" readonly>
+                                </div>
+                            </div>
+
+                            <!-- Doctor Specialization (Display only) -->
+                            <div class="col-md-4">
+                                <div class="mt-3">
+                                    <label class="form-label">Doctor's Specialization</label>
+                                    <input type="text" id="specialization" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
 
                             <!-- Patient -->
-                            <div class="col-xl-3">
-                                <div class="mt-3">
+                            <div class="col-md-3">
+                                <div class="mb-3">
                                     <label class="form-label">Patient's Name</label>
                                     <select class="form-select select2 @error('patient_id') is-invalid @enderror"
-                                        id="patient_id" name="patient_id" required>
+                                        id="patient_id" name="patient_id">
                                         <option value="">Select Patient...</option>
                                         @foreach ($patients as $patient)
                                             <option value="{{ $patient->id }}">{{ $patient->user->name }}</option>
@@ -77,31 +96,13 @@
                                 </div>
                             </div>
 
-                            {{-- <!-- Doctor Department (Display only) -->
-                            <div class="col-md-3">
-                                <div class="mt-3">
-                                    <label class="form-label">Doctor's Department</label>
-                                    <input type="text" id="department" class="form-control" readonly>
-                                </div>
-                            </div>
-
-                            <!-- Doctor Specialization (Display only) -->
-                            <div class="col-md-3">
-                                <div class="mt-3">
-                                    <label class="form-label">Doctor's Specialization</label>
-                                    <input type="text" id="specialization" class="form-control" readonly>
-                                </div>
-                            </div> --}}
-                        </div>
-
-                        <div class="row mt-4">
                             <!-- Appointment Date -->
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="appointment_date" class="form-label">Appointment Date</label>
                                     <input type="date"
                                         class="form-control @error('appointment_date') is-invalid @enderror"
-                                        name="appointment_date" id="appointment_date" required>
+                                        name="appointment_date" id="appointment_date">
                                     @error('appointment_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -114,7 +115,7 @@
                                     <label for="appointment_time" class="form-label">Appointment Time</label>
                                     <input type="time"
                                         class="form-control @error('appointment_time') is-invalid @enderror"
-                                        name="appointment_time" id="appointment_time" required>
+                                        name="appointment_time" id="appointment_time">
                                     @error('appointment_time')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -146,14 +147,16 @@
                                     @enderror
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="row mt-4">
                             <!-- Notes -->
-                            <div class="col-md-3">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="notes" class="form-label">Notes (Optional)</label>
-                                    <textarea name="notes" id="notes" class="form-control" rows="1"></textarea>
+                                    <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Buttons -->
@@ -182,4 +185,37 @@
 
     <!-- form advanced init -->
     <script src="{{ URL::asset('build/js/pages/form-advanced.init.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#doctor_id').on('change', function() {
+                let doctorId = $(this).val();
+
+                if (doctorId) {
+                    $.ajax({
+                        url: "{{ route('admin.appointment.getDoctorDetails') }}",
+                        type: "GET",
+                        data: {
+                            doctor_id: doctorId
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#department').val(response.department);
+                                $('#specialization').val(response.specialization);
+                            } else {
+                                $('#department').val('');
+                                $('#specialization').val('');
+                            }
+                        },
+                        error: function() {
+                            alert('Unable to fetch doctor details.');
+                        }
+                    });
+                } else {
+                    $('#department').val('');
+                    $('#specialization').val('');
+                }
+            });
+        });
+    </script>
 @endsection
