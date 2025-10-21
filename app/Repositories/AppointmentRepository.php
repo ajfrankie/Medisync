@@ -60,21 +60,20 @@ class AppointmentRepository
         $appointment = Appointment::findOrFail($id);
 
         if (!empty($input['appointment_date'])) {
-            $input['appointment_date'] = \Carbon\Carbon::parse($input['appointment_date'])->toDateString();
+            $input['appointment_date'] = Carbon::parse($input['appointment_date'])->toDateString();
         }
 
         if (!empty($input['appointment_time'])) {
-            $input['appointment_time'] = \Carbon\Carbon::parse($input['appointment_time'])->format('H:i:s');
+            $input['appointment_time'] = Carbon::parse($input['appointment_time'])->format('H:i:s');
         }
 
         if (array_key_exists('next_appointment_date', $input)) {
             $input['next_appointment_date'] = !empty($input['next_appointment_date'])
-                ? \Carbon\Carbon::parse($input['next_appointment_date'])->toDateString()
+                ? Carbon::parse($input['next_appointment_date'])->toDateString()
                 : null;
         }
 
         $appointment->fill($input);
-
         $appointment->save();
 
         return $appointment;
