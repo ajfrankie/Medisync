@@ -32,19 +32,7 @@
                                         value="{{ request('phone') }}">
                                 </div>
 
-                                <!-- Department -->
-                                <div class="col-md-3">
-                                    <label class="form-label">Department</label>
-                                    <select class="form-select" name="department">
-                                        <option value="">All Departments</option>
-                                        @foreach ($doctors->pluck('department')->unique() as $department)
-                                            <option value="{{ $department }}"
-                                                {{ request('department') == $department ? 'selected' : '' }}>
-                                                {{ \Illuminate\Support\Str::of($department)->replace('_', ' ')->title() }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
 
                                 <!-- Specialization -->
                                 <div class="col-md-3">
@@ -56,28 +44,28 @@
                                             <option value="">All Specializations</option>
                                             @php
                                                 $specializations = [
-                                                    'general_medicine' => 'General Medicine',
-                                                    'cardiology' => 'Cardiology',
-                                                    'neurology' => 'Neurology',
-                                                    'oncology' => 'Oncology',
-                                                    'orthopedics' => 'Orthopedics',
-                                                    'pediatrics' => 'Pediatrics',
-                                                    'obgyn' => 'OB/GYN',
-                                                    'surgery' => 'Surgery',
-                                                    'radiology' => 'Radiology',
-                                                    'pathology' => 'Pathology / Laboratory',
-                                                    'gastroenterology' => 'Gastroenterology',
-                                                    'pulmonology' => 'Pulmonology',
-                                                    'nephrology' => 'Nephrology',
-                                                    'endocrinology' => 'Endocrinology',
-                                                    'dermatology' => 'Dermatology',
-                                                    'psychiatry' => 'Psychiatry / Mental Health',
-                                                    'ophthalmology' => 'Ophthalmology',
-                                                    'ent' => 'ENT',
-                                                    'rehabilitation' => 'Physical Therapy / Rehabilitation',
-                                                    'pharmacy' => 'Pharmacy',
-                                                    'urology' => 'Urology',
-                                                    'palliative' => 'Palliative / Hospice Care',
+                                                    'General Medicine' => 'General Medicine',
+                                                    'Cardiology' => 'Cardiology',
+                                                    'Neurology' => 'Neurology',
+                                                    'Oncology' => 'Oncology',
+                                                    'Orthopedics' => 'Orthopedics',
+                                                    'Pediatrics' => 'Pediatrics',
+                                                    'OB/GYN' => 'OB/GYN',
+                                                    'Surgery' => 'Surgery',
+                                                    'Radiology' => 'Radiology',
+                                                    'Pathology/Laboratory' => 'Pathology/Laboratory',
+                                                    'Gastroenterology' => 'Gastroenterology',
+                                                    'Pulmonology' => 'Pulmonology',
+                                                    'Nephrology' => 'Nephrology',
+                                                    'Endocrinology' => 'Endocrinology',
+                                                    'Dermatology' => 'Dermatology',
+                                                    'Psychiatry' => 'Psychiatry / Mental Health',
+                                                    'Ophthalmology' => 'Ophthalmology',
+                                                    'ENT' => 'ENT',
+                                                    'Physical Therapy' => 'Physical Therapy / Rehabilitation',
+                                                    'Pharmacy' => 'Pharmacy',
+                                                    'Urology' => 'Urology',
+                                                    'Hospice Care' => 'Urology / Hospice Care',
                                                 ];
                                             @endphp
                                             @foreach ($specializations as $key => $label)
@@ -103,7 +91,7 @@
                                             <option value="">All Departments</option>
                                             @php
                                                 $departments = [
-                                                    'emergency' => 'ED / ER',
+                                                    'emergency' => 'Emergency',
                                                     'icu' => 'ICU',
                                                     'cardiology' => 'Cardiology',
                                                     'neurology' => 'Neurology',

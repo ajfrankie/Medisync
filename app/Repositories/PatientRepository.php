@@ -35,6 +35,37 @@ class PatientRepository
             });
         }
 
+        if (!empty($request->nic)) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('nic', 'LIKE', "%{$request->nic}%");
+            });
+        }
+
+         if (!empty($request->gender)) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('gender', 'LIKE', "%{$request->gender}%");
+            });
+        }
+
+        if (!empty($request->blood_group)) {
+            $query->where('blood_group', 'LIKE', "%{$request->blood_group}%");
+        }
+
+        if (!empty($request->dob)) {
+            $query->where('dob', 'LIKE', "%{$request->dob}%");
+        }
+
+     
+
+        if (!empty($request->emergency_contact)) {
+            $query->where('emergency_contact', 'LIKE', "%{$request->emergency_contact}%");
+        }
+
+        if ($request->has('is_activated')) {
+            $query->where('is_activated', (bool) $request->is_activated);
+        }
+
+
         return $query;
     }
 
@@ -62,7 +93,7 @@ class PatientRepository
             'blood_group'          => $input['blood_group'] ?? null,
             'address'              => $input['address'] ?? null,
             'emergency_person'     => $input['emergency_person'] ?? null,
-            'emergency_relationship'=> $input['emergency_relationship'] ?? null,
+            'emergency_relationship' => $input['emergency_relationship'] ?? null,
             'emergency_contact'    => $input['emergency_contact'] ?? null,
         ]);
     }

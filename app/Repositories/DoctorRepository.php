@@ -36,16 +36,13 @@ class DoctorRepository
             });
         }
 
+
         if (!empty($request->department)) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('department', 'LIKE', "%{$request->department}%");
-            });
+            $query->where('department', 'LIKE', "%{$request->department}%");
         }
 
         if (!empty($request->specialization)) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('specialization', 'LIKE', "%{$request->specialization}%");
-            });
+            $query->where('specialization', 'LIKE', "%{$request->specialization}%");
         }
 
 
