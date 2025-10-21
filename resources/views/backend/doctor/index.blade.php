@@ -21,7 +21,7 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">Doctors</h5>
-                        <a href="{{ route('admin.doctor.create') }}" class="btn btn-primary w-md">
+                        <a href="{{ route('admin.doctor.create') }}" class="btn btn-outline-primary w-md">
                             <i class="fas fa-plus me-1"></i>
                             Create Doctor
                         </a>
