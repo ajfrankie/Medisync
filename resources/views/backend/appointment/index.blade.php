@@ -3,6 +3,19 @@
 @section('title')
     Appointments
 @endsection
+@section('css')
+    <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endsection
+
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
@@ -59,7 +72,8 @@
                                                     'schedule next appointment' => 'primary',
                                                 ];
                                             @endphp
-                                            <span class="badge bg-{{ $statusColors[$appointment->status] ?? 'secondary' }}">
+                                            <span
+                                                class="badge bg-{{ $statusColors[$appointment->status] ?? 'secondary' }}">
                                                 {{ ucfirst($appointment->status) }}
                                             </span>
                                         </td>
@@ -102,4 +116,56 @@
         <!--end col-->
     </div>
     <!--end row-->
+@endsection
+
+
+@section('script')
+    <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Function to fetch doctor details
+            function fetchDoctorDetails(doctorId) {
+                if (doctorId) {
+                    $.ajax({
+                        url: "{{ route('admin.appointment.getDoctorDetails') }}",
+                        type: "GET",
+                        data: {
+                            doctor_id: doctorId
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#department').val(response.department);
+                                $('#specialization').val(response.specialization);
+                            } else {
+                                $('#department').val('');
+                                $('#specialization').val('');
+                            }
+                        },
+                        error: function() {
+                            alert('Unable to fetch doctor details.');
+                        }
+                    });
+                } else {
+                    $('#department').val('');
+                    $('#specialization').val('');
+                }
+            }
+
+            // Fetch when page loads (for already selected doctor)
+            const selectedDoctor = $('#doctor_id').val();
+            fetchDoctorDetails(selectedDoctor);
+
+            // Fetch when doctor changes
+            $('#doctor_id').on('change', function() {
+                fetchDoctorDetails($(this).val());
+            });
+        });
+    </script>
 @endsection
