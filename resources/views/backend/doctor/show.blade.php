@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="text-end pe-3 mb-3">
-                        <a href="{{ route('admin.doctor.index') }}" class="btn btn-secondary w-md">
+                        <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary w-md">
                             Back
                         </a>
                     </div>
