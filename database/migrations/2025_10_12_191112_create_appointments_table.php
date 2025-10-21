@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('doctor_id');
             $table->date('appointment_date');
             $table->time('appointment_time');
+            $table->date('next_appointment_date')->nullable();
             $table->string('status')->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();

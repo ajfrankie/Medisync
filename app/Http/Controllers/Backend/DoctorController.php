@@ -16,7 +16,10 @@ class DoctorController extends Controller
   public function index(Request $request)
   {
     $doctors = app(DoctorRepository::class)->get($request)->paginate(10);
-    return view('backend.doctor.index', compact('doctors', 'request'));
+    return view('backend.doctor.index', [
+      'doctors' => $doctors,
+      'request' => $request,
+    ]);
   }
 
 
