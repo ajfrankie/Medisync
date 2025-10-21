@@ -3,6 +3,17 @@
 @section('title')
     Nurse Edit
 @endsection
+@section('css')
+    <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
+@endsection
 
 @section('content')
     @component('components.breadcrumb')
@@ -44,12 +55,9 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nurse's Name</label>
-                                    <input type="text"
-                                           class="form-control @error('name') is-invalid @enderror"
-                                           name="name"
-                                           id="name"
-                                           value="{{ old('name', $nurse->user->name ?? '') }}"
-                                           placeholder="Enter name">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        name="name" id="name" value="{{ old('name', $nurse->user->name ?? '') }}"
+                                        placeholder="Enter name">
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -60,11 +68,8 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email (non-editable)</label>
-                                    <input type="email"
-                                           class="form-control"
-                                           id="email"
-                                           value="{{ $nurse->user->email ?? '' }}"
-                                           readonly>
+                                    <input type="email" class="form-control" id="email"
+                                        value="{{ $nurse->user->email ?? '' }}" readonly>
                                 </div>
                             </div>
 
@@ -72,12 +77,9 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="text"
-                                           class="form-control @error('phone') is-invalid @enderror"
-                                           name="phone"
-                                           id="phone"
-                                           value="{{ old('phone', $nurse->user->phone ?? '') }}"
-                                           placeholder="Enter phone">
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                        name="phone" id="phone" value="{{ old('phone', $nurse->user->phone ?? '') }}"
+                                        placeholder="Enter phone">
                                     @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -92,8 +94,8 @@
                                 <div class="mb-3">
                                     <label for="shift_time" class="form-label">Nurse's Shift Time</label>
                                     <select id="shift_time"
-                                            class="form-control select2 @error('shift_time') is-invalid @enderror"
-                                            name="shift_time">
+                                        class="form-control select2 @error('shift_time') is-invalid @enderror"
+                                        name="shift_time">
                                         <option selected disabled value="">Choose...</option>
                                         <option value="Morning (6 AM - 2 PM)"
                                             {{ old('shift_time', $nurse->shift_time) == 'Morning (6 AM - 2 PM)' ? 'selected' : '' }}>
@@ -119,32 +121,78 @@
                                 <div class="mb-3">
                                     <label for="department" class="form-label">Nurse's Department</label>
                                     <select id="department"
-                                            class="form-control select2 @error('department') is-invalid @enderror"
-                                            name="department">
+                                        class="form-control select2 @error('department') is-invalid @enderror"
+                                        name="department">
                                         <option selected disabled value="">Choose...</option>
-                                        <option value="emergency" {{ old('department', $nurse->department) == 'emergency' ? 'selected' : '' }}>ED / ER</option>
-                                        <option value="icu" {{ old('department', $nurse->department) == 'icu' ? 'selected' : '' }}>ICU</option>
-                                        <option value="cardiology" {{ old('department', $nurse->department) == 'cardiology' ? 'selected' : '' }}>Cardiology</option>
-                                        <option value="neurology" {{ old('department', $nurse->department) == 'neurology' ? 'selected' : '' }}>Neurology</option>
-                                        <option value="oncology" {{ old('department', $nurse->department) == 'oncology' ? 'selected' : '' }}>Oncology</option>
-                                        <option value="orthopedics" {{ old('department', $nurse->department) == 'orthopedics' ? 'selected' : '' }}>Orthopedics</option>
-                                        <option value="pediatrics" {{ old('department', $nurse->department) == 'pediatrics' ? 'selected' : '' }}>Pediatrics</option>
-                                        <option value="obgyn" {{ old('department', $nurse->department) == 'obgyn' ? 'selected' : '' }}>OB/GYN</option>
-                                        <option value="surgery" {{ old('department', $nurse->department) == 'surgery' ? 'selected' : '' }}>Surgery</option>
-                                        <option value="radiology" {{ old('department', $nurse->department) == 'radiology' ? 'selected' : '' }}>Radiology</option>
-                                        <option value="pathology" {{ old('department', $nurse->department) == 'pathology' ? 'selected' : '' }}>Pathology / Laboratory</option>
-                                        <option value="gastroenterology" {{ old('department', $nurse->department) == 'gastroenterology' ? 'selected' : '' }}>Gastroenterology</option>
-                                        <option value="pulmonology" {{ old('department', $nurse->department) == 'pulmonology' ? 'selected' : '' }}>Pulmonology</option>
-                                        <option value="nephrology" {{ old('department', $nurse->department) == 'nephrology' ? 'selected' : '' }}>Nephrology</option>
-                                        <option value="endocrinology" {{ old('department', $nurse->department) == 'endocrinology' ? 'selected' : '' }}>Endocrinology</option>
-                                        <option value="dermatology" {{ old('department', $nurse->department) == 'dermatology' ? 'selected' : '' }}>Dermatology</option>
-                                        <option value="psychiatry" {{ old('department', $nurse->department) == 'psychiatry' ? 'selected' : '' }}>Psychiatry / Mental Health</option>
-                                        <option value="ophthalmology" {{ old('department', $nurse->department) == 'ophthalmology' ? 'selected' : '' }}>Ophthalmology</option>
-                                        <option value="ent" {{ old('department', $nurse->department) == 'ent' ? 'selected' : '' }}>ENT</option>
-                                        <option value="rehabilitation" {{ old('department', $nurse->department) == 'rehabilitation' ? 'selected' : '' }}>Physical Therapy / Rehabilitation</option>
-                                        <option value="pharmacy" {{ old('department', $nurse->department) == 'pharmacy' ? 'selected' : '' }}>Pharmacy</option>
-                                        <option value="urology" {{ old('department', $nurse->department) == 'urology' ? 'selected' : '' }}>Urology</option>
-                                        <option value="palliative" {{ old('department', $nurse->department) == 'palliative' ? 'selected' : '' }}>Palliative / Hospice Care</option>
+                                        <option value="emergency"
+                                            {{ old('department', $nurse->department) == 'emergency' ? 'selected' : '' }}>ED
+                                            / ER</option>
+                                        <option value="icu"
+                                            {{ old('department', $nurse->department) == 'icu' ? 'selected' : '' }}>ICU
+                                        </option>
+                                        <option value="cardiology"
+                                            {{ old('department', $nurse->department) == 'cardiology' ? 'selected' : '' }}>
+                                            Cardiology</option>
+                                        <option value="neurology"
+                                            {{ old('department', $nurse->department) == 'neurology' ? 'selected' : '' }}>
+                                            Neurology</option>
+                                        <option value="oncology"
+                                            {{ old('department', $nurse->department) == 'oncology' ? 'selected' : '' }}>
+                                            Oncology</option>
+                                        <option value="orthopedics"
+                                            {{ old('department', $nurse->department) == 'orthopedics' ? 'selected' : '' }}>
+                                            Orthopedics</option>
+                                        <option value="pediatrics"
+                                            {{ old('department', $nurse->department) == 'pediatrics' ? 'selected' : '' }}>
+                                            Pediatrics</option>
+                                        <option value="obgyn"
+                                            {{ old('department', $nurse->department) == 'obgyn' ? 'selected' : '' }}>OB/GYN
+                                        </option>
+                                        <option value="surgery"
+                                            {{ old('department', $nurse->department) == 'surgery' ? 'selected' : '' }}>
+                                            Surgery</option>
+                                        <option value="radiology"
+                                            {{ old('department', $nurse->department) == 'radiology' ? 'selected' : '' }}>
+                                            Radiology</option>
+                                        <option value="pathology"
+                                            {{ old('department', $nurse->department) == 'pathology' ? 'selected' : '' }}>
+                                            Pathology / Laboratory</option>
+                                        <option value="gastroenterology"
+                                            {{ old('department', $nurse->department) == 'gastroenterology' ? 'selected' : '' }}>
+                                            Gastroenterology</option>
+                                        <option value="pulmonology"
+                                            {{ old('department', $nurse->department) == 'pulmonology' ? 'selected' : '' }}>
+                                            Pulmonology</option>
+                                        <option value="nephrology"
+                                            {{ old('department', $nurse->department) == 'nephrology' ? 'selected' : '' }}>
+                                            Nephrology</option>
+                                        <option value="endocrinology"
+                                            {{ old('department', $nurse->department) == 'endocrinology' ? 'selected' : '' }}>
+                                            Endocrinology</option>
+                                        <option value="dermatology"
+                                            {{ old('department', $nurse->department) == 'dermatology' ? 'selected' : '' }}>
+                                            Dermatology</option>
+                                        <option value="psychiatry"
+                                            {{ old('department', $nurse->department) == 'psychiatry' ? 'selected' : '' }}>
+                                            Psychiatry / Mental Health</option>
+                                        <option value="ophthalmology"
+                                            {{ old('department', $nurse->department) == 'ophthalmology' ? 'selected' : '' }}>
+                                            Ophthalmology</option>
+                                        <option value="ent"
+                                            {{ old('department', $nurse->department) == 'ent' ? 'selected' : '' }}>ENT
+                                        </option>
+                                        <option value="rehabilitation"
+                                            {{ old('department', $nurse->department) == 'rehabilitation' ? 'selected' : '' }}>
+                                            Physical Therapy / Rehabilitation</option>
+                                        <option value="pharmacy"
+                                            {{ old('department', $nurse->department) == 'pharmacy' ? 'selected' : '' }}>
+                                            Pharmacy</option>
+                                        <option value="urology"
+                                            {{ old('department', $nurse->department) == 'urology' ? 'selected' : '' }}>
+                                            Urology</option>
+                                        <option value="palliative"
+                                            {{ old('department', $nurse->department) == 'palliative' ? 'selected' : '' }}>
+                                            Palliative / Hospice Care</option>
                                     </select>
                                     @error('department')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -168,11 +216,15 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('script')
     <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({ width: '100%' });
-        });
-    </script>
+    <script src="{{ URL::asset('build/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    <!-- form advanced init -->
+    <script src="{{ URL::asset('build/js/pages/form-advanced.init.js') }}"></script>
 @endsection

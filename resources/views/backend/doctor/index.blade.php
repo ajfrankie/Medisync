@@ -45,8 +45,8 @@
                                     <tr>
                                         <td>{{ $doctor->user->name ?? 'N/A' }}</td>
                                         <td>{{ $doctor->user->phone ?? 'N/A' }}</td>
-                                        <td>{{ $doctor->specialization_formatted ?? 'N/A'  }}</td>
-                                        <td>{{ $doctor->department_formatted ?? 'N/A'  }}</td>
+                                        <td>{{ $doctor->specialization ?? 'N/A'  }}</td>
+                                        <td>{{ $doctor->department ?? 'N/A'  }}</td>
                                         <td>
                                             @if ($doctor->is_activated)
                                                 <span class="badge bg-success">Avilable</span>

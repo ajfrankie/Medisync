@@ -4,6 +4,18 @@
     Edit Doctor
 @endsection
 
+@section('css')
+    <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
+@endsection
+
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
@@ -175,13 +187,15 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('script')
     <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                width: '100%'
-            });
-        });
-    </script>
+    <script src="{{ URL::asset('build/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    <!-- form advanced init -->
+    <script src="{{ URL::asset('build/js/pages/form-advanced.init.js') }}"></script>
 @endsection

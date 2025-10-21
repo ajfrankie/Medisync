@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\DoctorRepository;
+use App\Repositories\PatientRepository;
 
 class AppointmentController extends Controller
 {
@@ -22,7 +24,20 @@ class AppointmentController extends Controller
     }
 
 
-    public function create(Request $request) {}
+    public function create(Request $request)
+    {
+
+        $doctors = app(DoctorRepository::class)->get($request)->get();
+        $patients = app(PatientRepository::class)->get($request)->get();
+
+        $appointments = app(AppointmentRepository::class)->get($request)->paginate(10);
+        return view('backend.appointment.create', [
+            'appointments' => $appointments,
+            'request' => $request,
+            'doctors' => $doctors,
+            'patients' => $patients,
+        ]);
+    }
 
     public function store(Request $request) {}
 

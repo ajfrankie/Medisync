@@ -34,16 +34,7 @@ class Doctor extends Model
             }
         });
     }
-    public function getSpecializationFormattedAttribute(): string
-    {
-        // Convert 'general_medicine' → 'General Medicine'
-        return ucwords(str_replace('_', ' ', $this->specialization));
-    }
 
-    public function getDepartmentFormattedAttribute(): string
-    {
-        return ucwords(str_replace('_', ' ', $this->department));
-    }
     //releatioships
 
     public function user()
