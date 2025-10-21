@@ -22,6 +22,21 @@ class AppointmentRepository
     {
         $query = Appointment::orderBy('created_at', 'desc');
 
+        if (!empty($request->doctor_id)) {
+            $query->where('doctor_id', 'LIKE', "%{$request->doctor_id}%");
+        }
+
+        if (!empty($request->patient_id)) {
+            $query->where('patient_id', 'LIKE', "%{$request->patient_id}%");
+        }
+
+        if (!empty($request->status)) {
+            $query->where('status', 'LIKE', "%{$request->status}%");
+        }
+
+        if (!empty($request->appointment_date)) {
+            $query->where('appointment_date', 'LIKE', "%{$request->appointment_date}%");
+        }
 
         return $query;
     }

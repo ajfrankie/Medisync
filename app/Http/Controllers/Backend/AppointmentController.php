@@ -23,10 +23,15 @@ class AppointmentController extends Controller
 
     public function index(Request $request)
     {
+        $doctors = app(DoctorRepository::class)->get($request)->get();
+        $patients = app(PatientRepository::class)->get($request)->get();
+
         $appointments = app(AppointmentRepository::class)->get($request)->paginate(10);
         return view('backend.appointment.index', [
             'appointments' => $appointments,
             'request' => $request,
+            'doctors' => $doctors,
+            'patients' => $patients,
         ]);
     }
 
