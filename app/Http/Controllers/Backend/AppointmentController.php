@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeAppointmentRequest;
+use App\Http\Requests\updateAppointmentRequest;
 use App\Models\Doctor;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\DoctorRepository;
@@ -13,8 +14,12 @@ use App\Repositories\PatientRepository;
 class AppointmentController extends Controller
 {
 
-    protected $doctorRepository;
+    protected $appointmentRepository;
 
+    public function __construct(AppointmentRepository $appointmentRepository)
+    {
+        $this->appointmentRepository = $appointmentRepository;
+    }
 
     public function index(Request $request)
     {
@@ -57,9 +62,48 @@ class AppointmentController extends Controller
     }
 
 
-    public function edit(Request $request, $id) {}
+    public function edit(Request $request, $id)
+    {
+        $doctors = app(DoctorRepository::class)->get($request)->get();
+        $patients = app(PatientRepository::class)->get($request)->get();
 
-    public function update(Request $request, $id) {}
+        $appointment = app(AppointmentRepository::class)->find($id);
+        return view('backend.appointment.edit', [
+            'appointment' => $appointment,
+            'request' => $request,
+            'doctors' => $doctors,
+            'patients' => $patients,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'doctor_id' => 'required|exists:doctors,id',
+                'patient_id' => 'required|exists:patients,id',
+                'appointment_date' => 'required|date',
+                'appointment_time' => 'required',
+                'next_appointment_date' => 'nullable|date|after_or_equal:appointment_date',
+                'notes' => 'nullable|string|max:500',
+            ]);
+
+            $data = $request->all();
+
+            // <-- use the injected repository property
+            $this->appointmentRepository->update($id, $data);
+
+            return redirect()
+                ->route('admin.appointment.index')
+                ->with('success', 'Appointment updated successfully.');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update appointment: ' . $e->getMessage());
+        }
+    }
+
+
 
 
     public function show($id, Request $request) {}
