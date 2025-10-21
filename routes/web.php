@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AppointmentController;
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -72,7 +73,7 @@ Route::prefix('/admin')->group(function () {
         Route::post('/activate/{id}', [NurseController::class, 'activateNurse'])->name('admin.nurse.activate');
     });
 
-     //doctors
+    //doctors
     Route::prefix('/patient')->middleware('auth')->group(function () {
         Route::get('/', [PatientController::class, 'index'])->name('admin.patient.index');
         Route::get('/create', [PatientController::class, 'create'])->name('admin.patient.create');
@@ -81,6 +82,16 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('admin.patient.edit');
         Route::put('update/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
         Route::delete('delete/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
-       
+    });
+
+    //appointments
+    Route::prefix('/AppointmentController')->middleware('auth')->group(function () {
+        Route::get('/', [AppointmentController::class, 'index'])->name('admin.appointment.index');
+        Route::get('/create', [AppointmentController::class, 'create'])->name('admin.appointment.create');
+        Route::post('/store', [AppointmentController::class, 'store'])->name('admin.appointment.store');
+        Route::get('/show/{id}', [AppointmentController::class, 'show'])->name('admin.appointment.show');
+        Route::get('/edit/{id}', [AppointmentController::class, 'edit'])->name('admin.appointment.edit');
+        Route::put('update/{id}', [AppointmentController::class, 'update'])->name('admin.appointment.update');
+        Route::delete('delete/{id}', [AppointmentController::class, 'destroy'])->name('admin.appointment.destroy');
     });
 });

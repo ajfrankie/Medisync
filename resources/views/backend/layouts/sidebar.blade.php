@@ -16,7 +16,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.appointment.index') }}" class="waves-effect">
                         <i class="bx bx-calendar"></i>
                         <span key="t-chat">Appointments</span>
                     </a>

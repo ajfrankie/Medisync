@@ -18,6 +18,7 @@ class Appointment extends Model
         'appointment_date',
         'appointment_time',
         'status',
+        'next_appointment_date',
         'notes',
     ];
 
