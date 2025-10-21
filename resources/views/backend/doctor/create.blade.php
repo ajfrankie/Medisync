@@ -255,7 +255,7 @@
                             <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-danger custom-cancel-btn">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn btn-secondary w-md">Submit</button>
+                            <button type="submit" class="btn btn-outline-secondary w-md">Submit</button>
                         </div>
                     </form>
                 </div>

@@ -174,7 +174,7 @@
                             <a href="{{ route('admin.appointment.index') }}" class="btn btn-outline-danger">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn btn-secondary w-md">Update</button>
+                            <button type="submit" class="btn btn-outline-secondary w-md">Update</button>
                         </div>
 
                     </form>

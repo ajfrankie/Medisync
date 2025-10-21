@@ -143,7 +143,7 @@
 
                                 <!-- Buttons -->
                                 <div class="col-xl-12 mt-3 d-flex justify-content-end gap-2">
-                                    <button type="submit" class="btn btn-secondary w-md">
+                                    <button type="submit" class="btn btn-outline-secondary w-md">
                                         <i class="fa fa-search me-1"></i> Search
                                     </button>
                                     <a href="{{ route('admin.doctor.index') }}" class="btn btn-light w-md">

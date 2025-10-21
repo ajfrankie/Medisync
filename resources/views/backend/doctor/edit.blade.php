@@ -178,7 +178,7 @@
                         <!-- Buttons -->
                         <div class="text-end pe-3 mb-3">
                             <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-danger">Cancel</a>
-                            <button type="submit" class="btn btn-secondary w-md">Update</button>
+                            <button type="submit" class="btn btn-outline-secondary w-md">Update</button>
                         </div>
                     </form>
                 </div>
