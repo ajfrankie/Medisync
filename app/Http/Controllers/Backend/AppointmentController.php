@@ -104,9 +104,27 @@ class AppointmentController extends Controller
     }
 
 
+    public function show($id, Request $request)
+    { {
+            try {
+                $appointment = app(AppointmentRepository::class)->find($id);
 
+                if (!$appointment) {
+                    return redirect()
+                        ->route('admin.appointment.index')
+                        ->with('error', 'appointment order not found.');
+                }
 
-    public function show($id, Request $request) {}
+                return view('backend.appointment.show', [
+                    'appointment' => $appointment,
+                    'request' => $request,
+                ]);
+            } catch (\Exception $e) {
+                return back()
+                    ->with('error', 'Failed to fetch appointment  details: ' . $e->getMessage());
+            }
+        }
+    }
 
     public function getDoctorDetails(Request $request)
     {

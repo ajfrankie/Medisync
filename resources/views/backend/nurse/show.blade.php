@@ -94,7 +94,7 @@
                     <!-- Buttons -->
                     <div class="text-end pe-3 mb-3">
                         <a href="{{ route('admin.nurse.index') }}" class="btn btn-outline-secondary">Back</a>
-                        <a href="{{ route('admin.nurse.edit', $nurse->id) }}" class="btn btn-primary">Edit</a>
+                        <a href="{{ route('admin.nurse.edit', $nurse->id) }}" class="btn btn-outline-primary">Edit</a>
                     </div>
 
                 </div>
