@@ -19,31 +19,13 @@ class EHRRepository
 
     public function get(Request $request)
     {
-        $query = EhrRecord::with('user')
+        $query = EhrRecord::with('doctor.user', 'patient.user')
             ->orderBy('created_at', 'desc');
 
         if (!empty($request->name)) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'LIKE', "%{$request->name}%");
             });
-        }
-
-        if (!empty($request->phone)) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('phone', 'LIKE', "%{$request->phone}%");
-            });
-        }
-
-        if (!empty($request->department)) {
-            $query->where('department', 'LIKE', "%{$request->department}%");
-        }
-
-        if (!empty($request->specialization)) {
-            $query->where('specialization', 'LIKE', "%{$request->specialization}%");
-        }
-
-        if ($request->has('is_activated')) {
-            $query->where('is_activated', (bool) $request->is_activated);
         }
 
         return $query;
