@@ -9,7 +9,7 @@ use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\NurseController;
-use App\Http\Controllers\Backend\PatientController;
+use App\Http\Controllers\Backend\PatientControllekachal ause App\Http\Controllers\EHRController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +94,15 @@ Route::prefix('/admin')->group(function () {
         Route::put('update/{id}', [AppointmentController::class, 'update'])->name('admin.appointment.update');
         Route::delete('delete/{id}', [AppointmentController::class, 'destroy'])->name('admin.appointment.destroy');
         Route::get('/get-doctor-details', [AppointmentController::class, 'getDoctorDetails'])->name('admin.appointment.getDoctorDetails');
+    });
 
+    //EHR Records
+    Route::prefix('/ehr')->middleware('auth')->group(function () {
+        Route::get('/', [EHRController::class, 'index'])->name('admin.ehr.index');
+        Route::get('/create', [EHRController::class, 'create'])->name('admin.ehr.create');
+        Route::post('/store', [EHRController::class, 'store'])->name('admin.ehr.store');
+        Route::get('/show/{id}', [EHRController::class, 'show'])->name('admin.ehr.show');
+        Route::get('/edit/{id}', [EHRController::class, 'edit'])->name('admin.ehr.edit');
+        Route::put('update/{id}', [EHRController::class, 'update'])->name('admin.ehr.update');
     });
 });

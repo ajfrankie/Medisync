@@ -23,6 +23,20 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('admin.doctor.index') }}" class="waves-effect">
+                        <i class="bx bx-user-circle"></i>
+                        <span key="t-chat">Doctors</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.patient.index') }}" class="waves-effect">
+                        <i class="bx bx-user"></i>
+                        <span key="t-chat">Patients</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('admin.customers.index') }}" class="waves-effect">
                         <i class="bx bx-folder-open"></i>
                         <span key="t-chat">EHR Records</span>
