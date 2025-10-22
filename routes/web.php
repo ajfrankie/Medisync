@@ -8,8 +8,9 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
+use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NurseController;
-use App\Http\Controllers\Backend\PatientControllekachal ause App\Http\Controllers\EHRController;
+use App\Http\Controllers\Backend\PatientController;
 
 /*
 |--------------------------------------------------------------------------

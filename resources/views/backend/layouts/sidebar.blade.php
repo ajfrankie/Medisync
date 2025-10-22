@@ -37,7 +37,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.ehr.index') }}" class="waves-effect">
                         <i class="bx bx-folder-open"></i>
                         <span key="t-chat">EHR Records</span>
                     </a>
