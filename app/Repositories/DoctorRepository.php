@@ -55,23 +55,30 @@ class DoctorRepository
 
     public function create(array $input): Doctor
     {
+        // Get the Doctor role
         $doctorRole = Role::where('role_name', 'Doctor')->firstOrFail();
 
+        // Generate a UUID to use for both User and Doctor
+        $uuid = Str::uuid();
+
+        // Create User with custom UUID
         $user = User::create([
-            'role_id'  => $doctorRole->id,
-            'name'     => $input['name'],
-            'email'    => $input['email'],
-            'nic'   => $input['nic'] ?? null,
-            'dob'   => $input['dob'] ?? null,
-            'gender'   => $input['gender'] ?? null,
-            'image_path'   => $input['image_path'] ?? null,
-            'password' => Hash::make($input['password']),
-            'phone'    => $input['phone'] ?? null,
+            'id'        => $uuid, // assign UUID as primary key
+            'role_id'   => $doctorRole->id,
+            'name'      => $input['name'],
+            'email'     => $input['email'],
+            'nic'       => $input['nic'] ?? null,
+            'dob'       => $input['dob'] ?? null,
+            'gender'    => $input['gender'] ?? null,
+            'image_path' => $input['image_path'] ?? null,
+            'password'  => Hash::make($input['password']),
+            'phone'     => $input['phone'] ?? null,
         ]);
 
+        // Create Doctor with the same UUID as user_id
         return Doctor::create([
-            'id'             => Str::uuid(),
-            'user_id'        => $user->id,
+            'id'             => $uuid, // or another UUID if you want doctor ID separate
+            'user_id'        => $uuid, // same as User ID
             'specialization' => $input['specialization'],
             'department'     => $input['department'],
             'experience'     => $input['experience'] ?? null,

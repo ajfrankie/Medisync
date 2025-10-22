@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEhrRecordRequest;
 use App\Repositories\DoctorRepository;
 use App\Repositories\EHRRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Support\Facades\App;
 
 class EHRController extends Controller
@@ -20,9 +22,29 @@ class EHRController extends Controller
         ]);
     }
 
-    public function create() {}
+    public function create(Request $request)
+    {
 
-    public function store() {}
+        $doctors = app(DoctorRepository::class)->get($request)->get();
+        $patients = app(PatientRepository::class)->get($request)->get();
+
+        return view('backend.ehr.create', [
+            'patients' => $patients,
+            'doctors' => $doctors,
+            'request' => $request,
+        ]);
+    }
+
+    public function store(StoreEhrRecordRequest $request)
+    {
+        try {
+            $ehr = app(EHRRepository::class)->create($request->all());
+            return redirect()->route('admin.ehr.index')->with('success', 'EHR Record created successfully.');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to create EHR Record: ' . $e->getMessage());
+        }
+    }
+
 
     public function edit() {}
 

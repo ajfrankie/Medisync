@@ -34,8 +34,7 @@ class EHRRepository
     public function create(array $input): EhrRecord
     {
         return EhrRecord::create([
-            'id'                => Str::uuid(),
-            'doctor_id'         => Auth::id(), // logged-in doctor
+            'doctor_id'         => Auth::user()->doctor->id ?? null, // fetch doctor's ID
             'patient_id'        => $input['patient_id'],
             'visit_date'        => $input['visit_date'],
             'diagnosis'         => $input['diagnosis'],
@@ -44,6 +43,7 @@ class EHRRepository
             'is_activated'      => true,
         ]);
     }
+
 
     public function find($id)
     {
@@ -58,8 +58,15 @@ class EHRRepository
             throw new ModelNotFoundException("EHR Record not found");
         }
 
+        // Ensure we use the doctor's ID, not the user ID
+        $doctorId = Auth::user()->doctor->id ?? null;
+
+        if (!$doctorId) {
+            throw new \Exception("Authenticated user is not linked to a doctor profile.");
+        }
+
         $ehrRecord->update([
-            'doctor_id'         => Auth::id(), // logged-in doctor
+            'doctor_id'         => $doctorId, // logged-in doctor's ID
             'patient_id'        => $input['patient_id'] ?? $ehrRecord->patient_id,
             'visit_date'        => $input['visit_date'] ?? $ehrRecord->visit_date,
             'diagnosis'         => $input['diagnosis'] ?? $ehrRecord->diagnosis,
