@@ -76,6 +76,11 @@
                                                         <i class="bx bx-edit-alt"></i>Edit
                                                     </a>
 
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.ehr.index', $patient->id) }}">
+                                                        <i class="bx bx-edit-alt"></i>EHR Records
+                                                    </a>
+
                                                 </div>
                                             </div>
                                         </td>
