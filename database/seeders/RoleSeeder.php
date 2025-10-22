@@ -15,22 +15,22 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             [
-                'id' => Str::uuid(),
+                'id' => '1',
                 'role_name' => 'Doctor',
                 'description' => 'Handles patient diagnosis and treatment',
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '2',
                 'role_name' => 'Patient',
                 'description' => 'Receives medical care and services',
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '3',
                 'role_name' => 'Nurse',
                 'description' => 'Assists doctors and cares for patients',
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '4',
                 'role_name' => 'Admin Officer',
                 'description' => 'Manages administrative tasks and hospital operations',
             ],
