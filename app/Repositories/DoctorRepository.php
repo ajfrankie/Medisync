@@ -82,31 +82,6 @@ class DoctorRepository
             throw new ModelNotFoundException('Doctor not found');
         }
 
-
-        $user = $doctor->user;
-        if ($user) {
-            $user->name = $input['name'] ?? $user->name;
-            $user->email = $input['email'] ?? $user->email;
-            $user->phone = $input['phone'] ?? $user->phone;
-            $user->nic = $input['nic'] ?? $user->nic;
-            $user->gender = $input['gender'] ?? $user->nic;
-
-            if (!empty($input['password'])) {
-                $user->password = Hash::make($input['password']);
-            }
-
-            // Handle image
-            if (!empty($input['image_path'])) {
-                if ($input['image_path'] instanceof \Illuminate\Http\UploadedFile) {
-                    $user->image_path = $input['image_path']->store('patients', 'public');
-                } else {
-                    $user->image_path = $input['image_path'];
-                }
-            }
-
-            $user->save();
-        }
-
         $doctor->update([
             'specialization' => $input['specialization'] ?? $doctor->specialization,
             'department'     => $input['department'] ?? $doctor->department,

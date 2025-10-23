@@ -82,32 +82,13 @@ class NurseRepository
     {
         $nurse = $this->find($id);
         if (!$nurse) {
-            throw new ModelNotFoundException('nurse not found');
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Nurse not found');
         }
+        // Update nurse-specific fields
+        $nurse->shift_time = $input['shift_time'] ?? $nurse->shift_time;
+        $nurse->department = $input['department'] ?? $nurse->department;
 
-
-        $user = $nurse->user;
-        if ($user) {
-            $user->name = $input['name'] ?? $user->name;
-            $user->email = $input['email'] ?? $user->email;
-            $user->phone = $input['phone'] ?? $user->phone;
-            $user->nic = $input['nic'] ?? $user->nic;
-            $user->gender = $input['gender'] ?? $user->nic;
-
-            if (!empty($input['password'])) {
-                $user->password = Hash::make($input['password']);
-            }
-
-            // Handle image
-            if (!empty($input['image_path'])) {
-                if ($input['image_path'] instanceof \Illuminate\Http\UploadedFile) {
-                    $user->image_path = $input['image_path']->store('patients', 'public');
-                } else {
-                    $user->image_path = $input['image_path'];
-                }
-            }
-            $user->save();
-        }
+        $nurse->save();
 
         return $nurse;
     }

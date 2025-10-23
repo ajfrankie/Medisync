@@ -41,7 +41,7 @@ class PatientRepository
             });
         }
 
-         if (!empty($request->gender)) {
+        if (!empty($request->gender)) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('gender', 'LIKE', "%{$request->gender}%");
             });
@@ -55,7 +55,7 @@ class PatientRepository
             $query->where('dob', 'LIKE', "%{$request->dob}%");
         }
 
-     
+
 
         if (!empty($request->emergency_contact)) {
             $query->where('emergency_contact', 'LIKE', "%{$request->emergency_contact}%");
@@ -71,32 +71,28 @@ class PatientRepository
 
     public function create(array $input): Patient
     {
-        $patientRole = Role::where('role_name', 'Patient')->firstOrFail();
+        // Ensure user_id is present
+        if (empty($input['user_id'])) {
+            throw new \InvalidArgumentException('User ID is required to create a Patient record.');
+        }
 
-        $user = User::create([
-            'id'         => Str::uuid(),
-            'role_id'    => $patientRole->id,
-            'name'       => $input['name'],
-            'email'      => $input['email'],
-            'nic'        => $input['nic'] ?? null,
-            'dob'        => $input['dob'] ?? null,
-            'gender'     => $input['gender'] ?? null,
-            'image_path' => $input['image_path'] ?? null,
-            'password'   => Hash::make($input['password']),
-            'phone'      => $input['phone'] ?? null,
-        ]);
-
+        // Create Patient record
         return Patient::create([
-            'id'                   => Str::uuid(),
-            'user_id'              => $user->id,
-            'dob'                  => $input['dob'] ?? null,
-            'blood_group'          => $input['blood_group'] ?? null,
-            'address'              => $input['address'] ?? null,
-            'emergency_person'     => $input['emergency_person'] ?? null,
-            'emergency_relationship' => $input['emergency_relationship'] ?? null,
-            'emergency_contact'    => $input['emergency_contact'] ?? null,
+            'user_id'                  => $input['user_id'],
+            'blood_group'              => $input['blood_group'] ?? null,
+            'marital_status'           => $input['marital_status'] ?? null,
+            'occupation'               => $input['occupation'] ?? null,
+            'height'                   => $input['height'] ?? null,
+            'weight'                   => $input['weight'] ?? null,
+            'past_surgeries'           => $input['past_surgeries'] ?? null,
+            'past_surgeries_details'   => $input['past_surgeries_details'] ?? null,
+            'emergency_person'         => $input['emergency_person'] ?? null,
+            'preferred_language'       => $input['preferred_language'] ?? null,
+            'emergency_relationship'   => $input['emergency_relationship'] ?? null,
+            'emergency_contact'        => $input['emergency_contact'] ?? null,
         ]);
     }
+
 
     public function find($id)
     {
@@ -106,34 +102,20 @@ class PatientRepository
     public function update($id, array $input)
     {
         $patient = $this->find($id);
-        if (!$patient) throw new ModelNotFoundException('Patient not found');
-
-        $user = $patient->user;
-        if ($user) {
-            $user->name = $input['name'] ?? $user->name;
-            $user->phone = $input['phone'] ?? $user->phone;
-            $user->nic = $input['nic'] ?? $user->nic;
-            $user->gender = $input['gender'] ?? $user->nic;
-
-            if (!empty($input['password'])) {
-                $user->password = Hash::make($input['password']);
-            }
-
-            // Handle image
-            if (!empty($input['image_path'])) {
-                if ($input['image_path'] instanceof \Illuminate\Http\UploadedFile) {
-                    $user->image_path = $input['image_path']->store('patients', 'public');
-                } else {
-                    $user->image_path = $input['image_path'];
-                }
-            }
-
-            $user->save();
+        if (!$patient) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Patient not found');
         }
 
-        $patient->dob = $input['dob'] ?? $patient->dob;
+
+        // Update patient-specific fields
         $patient->blood_group = $input['blood_group'] ?? $patient->blood_group;
-        $patient->address = $input['address'] ?? $patient->address;
+        $patient->marital_status = $input['marital_status'] ?? $patient->marital_status;
+        $patient->preferred_language = $input['preferred_language'] ?? $patient->preferred_language;
+        $patient->occupation = $input['occupation'] ?? $patient->occupation;
+        $patient->height = $input['height'] ?? $patient->height;
+        $patient->weight = $input['weight'] ?? $patient->weight;
+        $patient->past_surgeries = $input['past_surgeries'] ?? $patient->past_surgeries;
+        $patient->past_surgeries_details = $input['past_surgeries_details'] ?? $patient->past_surgeries_details;
         $patient->emergency_person = $input['emergency_person'] ?? $patient->emergency_person;
         $patient->emergency_relationship = $input['emergency_relationship'] ?? $patient->emergency_relationship;
         $patient->emergency_contact = $input['emergency_contact'] ?? $patient->emergency_contact;
@@ -142,6 +124,8 @@ class PatientRepository
 
         return $patient;
     }
+
+
 
     public function delete($id)
     {

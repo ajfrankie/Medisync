@@ -4,6 +4,10 @@
     Create Patient
 @endsection
 
+@section('css')
+    <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
@@ -18,7 +22,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" action="{{ route('admin.patient.store') }}">
+                    <form method="POST" action="{{ route('admin.patient.store') }}">
                         @csrf
                         <input type="hidden" name="role" value="Patient">
 
@@ -28,104 +32,37 @@
                             <div class="alert alert-danger mt-2">{{ session('error') }}</div>
                         @endif
 
-                        {{-- Basic Patient Information --}}
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Patient Name</label>
-                                    <input type="text" name="name" id="name"
-                                        class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
-                                        placeholder="Enter patient's name">
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        {{-- @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ old('email') }}" placeholder="Enter email">
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" name="password" id="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        placeholder="Enter password">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" name="phone" id="phone"
-                                        class="form-control @error('phone') is-invalid @enderror"
-                                        value="{{ old('phone') }}" placeholder="Enter phone number">
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                        @endif --}}
+                        {{-- Patient Selection --}}
+                        <div class="mb-3">
+                            <label class="form-label">Patient Name</label>
+                            <select class="form-select select2 @error('user_id') is-invalid @enderror" name="user_id">
+                                <option value="">Select Patient...</option>
+                                @foreach ($patientUsers as $user)
+                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('user_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Personal Information --}}
                         <div class="row">
+                            {{-- Blood Group --}}
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="dob" class="form-label">Date of Birth</label>
-                                    <input type="date" name="dob" id="dob"
-                                        class="form-control @error('dob') is-invalid @enderror"
-                                        value="{{ old('dob') }}">
-                                    @error('dob')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="nic" class="form-label">NIC</label>
-                                    <input type="text" name="nic" id="nic"
-                                        class="form-control @error('nic') is-invalid @enderror" value="{{ old('nic') }}"
-                                        placeholder="Enter NIC number">
-                                    @error('nic')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="gender" class="form-label">Gender</label>
-                                    <select name="gender" id="gender"
-                                        class="form-control @error('gender') is-invalid @enderror">
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male
-                                        </option>
-                                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female
-                                        </option>
-                                    </select>
-                                    @error('gender')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="blood_group" class="form-label">Blood Group</label>
-                                    <select name="blood_group" id="blood_group"
+                                    <label class="form-label">Blood Group</label>
+                                    <select name="blood_group"
                                         class="form-control @error('blood_group') is-invalid @enderror">
                                         <option value="" disabled selected>Choose...</option>
                                         @foreach (['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $group)
@@ -140,54 +77,141 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            {{-- Marital Status --}}
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Marital Status</label>
+                                    <select name="marital_status"
+                                        class="form-control @error('marital_status') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        @foreach (['Single', 'Married', 'Divorced', 'Widowed'] as $status)
+                                            <option value="{{ $status }}"
+                                                {{ old('marital_status') == $status ? 'selected' : '' }}>
+                                                {{ $status }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('marital_status')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Preferred Language --}}
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Preferred Language</label>
+                                    <select name="preferred_language"
+                                        class="form-control @error('preferred_language') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        @foreach (['Tamil', 'Sinhala', 'English'] as $lang)
+                                            <option value="{{ $lang }}"
+                                                {{ old('preferred_language') == $lang ? 'selected' : '' }}>
+                                                {{ $lang }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('preferred_language')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Occupation --}}
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Occupation</label>
+                                    <input type="text" name="occupation"
+                                        class="form-control @error('occupation') is-invalid @enderror"
+                                        value="{{ old('occupation') }}" placeholder="Enter occupation">
+                                    @error('occupation')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        {{-- Address and Image --}}
+                        {{-- Height & Weight --}}
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" name="address" id="address"
-                                        class="form-control @error('address') is-invalid @enderror"
-                                        value="{{ old('address') }}" placeholder="Enter address">
-                                    @error('address')
+                                    <label class="form-label">Height (cm)</label>
+                                    <input type="text" name="height"
+                                        class="form-control @error('height') is-invalid @enderror"
+                                        value="{{ old('height') }}" placeholder="Enter height in cm">
+                                    @error('height')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image_path" class="form-label">Upload Image</label>
-                                    <input type="file" name="image_path" id="image_path"
-                                        class="form-control @error('image_path') is-invalid @enderror" accept="image/*">
-                                    @error('image_path')
+                                    <label class="form-label">Weight (kg)</label>
+                                    <input type="text" name="weight"
+                                        class="form-control @error('weight') is-invalid @enderror"
+                                        value="{{ old('weight') }}" placeholder="Enter weight in kg">
+                                    @error('weight')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Past Surgeries --}}
+                        {{-- Past Surgeries --}}
+                        <h5 class="mt-4 mb-3">Past Surgeries</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Past Surgeries</label>
+                                    <select name="past_surgeries" id="past_surgeries"
+                                        class="form-control @error('past_surgeries') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes" {{ old('past_surgeries') == 'Yes' ? 'selected' : '' }}>Yes
+                                        </option>
+                                        <option value="No" {{ old('past_surgeries') == 'No' ? 'selected' : '' }}>No
+                                        </option>
+                                    </select>
+                                    @error('past_surgeries')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Surgery Details</label>
+                                    <input type="text" name="past_surgeries_details" id="past_surgeries_details"
+                                        class="form-control @error('past_surgeries_details') is-invalid @enderror"
+                                        value="{{ old('past_surgeries_details') }}"
+                                        placeholder="Enter past surgery details if any">
+                                    @error('past_surgeries_details')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        {{-- Emergency Contact Info --}}
+
+                        {{-- Emergency Contact --}}
                         <h5 class="mt-4 mb-3">Emergency Contact</h5>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_person" class="form-label">Contact Person</label>
-                                    <input type="text" name="emergency_person" id="emergency_person"
+                                    <label class="form-label">Contact Person</label>
+                                    <input type="text" name="emergency_person"
                                         class="form-control @error('emergency_person') is-invalid @enderror"
-                                        value="{{ old('emergency_person') }}" placeholder="Enter contact person name">
+                                        value="{{ old('emergency_person') }}" placeholder="Enter name">
                                     @error('emergency_person')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_relationship" class="form-label">Relationship</label>
-                                    <select name="emergency_relationship" id="emergency_relationship"
+                                    <label class="form-label">Relationship</label>
+                                    <select name="emergency_relationship"
                                         class="form-control @error('emergency_relationship') is-invalid @enderror">
                                         <option value="" disabled selected>Choose...</option>
                                         @foreach (['Father', 'Mother', 'Sibling', 'Spouse', 'Friend'] as $relation)
@@ -202,14 +226,12 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_contact" class="form-label">Emergency Contact Number</label>
-                                    <input type="text" name="emergency_contact" id="emergency_contact"
+                                    <label class="form-label">Emergency Contact Number</label>
+                                    <input type="text" name="emergency_contact"
                                         class="form-control @error('emergency_contact') is-invalid @enderror"
-                                        value="{{ old('emergency_contact') }}"
-                                        placeholder="Enter emergency phone number">
+                                        value="{{ old('emergency_contact') }}" placeholder="+947XXXXXXXX">
                                     @error('emergency_contact')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -217,10 +239,10 @@
                             </div>
                         </div>
 
-                        {{-- Submit + Cancel --}}
-                        <div class="text-end pe-3 mb-3">
+                        {{-- Submit --}}
+                        <div class="text-end">
                             <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger">Cancel</a>
-                            <button type="submit" class="btn btn-outline-secondary w-md">Submit</button>
+                            <button type="submit" class="btn btn-outline-secondary">Submit</button>
                         </div>
 
                     </form>
@@ -228,4 +250,16 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Patient",
+                allowClear: true
+            });
+        });
+    </script>
 @endsection
