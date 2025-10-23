@@ -19,7 +19,7 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Nurse
+            Nurses
         @endslot
         @slot('title')
             Create
@@ -30,16 +30,16 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.nurse.store') }}">
+                    <form method="POST" action="{!! route('admin.nurse.store') !!}">
                         @csrf
-
+                        <input type="hidden" name="role" value="nurse">
                         @if (session('success'))
                             <div class="alert alert-success mt-2">{{ session('success') }}</div>
                         @elseif (session('error'))
                             <div class="alert alert-danger mt-2">{{ session('error') }}</div>
                         @endif
 
-                        @if ($errors->any())
+                        {{-- @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -47,63 +47,31 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
-
+                        @endif --}}
                         <div class="row">
-                            <!-- Nurse Name -->
-                            <div class="col-md-3">
+
+                            <!-- Doctor Name -->
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nurse's Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" value="{{ old('name') }}" placeholder="Enter name"
-                                        required>
-                                    @error('name')
+                                    <label class="form-label">Nurse's Name</label>
+                                    <select class="form-select select2 @error('user_id') is-invalid @enderror"
+                                        id="user_id" name="user_id">
+                                        <option value="">Select Nurse...</option>
+                                        @foreach ($nurseUsers as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('user_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
                             <!-- Email -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" id="email" value="{{ old('email') }}" placeholder="Enter email"
-                                        required>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
 
-                            <!-- Phone -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        name="phone" id="phone" value="{{ old('phone') }}" placeholder="Enter phone"
-                                        required>
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
 
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        name="password" id="password" placeholder="Enter password">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <!-- Shift Time -->
-                            <div class="col-md-3">
+                            <!-- Specialization -->
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="shift_time" class="form-label">Nurse's Shift Time</label>
                                     <select id="shift_time"
@@ -121,52 +89,95 @@
                             </div>
 
                             <!-- Department -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="department" class="form-label">Nurse's Department</label>
+                                    <label for="department" class="form-label">Doctor's Department</label>
                                     <select id="department"
                                         class="form-control select2 @error('department') is-invalid @enderror"
-                                        name="department" required>
+                                        name="department">
                                         <option selected disabled value="">Choose...</option>
-                                        <option value="Emergency">Emergency</option>
-                                        <option value="ICU">ICU</option>
-                                        <option value="Cardiology">Cardiology</option>
-                                        <option value="Neurology">Neurology</option>
-                                        <option value="Oncology">Oncology</option>
-                                        <option value="Orthopedics">Orthopedics</option>
-                                        <option value="Pediatrics">Pediatrics</option>
-                                        <option value="OB/GYN">OB/GYN</option>
-                                        <option value="Surgery">Surgery</option>
-                                        <option value="Radiology">Radiology</option>
-                                        <option value="Pathology">Pathology / Laboratory</option>
-                                        <option value="Gastroenterology">Gastroenterology</option>
-                                        <option value="Pulmonology">Pulmonology</option>
-                                        <option value="Nephrology">Nephrology</option>
-                                        <option value="Endocrinology">Endocrinology</option>
-                                        <option value="Dermatology">Dermatology</option>
-                                        <option value="Psychiatry">Psychiatry</option>
-                                        <option value="Ophthalmology">Ophthalmology</option>
-                                        <option value="ENT">ENT</option>
-                                        <option value="Physical Therapy">Physical Therapy</option>
-                                        <option value="Pharmacy">Pharmacy</option>
-                                        <option value="Urology">Urology</option>
-                                        <option value="Palliative">Palliative</option>
+                                        <option value="Emergency" {{ old('department') == 'Emergency' ? 'selected' : '' }}>
+                                            Emergency</option>
+                                        <option value="ICU" {{ old('department') == 'ICU' ? 'selected' : '' }}>ICU
+                                        </option>
+                                        <option value="Cardiology"
+                                            {{ old('department') == 'Cardiology' ? 'selected' : '' }}>Cardiology</option>
+                                        <option value="Neurology" {{ old('department') == 'Neurology' ? 'selected' : '' }}>
+                                            Neurology</option>
+                                        <option value="Oncology" {{ old('department') == 'Oncology' ? 'selected' : '' }}>
+                                            Oncology</option>
+                                        <option value="Orthopedics"
+                                            {{ old('department') == 'Orthopedics' ? 'selected' : '' }}>Orthopedics</option>
+                                        <option value="Pediatrics"
+                                            {{ old('department') == 'Pediatrics' ? 'selected' : '' }}>Pediatrics</option>
+                                        <option value="OB/GYN" {{ old('department') == 'OB/GYN' ? 'selected' : '' }}>OB/GYN
+                                        </option>
+                                        <option value="Surgery" {{ old('department') == 'Surgery' ? 'selected' : '' }}>
+                                            Surgery</option>
+                                        <option value="Radiology" {{ old('department') == 'Radiology' ? 'selected' : '' }}>
+                                            Radiology</option>
+                                        <option value="Pathology/Laboratory"
+                                            {{ old('department') == 'Pathology/Laboratory' ? 'selected' : '' }}>
+                                            Pathology/Laboratory
+                                        </option>
+                                        <option value="Gastroenterology"
+                                            {{ old('department') == 'Gastroenterology' ? 'selected' : '' }}>
+                                            Gastroenterology</option>
+                                        <option value="Pulmonology"
+                                            {{ old('department') == 'Pulmonology' ? 'selected' : '' }}>Pulmonology</option>
+                                        <option value="Nephrology"
+                                            {{ old('department') == 'Nephrology' ? 'selected' : '' }}>Nephrology</option>
+                                        <option value="Endocrinology"
+                                            {{ old('department') == 'Endocrinology' ? 'selected' : '' }}>Endocrinology
+                                        </option>
+                                        <option value="Dermatology"
+                                            {{ old('department') == 'Dermatology' ? 'selected' : '' }}>Dermatology</option>
+                                        <option value="Psychiatry/MentalHealth"
+                                            {{ old('department') == 'Psychiatry/MentalHealth' ? 'selected' : '' }}>
+                                            Psychiatry/MentalHealth</option>
+                                        <option value="Ophthalmology"
+                                            {{ old('department') == 'Ophthalmology' ? 'selected' : '' }}>Ophthalmology
+                                        </option>
+                                        <option value="ENT" {{ old('department') == 'ENT' ? 'selected' : '' }}>ENT
+                                        </option>
+                                        <option value="Physical Therapy/Rehabilitation"
+                                            {{ old('department') == 'Physical Therapy/Rehabilitation' ? 'selected' : '' }}>
+                                            Physical Therapy/Rehabilitation</option>
+                                        <option value="Pharmacy" {{ old('department') == 'Pharmacy' ? 'selected' : '' }}>
+                                            Pharmacy</option>
+                                        <option value="Urology" {{ old('department') == 'Urology' ? 'selected' : '' }}>
+                                            Urology</option>
+                                        <option value="HospiceCare"
+                                            {{ old('department') == 'HospiceCare' ? 'selected' : '' }}>HospiceCare</option>
                                     </select>
                                     @error('department')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
+                            <!-- Experience -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="experience" class="form-label">Doctor's Experience (years)</label>
+                                    <input type="number" class="form-control @error('experience') is-invalid @enderror"
+                                        name="experience" id="experience" placeholder="Enter experience"
+                                        value="{{ old('experience') }}">
+                                    @error('experience')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- Buttons -->
                         <div class="text-end pe-3 mb-3">
-                            <a href="{{ route('admin.nurse.index') }}" class="btn btn-outline-danger">
+                            <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-danger custom-cancel-btn">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn btn-outline-secondary w-md">Create</button>
+                            <button type="submit" class="btn btn-outline-secondary w-md">Submit</button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -182,5 +193,7 @@
     <script src="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    <!-- form advanced init -->
     <script src="{{ URL::asset('build/js/pages/form-advanced.init.js') }}"></script>
 @endsection

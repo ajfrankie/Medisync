@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeNurseRequest;
+use App\Models\User;
 use App\Repositories\NurseRepository;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class NurseController extends Controller
 {
@@ -23,20 +25,52 @@ class NurseController extends Controller
   }
 
 
-  public function create(Request $request)
+  public function create()
   {
-    return view('backend.nurse.create');
+    $authUser = Auth::user();
+
+    // Allow only Admin Officer
+    if ($authUser->role->role_name !== 'Admin Officer') {
+      abort(403, 'Access denied. Only Admin Officers can create Nurse accounts.');
+    }
+
+    // Get users with Nurse role (role_id = 3) who are NOT already in nurses table
+    $nurseUsers = User::where('role_id', 3)
+      ->get();
+
+    return view('backend.nurse.create', [
+      'nurseUsers' => $nurseUsers,
+    ]);
   }
 
-  public function store(storeNurseRequest $request)
+
+  public function store(StoreNurseRequest $request)
   {
     try {
-      $nurse = app(NurseRepository::class)->create($request->all());
-      return redirect()->route('admin.nurse.index')->with('success', 'nurse created successfully.');
+      // Create nurse record using validated data
+      $nurse = app(NurseRepository::class)->create($request->validated());
+
+      return redirect()
+        ->route('admin.nurse.index')
+        ->with('success', 'Nurse created successfully.');
+    } catch (\Illuminate\Database\QueryException $e) {
+      // Duplicate user_id error (unique constraint)
+      if ($e->getCode() == 23000) {
+        return back()
+          ->withInput()
+          ->with('error', 'This user already has a nurse profile. Please select a different user.');
+      }
+
+      return back()
+        ->withInput()
+        ->with('error', 'A database error occurred while creating the nurse: ' . $e->getMessage());
     } catch (\Exception $e) {
-      return back()->withInput()->with('error', 'Failed to create nurse: ' . $e->getMessage());
+      return back()
+        ->withInput()
+        ->with('error', 'Failed to create nurse: ' . $e->getMessage());
     }
   }
+
 
   public function edit(Request $request, $id)
   {

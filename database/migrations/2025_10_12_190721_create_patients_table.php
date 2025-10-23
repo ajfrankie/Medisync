@@ -16,8 +16,14 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->date('dob')->nullable();
             $table->string('blood_group', 5)->nullable();
-            $table->string('address')->nullable();
+            $table->string('marital_status')->nullable();
+            $table->string('occupation')->nullable();
+            $table->string('height')->nullable();
+            $table->string('weight')->nullable();
+            $table->string('past_surgeries')->nullable();
+            $table->string('past_surgeries_details')->nullable();
             $table->string('emergency_person')->nullable();
+            $table->string('preferred_language')->nullable();
             $table->string('emergency_relationship')->nullable();
             $table->string('emergency_contact')->nullable();
             $table->timestamps();
