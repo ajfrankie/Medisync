@@ -4,6 +4,10 @@
     Edit Patient
 @endsection
 
+@section('css')
+    <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
@@ -18,11 +22,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    {{-- enctype added for image upload --}}
-                    <form method="POST" enctype="multipart/form-data"
-                        action="{{ route('admin.patient.update', $patient->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.patient.update', $patient->id) }}">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="role" value="Patient">
 
                         @if (session('success'))
                             <div class="alert alert-success mt-2">{{ session('success') }}</div>
@@ -30,113 +33,29 @@
                             <div class="alert alert-danger mt-2">{{ session('error') }}</div>
                         @endif
 
-                        {{-- BASIC INFORMATION --}}
-                        <div class="row">
-                            <div class="col-md-3">
+                        {{-- Patient Name (Non-editable) --}}
+                       
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Patient Name</label>
-                                    <input type="text" name="name" id="name"
-                                        class="form-control @error('name') is-invalid @enderror"
-                                        value="{{ old('name', $patient->user->name ?? '') }}"
-                                        placeholder="Enter patient's name">
+                                    <label for="name" class="form-label">Patient's Name</label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        name="name" id="name" value="{{ old('name', $patient->user->name) }}"
+                                        placeholder="Enter name">
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
 
-                            {{-- EMAIL (READ-ONLY) --}}
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email (Cannot be changed)</label>
-                                    <input type="email" name="email" id="email" class="form-control"
-                                        value="{{ $patient->user->email ?? '' }}" readonly>
-                                </div>
-                            </div>
-
-                            {{-- PASSWORD (OPTIONAL CHANGE) --}}
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password (Leave blank to keep same)</label>
-                                    <input type="password" name="password" id="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        placeholder="Enter new password if needed">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- PHONE --}}
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" name="phone" id="phone"
-                                        class="form-control @error('phone') is-invalid @enderror"
-                                        value="{{ old('phone', $patient->user->phone ?? '') }}"
-                                        placeholder="Enter phone number">
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- PERSONAL INFO --}}
+                        {{-- Blood Group, Marital Status, Preferred Language, Occupation --}}
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="dob" class="form-label">Date of Birth</label>
-                                    <input type="date" name="dob" id="dob"
-                                        class="form-control @error('dob') is-invalid @enderror"
-                                        value="{{ old('dob', $patient->dob ?? ($patient->user->dob ?? '')) }}">
-                                    @error('dob')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="nic" class="form-label">NIC</label>
-                                    <input type="text" name="nic" id="nic"
-                                        class="form-control @error('nic') is-invalid @enderror"
-                                        value="{{ old('nic', $patient->user->nic ?? '') }}" placeholder="Enter NIC number">
-                                    @error('nic')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="gender" class="form-label">Gender</label>
-                                    <select name="gender" id="gender"
-                                        class="form-control @error('gender') is-invalid @enderror">
-                                        <option value="" disabled>Choose...</option>
-                                        <option value="male"
-                                            {{ old('gender', $patient->gender ?? '') == 'male' ? 'selected' : '' }}>Male
-                                        </option>
-                                        <option value="female"
-                                            {{ old('gender', $patient->gender ?? '') == 'female' ? 'selected' : '' }}>
-                                            Female</option>
-                                    </select>
-                                    @error('gender')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="blood_group" class="form-label">Blood Group</label>
-                                    <select name="blood_group" id="blood_group"
+                                    <label class="form-label">Blood Group</label>
+                                    <select name="blood_group"
                                         class="form-control @error('blood_group') is-invalid @enderror">
-                                        <option value="" disabled>Choose...</option>
+                                        <option value="" disabled selected>Choose...</option>
                                         @foreach (['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $group)
                                             <option value="{{ $group }}"
-                                                {{ old('blood_group', $patient->blood_group ?? '') == $group ? 'selected' : '' }}>
-                                                {{ $group }}
+                                                {{ $patient->blood_group == $group ? 'selected' : '' }}>{{ $group }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -145,70 +64,140 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Marital Status</label>
+                                    <select name="marital_status"
+                                        class="form-control @error('marital_status') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        @foreach (['Single', 'Married', 'Divorced', 'Widowed'] as $status)
+                                            <option value="{{ $status }}"
+                                                {{ $patient->marital_status == $status ? 'selected' : '' }}>
+                                                {{ $status }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('marital_status')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Preferred Language</label>
+                                    <select name="preferred_language"
+                                        class="form-control @error('preferred_language') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        @foreach (['Tamil', 'Sinhala', 'English'] as $lang)
+                                            <option value="{{ $lang }}"
+                                                {{ $patient->preferred_language == $lang ? 'selected' : '' }}>
+                                                {{ $lang }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('preferred_language')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Occupation</label>
+                                    <input type="text" name="occupation"
+                                        class="form-control @error('occupation') is-invalid @enderror"
+                                        value="{{ $patient->occupation }}" placeholder="Enter occupation">
+                                    @error('occupation')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        {{-- ADDRESS + IMAGE --}}
+                        {{-- Height & Weight --}}
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" name="address" id="address"
-                                        class="form-control @error('address') is-invalid @enderror"
-                                        value="{{ old('address', $patient->address ?? '') }}"
-                                        placeholder="Enter address">
-                                    @error('address')
+                                    <label class="form-label">Height (cm)</label>
+                                    <input type="text" name="height"
+                                        class="form-control @error('height') is-invalid @enderror"
+                                        value="{{ $patient->height }}" placeholder="Enter height in cm">
+                                    @error('height')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
-                            {{-- IMAGE UPLOAD WITH PREVIEW --}}
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image_path" class="form-label">Upload Image</label>
-                                    <input type="file" name="image_path" id="image_path"
-                                        class="form-control @error('image_path') is-invalid @enderror" accept="image/*">
-                                    @if ($patient->user->image_path)
-                                        <div class="mt-2">
-                                            <p class="mb-1">Current Image:</p>
-                                            <img src="{{ asset('storage/' . $patient->user->image_path) }}"
-                                                alt="Patient Image" width="100" class="rounded shadow">
-                                        </div>
-                                    @endif
-                                    @error('image_path')
+                                    <label class="form-label">Weight (kg)</label>
+                                    <input type="text" name="weight"
+                                        class="form-control @error('weight') is-invalid @enderror"
+                                        value="{{ $patient->weight }}" placeholder="Enter weight in kg">
+                                    @error('weight')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        {{-- EMERGENCY CONTACT --}}
+                        {{-- Past Surgeries --}}
+                        <h5 class="mt-4 mb-3">Past Surgeries</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Past Surgeries</label>
+                                    <select name="past_surgeries" id="past_surgeries"
+                                        class="form-control @error('past_surgeries') is-invalid @enderror">
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="Yes" {{ $patient->past_surgeries == 'Yes' ? 'selected' : '' }}>
+                                            Yes</option>
+                                        <option value="No" {{ $patient->past_surgeries == 'No' ? 'selected' : '' }}>No
+                                        </option>
+                                    </select>
+                                    @error('past_surgeries')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Surgery Details</label>
+                                    <input type="text" name="past_surgeries_details" id="past_surgeries_details"
+                                        class="form-control @error('past_surgeries_details') is-invalid @enderror"
+                                        value="{{ $patient->past_surgeries_details }}"
+                                        placeholder="Enter past surgery details if any">
+                                    @error('past_surgeries_details')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Emergency Contact --}}
                         <h5 class="mt-4 mb-3">Emergency Contact</h5>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_person" class="form-label">Contact Person</label>
-                                    <input type="text" name="emergency_person" id="emergency_person"
+                                    <label class="form-label">Contact Person</label>
+                                    <input type="text" name="emergency_person"
                                         class="form-control @error('emergency_person') is-invalid @enderror"
-                                        value="{{ old('emergency_person', $patient->emergency_person ?? '') }}"
-                                        placeholder="Enter contact person name">
+                                        value="{{ $patient->emergency_person }}" placeholder="Enter name">
                                     @error('emergency_person')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_relationship" class="form-label">Relationship</label>
-                                    <select name="emergency_relationship" id="emergency_relationship"
+                                    <label class="form-label">Relationship</label>
+                                    <select name="emergency_relationship"
                                         class="form-control @error('emergency_relationship') is-invalid @enderror">
-                                        <option value="" disabled>Choose...</option>
+                                        <option value="" disabled selected>Choose...</option>
                                         @foreach (['Father', 'Mother', 'Sibling', 'Spouse', 'Friend'] as $relation)
                                             <option value="{{ $relation }}"
-                                                {{ old('emergency_relationship', $patient->emergency_relationship ?? '') == $relation ? 'selected' : '' }}>
-                                                {{ $relation }}
-                                            </option>
+                                                {{ $patient->emergency_relationship == $relation ? 'selected' : '' }}>
+                                                {{ $relation }}</option>
                                         @endforeach
                                     </select>
                                     @error('emergency_relationship')
@@ -216,14 +205,12 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="emergency_contact" class="form-label">Emergency Contact Number</label>
-                                    <input type="text" name="emergency_contact" id="emergency_contact"
+                                    <label class="form-label">Emergency Contact Number</label>
+                                    <input type="text" name="emergency_contact"
                                         class="form-control @error('emergency_contact') is-invalid @enderror"
-                                        value="{{ old('emergency_contact', $patient->emergency_contact ?? '') }}"
-                                        placeholder="Enter emergency phone number">
+                                        value="{{ $patient->emergency_contact }}" placeholder="+947XXXXXXXX">
                                     @error('emergency_contact')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -231,14 +218,27 @@
                             </div>
                         </div>
 
-                        {{-- ACTION BUTTONS --}}
-                        <div class="text-end pe-3 mb-3">
+                        {{-- Submit --}}
+                        <div class="text-end">
                             <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger">Cancel</a>
-                            <button type="submit" class="btn btn-outline-secondary w-md">Update</button>
+                            <button type="submit" class="btn btn-outline-secondary">Update</button>
                         </div>
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Patient",
+                allowClear: true
+            });
+        });
+    </script>
 @endsection

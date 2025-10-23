@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePatientRequest;
+use App\Models\User;
 use App\Repositories\PatientRepository;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
@@ -20,37 +23,50 @@ class PatientController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        return view('backend.patient.create');
-    }
+        $authUser = Auth::user();
 
-    public function store(Request $request)
-    {
-        // Validate request
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'nic' => 'nullable|string|unique:users,nic',
-            'phone' => 'nullable|string',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Handle image upload
-        $imagePath = null;
-        if ($request->hasFile('image_path')) {
-            $imagePath = $request->file('image_path')->store('patients', 'public');
+        // Allow only Admin Officer
+        if ($authUser->role->role_name !== 'Admin Officer') {
+            abort(403, 'Access denied. Only Admin Officers can create Nurse accounts.');
         }
 
-        // Prepare input
-        $input = $request->all();
-        $input['image_path'] = $imagePath;
+        // Get users with Nurse role (role_id = 3) who are NOT already in nurses table
+        $patientUsers = User::where('role_id', 2)
+            ->get();
 
-        // Create patient via repository
-        $patient = app(PatientRepository::class)->create($input);
+        return view('backend.patient.create', [
+            'patientUsers' => $patientUsers,
+        ]);
+    }
 
-        return redirect()->route('admin.patient.index')->with('success', 'Patient created successfully.');
+
+    public function store(StorePatientRequest $request)
+    {
+        try {
+            // Create nurse record using validated data
+            $nurse = app(PatientRepository::class)->create($request->validated());
+
+            return redirect()
+                ->route('admin.patient.index')
+                ->with('success', 'Patient created successfully.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Duplicate user_id error (unique constraint)
+            if ($e->getCode() == 23000) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'This user already has a patient profile. Please select a different user.');
+            }
+
+            return back()
+                ->withInput()
+                ->with('error', 'A database error occurred while creating the patient: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create patient: ' . $e->getMessage());
+        }
     }
 
     public function edit(Request $request, $id)
