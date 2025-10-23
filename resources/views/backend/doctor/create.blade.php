@@ -51,58 +51,27 @@
                         <div class="row">
 
                             <!-- Doctor Name -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Doctor's Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" placeholder="Enter name" value="{{ old('name') }}">
-                                    @error('name')
+                                    <label class="form-label">Doctor's Name</label>
+                                    <select class="form-select select2 @error('user_id') is-invalid @enderror"
+                                        id="user_id" name="user_id">
+                                        <option value="">Select Doctor...</option>
+                                        @foreach ($doctorUsers as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('user_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
                             <!-- Email -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" id="email" placeholder="Enter email" value="{{ old('email') }}">
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                     
 
-                            <!-- Password -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        name="password" id="password" placeholder="Enter password">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Phone -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        name="phone" id="phone" placeholder="Enter phone" value="{{ old('phone') }}">
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
                             <!-- Specialization -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="specialization" class="form-label">Doctor's Specialization</label>
                                     <select id="specialization"
@@ -149,20 +118,23 @@
                                             {{ old('specialization') == 'Dermatology' ? 'selected' : '' }}>Dermatology
                                         </option>
                                         <option value="Psychiatry"
-                                            {{ old('specialization') == 'Psychiatry' ? 'selected' : '' }}>Psychiatry/Mental Health</option>
+                                            {{ old('specialization') == 'Psychiatry' ? 'selected' : '' }}>Psychiatry/Mental
+                                            Health</option>
                                         <option value="Ophthalmology"
                                             {{ old('specialization') == 'Ophthalmology' ? 'selected' : '' }}>Ophthalmology
                                         </option>
                                         <option value="ENT" {{ old('specialization') == 'ENT' ? 'selected' : '' }}>ENT
                                         </option>
                                         <option value="Physical Therapy"
-                                            {{ old('specialization') == 'Physical Therapy' ? 'selected' : '' }}>Physical Therapy</option>
+                                            {{ old('specialization') == 'Physical Therapy' ? 'selected' : '' }}>Physical
+                                            Therapy</option>
                                         <option value="Pharmacy"
                                             {{ old('specialization') == 'Pharmacy' ? 'selected' : '' }}>Pharmacy</option>
                                         <option value="urology" {{ old('specialization') == 'urology' ? 'selected' : '' }}>
                                             Urology</option>
                                         <option value="Hospice Care"
-                                            {{ old('specialization') == 'Hospice Care' ? 'selected' : '' }}>Hospice Care</option>
+                                            {{ old('specialization') == 'Hospice Care' ? 'selected' : '' }}>Hospice Care
+                                        </option>
                                     </select>
                                     @error('specialization')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -171,7 +143,7 @@
                             </div>
 
                             <!-- Department -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="department" class="form-label">Doctor's Department</label>
                                     <select id="department"
@@ -196,10 +168,11 @@
                                         </option>
                                         <option value="Surgery" {{ old('department') == 'Surgery' ? 'selected' : '' }}>
                                             Surgery</option>
-                                        <option value="Radiology"
-                                            {{ old('department') == 'Radiology' ? 'selected' : '' }}>Radiology</option>
+                                        <option value="Radiology" {{ old('department') == 'Radiology' ? 'selected' : '' }}>
+                                            Radiology</option>
                                         <option value="Pathology/Laboratory"
-                                            {{ old('department') == 'Pathology/Laboratory' ? 'selected' : '' }}>Pathology/Laboratory
+                                            {{ old('department') == 'Pathology/Laboratory' ? 'selected' : '' }}>
+                                            Pathology/Laboratory
                                         </option>
                                         <option value="Gastroenterology"
                                             {{ old('department') == 'Gastroenterology' ? 'selected' : '' }}>
@@ -214,14 +187,16 @@
                                         <option value="Dermatology"
                                             {{ old('department') == 'Dermatology' ? 'selected' : '' }}>Dermatology</option>
                                         <option value="Psychiatry/MentalHealth"
-                                            {{ old('department') == 'Psychiatry/MentalHealth' ? 'selected' : '' }}>Psychiatry/MentalHealth</option>
+                                            {{ old('department') == 'Psychiatry/MentalHealth' ? 'selected' : '' }}>
+                                            Psychiatry/MentalHealth</option>
                                         <option value="Ophthalmology"
                                             {{ old('department') == 'Ophthalmology' ? 'selected' : '' }}>Ophthalmology
                                         </option>
                                         <option value="ENT" {{ old('department') == 'ENT' ? 'selected' : '' }}>ENT
                                         </option>
                                         <option value="Physical Therapy/Rehabilitation"
-                                            {{ old('department') == 'Physical Therapy/Rehabilitation' ? 'selected' : '' }}>Physical Therapy/Rehabilitation</option>
+                                            {{ old('department') == 'Physical Therapy/Rehabilitation' ? 'selected' : '' }}>
+                                            Physical Therapy/Rehabilitation</option>
                                         <option value="Pharmacy" {{ old('department') == 'Pharmacy' ? 'selected' : '' }}>
                                             Pharmacy</option>
                                         <option value="Urology" {{ old('department') == 'Urology' ? 'selected' : '' }}>
@@ -236,7 +211,7 @@
                             </div>
 
                             <!-- Experience -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="experience" class="form-label">Doctor's Experience (years)</label>
                                     <input type="number" class="form-control @error('experience') is-invalid @enderror"

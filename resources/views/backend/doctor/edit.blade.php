@@ -6,14 +6,6 @@
 
 @section('css')
     <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
-        type="text/css">
-    <link href="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('build/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet"
-        type="text/css">
-    <link href="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet"
-        type="text/css" />
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.css') }}">
 @endsection
 
 @section('content')
@@ -30,6 +22,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
+
                     <form method="POST" action="{{ route('admin.doctor.update', $doctor->id) }}">
                         @csrf
                         @method('PUT')
@@ -41,96 +34,33 @@
                         @endif
 
                         <div class="row">
-                            <!-- Doctor Name -->
-                            <div class="col-md-3">
+
+                            <!-- Doctor's Name (Read Only) -->
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Doctor's Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" value="{{ old('name', $doctor->user->name) }}">
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label class="form-label">Doctor's Name</label>
+                                    <input type="text" class="form-control" value="{{ $doctor->user->name }}" readonly>
+                                    <input type="hidden" name="user_id" value="{{ $doctor->user_id }}">
                                 </div>
                             </div>
 
-                            <!-- Email -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" id="email" value="{{ old('email', $doctor->user->email) }}">
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        name="password" id="password" placeholder="Enter new password">
-                                    <small class="text-muted">Leave blank to keep current password</small>
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Phone -->
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                        name="phone" id="phone" value="{{ old('phone', $doctor->user->phone) }}">
-                                    @error('phone')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <!-- Specialization -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="specialization" class="form-label">Specialization</label>
+                                    <label for="specialization" class="form-label">Doctor's Specialization</label>
                                     <select id="specialization"
                                         class="form-control select2 @error('specialization') is-invalid @enderror"
                                         name="specialization">
-                                        <option disabled value="">Choose...</option>
-                                        @php
-                                            $specializations = [
-                                                'general_medicine' => 'General Medicine',
-                                                'cardiology' => 'Cardiology',
-                                                'neurology' => 'Neurology',
-                                                'oncology' => 'Oncology',
-                                                'orthopedics' => 'Orthopedics',
-                                                'pediatrics' => 'Pediatrics',
-                                                'obgyn' => 'OB/GYN',
-                                                'surgery' => 'Surgery',
-                                                'radiology' => 'Radiology',
-                                                'pathology' => 'Pathology / Laboratory',
-                                                'gastroenterology' => 'Gastroenterology',
-                                                'pulmonology' => 'Pulmonology',
-                                                'nephrology' => 'Nephrology',
-                                                'endocrinology' => 'Endocrinology',
-                                                'dermatology' => 'Dermatology',
-                                                'psychiatry' => 'Psychiatry / Mental Health',
-                                                'ophthalmology' => 'Ophthalmology',
-                                                'ent' => 'ENT',
-                                                'rehabilitation' => 'Physical Therapy / Rehabilitation',
-                                                'pharmacy' => 'Pharmacy',
-                                                'urology' => 'Urology',
-                                                'palliative' => 'Palliative / Hospice Care',
-                                            ];
-                                        @endphp
-
-                                        @foreach ($specializations as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ old('specialization', $doctor->specialization) == $value ? 'selected' : '' }}>
-                                                {{ $label }}
+                                        <option value="">Choose...</option>
+                                        @foreach ([
+                                            'General Medicine', 'Cardiology', 'Neurology', 'Oncology', 'Orthopedics',
+                                            'Pediatrics', 'OB/GYN', 'Surgery', 'Radiology', 'Pathology', 'Gastroenterology',
+                                            'Pulmonology', 'Nephrology', 'Endocrinology', 'Dermatology', 'Psychiatry',
+                                            'Ophthalmology', 'ENT', 'Physical Therapy', 'Pharmacy', 'Urology', 'Hospice Care'
+                                        ] as $specialty)
+                                            <option value="{{ $specialty }}"
+                                                {{ $doctor->specialization == $specialty ? 'selected' : '' }}>
+                                                {{ $specialty }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -141,17 +71,23 @@
                             </div>
 
                             <!-- Department -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="department" class="form-label">Department</label>
+                                    <label for="department" class="form-label">Doctor's Department</label>
                                     <select id="department"
                                         class="form-control select2 @error('department') is-invalid @enderror"
                                         name="department">
-                                        <option disabled value="">Choose...</option>
-                                        @foreach ($specializations as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ old('department', $doctor->department) == $value ? 'selected' : '' }}>
-                                                {{ $label }}
+                                        <option value="">Choose...</option>
+                                        @foreach ([
+                                            'Emergency', 'ICU', 'Cardiology', 'Neurology', 'Oncology', 'Orthopedics', 
+                                            'Pediatrics', 'OB/GYN', 'Surgery', 'Radiology', 'Pathology/Laboratory',
+                                            'Gastroenterology', 'Pulmonology', 'Nephrology', 'Endocrinology', 'Dermatology',
+                                            'Psychiatry/MentalHealth', 'Ophthalmology', 'ENT', 
+                                            'Physical Therapy/Rehabilitation', 'Pharmacy', 'Urology', 'HospiceCare'
+                                        ] as $dept)
+                                            <option value="{{ $dept }}"
+                                                {{ $doctor->department == $dept ? 'selected' : '' }}>
+                                                {{ $dept }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -162,17 +98,18 @@
                             </div>
 
                             <!-- Experience -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="experience" class="form-label">Experience (years)</label>
+                                    <label for="experience" class="form-label">Doctor's Experience (years)</label>
                                     <input type="number" class="form-control @error('experience') is-invalid @enderror"
-                                        name="experience" id="experience"
+                                        name="experience" id="experience" placeholder="Enter experience"
                                         value="{{ old('experience', $doctor->experience) }}">
                                     @error('experience')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Buttons -->
@@ -181,6 +118,7 @@
                             <button type="submit" class="btn btn-outline-secondary w-md">Update</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -189,13 +127,5 @@
 
 @section('script')
     <script src="{{ URL::asset('build/libs/select2/js/select2.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
-
-    <!-- form advanced init -->
     <script src="{{ URL::asset('build/js/pages/form-advanced.init.js') }}"></script>
 @endsection

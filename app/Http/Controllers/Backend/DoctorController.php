@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeDoctorRequest;
+use App\Models\User;
 use App\Repositories\DoctorRepository;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -23,20 +25,54 @@ class DoctorController extends Controller
   }
 
 
-  public function create(Request $request)
+
+  public function create()
   {
-    return view('backend.doctor.create');
+    $authUser = Auth::user();
+
+    // Allow only Admin Officer
+    if (!in_array($authUser->role->role_name, ['Admin Officer'])) {
+      abort(403, 'Access denied. Only Admin Officer can create Doctor accounts.');
+    }
+
+    // Get users with Doctor role who are NOT in doctors table
+    $doctorUsers = User::where('role_id', 1)
+      ->get();
+
+    return view('backend.doctor.create', [
+      'doctorUsers' => $doctorUsers,
+    ]);
   }
 
-  public function store(storeDoctorRequest $request)
+  public function store(StoreDoctorRequest $request)
   {
     try {
-      $doctor = app(DoctorRepository::class)->create($request->all());
-      return redirect()->route('admin.doctor.index')->with('success', 'Doctor created successfully.');
+      // Attempt to create doctor record
+      $doctor = app(DoctorRepository::class)->create($request->validated());
+
+      return redirect()
+        ->route('admin.doctor.index')
+        ->with('success', 'Doctor created successfully.');
+    } catch (\Illuminate\Database\QueryException $e) {
+      // Check if duplicate user_id constraint was violated (SQLSTATE 23000)
+      if ($e->getCode() == 23000) {
+        return back()
+          ->withInput()
+          ->with('error', 'This user already has a doctor profile. Please select a different user.');
+      }
+
+      // Handle any other database-related error
+      return back()
+        ->withInput()
+        ->with('error', 'A database error occurred while creating the doctor: ' . $e->getMessage());
     } catch (\Exception $e) {
-      return back()->withInput()->with('error', 'Failed to create Doctor: ' . $e->getMessage());
+      // Handle any other unexpected errors
+      return back()
+        ->withInput()
+        ->with('error', 'Failed to create doctor: ' . $e->getMessage());
     }
   }
+
 
 
   public function edit(Request $request, $id)
