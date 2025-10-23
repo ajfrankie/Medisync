@@ -58,28 +58,18 @@ class NurseRepository
 
     public function create(array $input): Nurse
     {
-        // Fetch the "Nurse" role safely
-        $nurseRole = Role::where('role_name', 'Nurse')->firstOrFail();
+        // Ensure user_id is present
+        if (empty($input['user_id'])) {
+            throw new \InvalidArgumentException('User ID is required to create a Doctor record.');
+        }
 
-        $user = User::create([
-            'id'       => Str::uuid(),
-            'role_id'  => $nurseRole->id,
-            'name'     => $input['name'],
-            'email'    => $input['email'],
-            'nic'   => $input['nic'] ?? null,
-            'dob'   => $input['dob'] ?? null,
-            'gender'   => $input['gender'] ?? null,
-            'image_path'   => $input['image_path'] ?? null,
-            'password' => Hash::make($input['password']),
-            'phone'    => $input['phone'] ?? null,
-        ]);
-
+        // Create Doctor record linked to existing user
         return Nurse::create([
-            'id'           => Str::uuid(),
-            'user_id'      => $user->id,
-            'department'   => $input['department'] ?? 'general',
-            'shift_time'   => $input['shift_time'] ?? null,
-            'is_activated' => true,
+            'user_id'        => $input['user_id'],
+            'shift_time' => $input['shift_time'],
+            'department'     => $input['department'],
+            'experience'     => $input['experience'] ?? null,
+            'is_activated'   => true,
         ]);
     }
 

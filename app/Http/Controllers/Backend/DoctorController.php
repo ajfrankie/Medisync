@@ -24,8 +24,6 @@ class DoctorController extends Controller
     ]);
   }
 
-
-
   public function create()
   {
     $authUser = Auth::user();
