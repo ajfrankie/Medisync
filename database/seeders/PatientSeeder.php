@@ -39,7 +39,6 @@ class PatientSeeder extends Seeder
             DB::table('patients')->insert([
                 'id' => Str::uuid(),
                 'user_id' => $user->id,
-                'dob' => $faker->dateTimeBetween('-80 years', '-10 years')->format('Y-m-d'),
                 'blood_group' => $faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
                 'marital_status' => $faker->randomElement(['Single', 'Married', 'Divorced', 'Widowed']),
                 'occupation' => $faker->jobTitle(),

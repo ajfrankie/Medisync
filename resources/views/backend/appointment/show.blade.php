@@ -36,13 +36,11 @@
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Appointment Date</h6>
-                            <p class="fw-semibold">
-                                {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}</p>
+                            <p class="fw-semibold">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}</p>
                         </div>
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Appointment Time</h6>
-                            <p class="fw-semibold">
-                                {{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
+                            <p class="fw-semibold">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
                         </div>
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Status</h6>
@@ -61,9 +59,7 @@
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <h6 class="text-muted mb-1">Next Appointment Date</h6>
-                                <p class="fw-semibold text-primary">
-                                    {{ \Carbon\Carbon::parse($appointment->next_appointment_date)->format('F d, Y') }}
-                                </p>
+                                <p class="fw-semibold text-primary">{{ \Carbon\Carbon::parse($appointment->next_appointment_date)->format('F d, Y') }}</p>
                             </div>
                         </div>
                     @endif
@@ -114,16 +110,22 @@
                         </div>
                     @endif
 
-                    <!-- Footer -->
-                    <div class="text-end mt-4">
+                    <!-- Footer Buttons -->
+                    <div class="text-end mt-4 d-flex flex-wrap justify-content-end gap-2">
                         <a href="{{ route('admin.appointment.index') }}" class="btn btn-outline-danger">
                             Cancel
                         </a>
                         <a href="{{ route('admin.appointment.edit', $appointment->id) }}" class="btn btn-outline-primary">
                             <i class="mdi mdi-pencil"></i> Edit
                         </a>
-
+                        <a href="{{ route('admin.doctor.show', $appointment->doctor->id) }}" class="btn btn-outline-info">
+                            <i class="mdi mdi-eye"></i> View Doctor Details
+                        </a>
+                        <a href="{{ route('admin.patient.show', $appointment->patient->id) }}" class="btn btn-outline-success">
+                            <i class="mdi mdi-eye"></i> View Patient Details
+                        </a>
                     </div>
+
                 </div>
             </div>
         </div>
