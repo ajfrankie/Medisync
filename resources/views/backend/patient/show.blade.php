@@ -125,18 +125,38 @@
                 </div>
             </div>
 
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-info text-dainfork d-flex align-items-center">
+                    <i class="ri-emergency-line me-2 fs-5"></i>
+                    <span class="fw-semibold">EHR Details</span>
+                </div>
+
+                <div class="card-body">
+                    @if ($ehrRecords->count() > 0)
+                        <h5 class="mb-3">EHR Records</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach ($ehrRecords as $ehr)
+                                <a href="{{ route('admin.ehr.show', $ehr->id) }}" class="btn  btn-outline-info btn-sm">
+                                    <i class="ri-file-list-line me-1"></i>
+                                    View EHR ({{ $ehr->visit_date ?? 'No date' }})
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-muted mb-0">No EHR records found for this patient.</p>
+                    @endif
+                </div>
+            </div>
+
+
             {{-- Back Button --}}
             <div class="d-flex justify-content-end gap-2 mb-4">
                 <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger btn-lg">
                     <i class="ri-arrow-go-back-line me-1"></i> Back to List
                 </a>
-
-                <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary btn-lg">
-                    <i class="ri-add-line me-1"></i> Add EHR
-                </a>
-
-                 <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary btn-lg">
-                    <i class="ri-add-line me-1"></i> View EHR
+                <a href="{{ route('admin.ehr.create', ['patient_id' => $patient->id]) }}"
+                    class="btn btn-outline-success btn-lg">
+                    <i class="ri-add-line me-1"></i> Create EHR
                 </a>
             </div>
 
