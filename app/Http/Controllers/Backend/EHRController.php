@@ -46,9 +46,32 @@ class EHRController extends Controller
     }
 
 
-    public function edit() {}
+    public function edit($id)
+    {
+        $ehr = app(EHRRepository::class)->find($id);
+        return view('backend.ehr.edit', [
+            'ehr' => $ehr,
+        ]);
+    }
 
-    public function update() {}
+    public function update(Request $request, $id)
+    {
+        try {
+            $nurse = app(EHRRepository::class)->update($id, $request->all());
+            return redirect()->route('admin.ehr.index')->with('success', 'EHR Record updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to update EHR Record: ' . $e->getMessage());
+        }
+    }
 
-    public function show() {}
+    public function show($id, Request $request)
+    {
+        $ehr = app(EHRRepository::class)->find($id);
+
+
+        return view('backend.ehr.show', [
+            'ehr' => $ehr,
+            'request' => $request,
+        ]);
+    }
 }
