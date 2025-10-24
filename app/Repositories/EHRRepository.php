@@ -108,4 +108,9 @@ class EHRRepository
 
         throw new \Exception('EHR Record not found');
     }
+
+    public function findByPatientID($patientId)
+    {
+        return EhrRecord::where('patient_id', $patientId)->get();
+    }
 }

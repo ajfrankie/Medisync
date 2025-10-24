@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\User;
+use App\Repositories\EHRRepository;
 use App\Repositories\PatientRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -121,8 +122,10 @@ class PatientController extends Controller
             return redirect()->route('admin.patient.index')->with('error', 'Patient not found.');
         }
 
-        // Prepare age and BMI
-        $request->merge(['patient_id' => $id]); // ensure patient_id is in the request
+        // Use repository method, not Eloquent relationship
+        $ehrRecords = app(EHRRepository::class)->findByPatientID($id);
+
+        $request->merge(['patient_id' => $id]);
         $age = $this->ageCalculate($request);
         $bmiData = $this->BMIcalculate($request);
 
@@ -130,8 +133,10 @@ class PatientController extends Controller
             'patient' => $patient,
             'age' => $age,
             'bmiData' => $bmiData,
+            'ehrRecords' => $ehrRecords, // collection
         ]);
     }
+
 
     public function ageCalculate(Request $request)
     {
