@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\User;
 use App\Repositories\PatientRepository;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
@@ -120,9 +121,53 @@ class PatientController extends Controller
             return redirect()->route('admin.patient.index')->with('error', 'Patient not found.');
         }
 
+        // Prepare age and BMI
+        $request->merge(['patient_id' => $id]); // ensure patient_id is in the request
+        $age = $this->ageCalculate($request);
+        $bmiData = $this->BMIcalculate($request);
+
         return view('backend.patient.show', [
             'patient' => $patient,
-            'request' => $request,
+            'age' => $age,
+            'bmiData' => $bmiData,
         ]);
+    }
+
+    public function ageCalculate(Request $request)
+    {
+        $patient = app(PatientRepository::class)->find($request->patient_id);
+
+        if (!$patient || !$patient->user || empty($patient->user->dob)) {
+            return null; // no DOB available
+        }
+
+        $birthDate = Carbon::parse($patient->user->dob);
+        return $birthDate->diffInYears(Carbon::today());
+    }
+
+    public function BMIcalculate(Request $request)
+    {
+        $patient = app(PatientRepository::class)->find($request->patient_id);
+
+        if (!$patient || empty($patient->height) || empty($patient->weight) || $patient->height == 0) {
+            return [
+                'bmi' => null,
+                'category' => 'Insufficient data',
+            ];
+        }
+
+        $bmi = round($patient->weight / pow($patient->height / 100, 2), 2);
+
+        $category = match (true) {
+            $bmi < 18.5 => 'Underweight',
+            $bmi < 25 => 'Normal weight',
+            $bmi < 30 => 'Overweight',
+            default => 'Obese',
+        };
+
+        return [
+            'bmi' => $bmi,
+            'category' => $category,
+        ];
     }
 }

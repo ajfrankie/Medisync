@@ -14,125 +14,134 @@
 
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-4">
-                        {{-- Profile Image --}}
-                        <div class="me-3">
-                            @php
-                                $avatar = $patient->user->image_path
-                                    ? asset('storage/' . $patient->user->image_path)
-                                    : asset('assets/images/default-avatar.png');
-                            @endphp
-                            <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle" width="120" height="120"
-                                style="object-fit: cover; border: 3px solid #0d6efd;">
-                        </div>
 
-                        {{-- Name & Email --}}
-                        <div>
-                            <h3 class="mb-1">{{ $patient->user->name }}</h3>
-                            <p class="text-muted mb-0">{{ $patient->user->email }}</p>
-                        </div>
+            {{-- Profile Section --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body d-flex align-items-center flex-column flex-md-row text-center text-md-start">
+                    @php
+                        $avatar = $patient->user->image_path
+                            ? asset('storage/' . $patient->user->image_path)
+                            : asset('assets/images/default-avatar.png');
+
+                        // BMI Badge color
+                        $bmiClass = match ($bmiData['category'] ?? '') {
+                            'Underweight' => 'bg-warning',
+                            'Normal' => 'bg-success',
+                            'Overweight' => 'bg-warning',
+                            'Obese' => 'bg-danger',
+                            default => 'bg-secondary',
+                        };
+                    @endphp
+                    <div class="me-md-4 mb-3 mb-md-0">
+                        <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle border border-primary"
+                            width="120" height="120" style="object-fit: cover;">
                     </div>
-
-                    <hr>
-
-                    {{-- Patient Info Grid --}}
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Phone:</strong> <span class="text-primary">{{ $patient->user->phone ?? '-' }}</span>
-                            </div>
+                    <div>
+                        <h3 class="mb-1">{{ $patient->user->name }}</h3>
+                        <p class="text-muted mb-2">{{ $patient->user->email }}</p>
+                        <div class="d-flex justify-content-center justify-content-md-start flex-wrap gap-2">
+                            <span class="badge bg-success">Age: {{ $age ?? 'N/A' }}</span>
+                            <span class="badge {{ $bmiClass }}">BMI: {{ $bmiData['bmi'] ?? 'N/A' }}
+                                ({{ $bmiData['category'] ?? '-' }})</span>
+                            <span class="badge bg-danger">Blood Group: {{ $patient->blood_group ?? '-' }}</span>
                         </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>NIC:</strong> <span class="text-primary">{{ $patient->user->nic ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Gender:</strong> <span
-                                    class="badge bg-info">{{ ucfirst($patient->user->gender ?? '-') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>DOB:</strong> <span class="text-success">{{ $patient->user->dob ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Blood Group:</strong> <span
-                                    class="badge bg-danger">{{ $patient->blood_group ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Marital Status:</strong> <span>{{ $patient->marital_status ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Occupation:</strong> <span>{{ $patient->occupation ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Height:</strong> <span>{{ $patient->height ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Weight:</strong> <span>{{ $patient->weight ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Past Surgeries:</strong> <span>{{ $patient->past_surgeries ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Past Surgeries Details:</strong>
-                                <span>{{ $patient->past_surgeries_details ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Preferred Language:</strong> <span>{{ $patient->preferred_language ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Address:</strong> <span>{{ $patient->address ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Emergency Person:</strong> <span>{{ $patient->emergency_person ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Relationship:</strong> <span>{{ $patient->emergency_relationship ?? '-' }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded">
-                                <strong>Emergency Contact:</strong> <span
-                                    class="text-warning">{{ $patient->emergency_contact ?? '-' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Back Button --}}
-                    <div class="mt-4 text-center">
-                        <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="ri-arrow-go-back-line"></i> Back to List
-                        </a>
                     </div>
                 </div>
             </div>
+
+            {{-- Personal Information --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="ri-user-3-line me-2"></i> Personal Information
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <i class="ri-phone-line me-1 text-primary"></i>
+                        <strong>Phone:</strong> <span class="text-primary">{{ $patient->user->phone ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-id-card-line me-1 text-primary"></i>
+                        <strong>NIC:</strong> <span>{{ $patient->user->nic ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-genderless-line me-1 text-info"></i>
+                        <strong>Gender:</strong> <span
+                            class="badge bg-info">{{ ucfirst($patient->user->gender ?? '-') }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-calendar-line me-1 text-success"></i>
+                        <strong>DOB:</strong> <span>{{ $patient->user->dob ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-heart-line me-1 text-warning"></i>
+                        <strong>Marital Status:</strong> <span>{{ $patient->marital_status ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-home-line me-1 text-secondary"></i>
+                        <strong>Address:</strong> <span>{{ $patient->address ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-global-line me-1 text-muted"></i>
+                        <strong>Preferred Language:</strong> <span>{{ $patient->preferred_language ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="ri-briefcase-line me-1 text-dark"></i>
+                        <strong>Occupation:</strong> <span>{{ $patient->occupation ?? '-' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Health Information --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-success text-white">
+                    <i class="ri-stethoscope-line me-2"></i> Health Information
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><strong>Height:</strong> <span>{{ $patient->height ?? '-' }}</span></div>
+                    <div class="col-md-6"><strong>Weight:</strong> <span>{{ $patient->weight ?? '-' }}</span></div>
+                    <div class="col-md-6"><strong>Past Surgeries:</strong>
+                        <span>{{ $patient->past_surgeries ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6"><strong>Past Surgeries Details:</strong>
+                        <span>{{ $patient->past_surgeries_details ?? '-' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Emergency Contact --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <i class="ri-emergency-line me-2"></i> Emergency Contact
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><strong>Emergency Person:</strong>
+                        <span>{{ $patient->emergency_person ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6"><strong>Relationship:</strong>
+                        <span>{{ $patient->emergency_relationship ?? '-' }}</span>
+                    </div>
+                    <div class="col-md-6"><strong>Emergency Contact:</strong> <span
+                            class="text-danger">{{ $patient->emergency_contact ?? '-' }}</span></div>
+                </div>
+            </div>
+
+            {{-- Back Button --}}
+            <div class="d-flex justify-content-end gap-2 mb-4">
+                <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger btn-lg">
+                    <i class="ri-arrow-go-back-line me-1"></i> Back to List
+                </a>
+
+                <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="ri-add-line me-1"></i> Add EHR
+                </a>
+
+                 <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="ri-add-line me-1"></i> View EHR
+                </a>
+            </div>
+
+
+
         </div>
     </div>
 @endsection
