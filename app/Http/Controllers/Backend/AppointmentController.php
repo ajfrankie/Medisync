@@ -10,6 +10,7 @@ use App\Models\Doctor;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\DoctorRepository;
 use App\Repositories\PatientRepository;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -23,10 +24,31 @@ class AppointmentController extends Controller
 
     public function index(Request $request)
     {
-        $doctors = app(DoctorRepository::class)->get($request)->get();
-        $patients = app(PatientRepository::class)->get($request)->get();
+        $authUser = Auth::user();
 
-        $appointments = app(AppointmentRepository::class)->get($request)->paginate(10);
+        $roleName = strtolower($authUser->role->role_name);
+
+        $doctorRepo = app(DoctorRepository::class);
+        $patientRepo = app(PatientRepository::class);
+        $appointmentRepo = app(AppointmentRepository::class);
+
+        if ($roleName === 'doctor') {
+            $doctor = $doctorRepo->findByUserId($authUser->id);
+            $appointments = $appointmentRepo->get($request)
+                ->where('doctor_id', $doctor->id)
+                ->paginate(10);
+        } elseif ($roleName === 'patient') {
+            $patient = $patientRepo->findByUserId($authUser->id);
+            $appointments = $appointmentRepo->get($request)
+                ->where('patient_id', $patient->id)
+                ->paginate(10);
+        } else {
+            $appointments = $appointmentRepo->get($request)->paginate(10);
+        }
+
+         $doctors = $doctorRepo->get($request)->get();
+        $patients = $patientRepo->get($request)->get();
+
         return view('backend.appointment.index', [
             'appointments' => $appointments,
             'request' => $request,
@@ -34,6 +56,7 @@ class AppointmentController extends Controller
             'patients' => $patients,
         ]);
     }
+
 
 
     public function create(Request $request)

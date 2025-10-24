@@ -13,7 +13,7 @@ class NurseSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Fetch the Nurse role
+        // Fetch the "Nurse" role
         $nurseRole = DB::table('roles')->where('role_name', 'Nurse')->first();
 
         if (!$nurseRole) {
@@ -21,7 +21,7 @@ class NurseSeeder extends Seeder
             return;
         }
 
-        // Get all users with Nurse role
+        // Get all users with the Nurse role
         $nurseUsers = DB::table('users')->where('role_id', $nurseRole->id)->get();
 
         if ($nurseUsers->isEmpty()) {
@@ -29,10 +29,11 @@ class NurseSeeder extends Seeder
             return;
         }
 
+        // Insert a nurse record for each nurse user
         foreach ($nurseUsers as $user) {
             DB::table('nurses')->insert([
-                'id' => Str::uuid(),
-                'user_id' => $user->id,
+                'id' => Str::uuid(),          // Unique nurse ID
+                'user_id' => $user->id,       // Link to user table
                 'department' => $faker->randomElement([
                     'Emergency', 'Pediatrics', 'Surgery', 'Intensive Care', 'Outpatient', 'General Ward'
                 ]),
@@ -41,10 +42,12 @@ class NurseSeeder extends Seeder
                     'Afternoon (2 PM - 10 PM)',
                     'Night (10 PM - 6 AM)',
                 ]),
-                'is_activated' => $faker->boolean(90),
+                'is_activated' => $faker->boolean(90), // 90% chance of true
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
+
+        $this->command->info(count($nurseUsers) . ' nurse records created successfully.');
     }
 }

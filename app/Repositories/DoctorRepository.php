@@ -122,4 +122,9 @@ class DoctorRepository
 
         throw new \Exception('Doctor not found');
     }
+
+    public function findByUserId($userId)
+    {
+        return Doctor::with('user')->where('user_id', $userId)->first();
+    }
 }

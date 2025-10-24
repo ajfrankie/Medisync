@@ -124,4 +124,9 @@ class NurseRepository
 
         throw new \Exception('nurse not found');
     }
+
+    public function findByUserId($userId)
+    {
+        return Nurse::with('user')->where('user_id', $userId)->first();
+    }
 }
