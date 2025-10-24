@@ -15,10 +15,15 @@ class Patient extends Model
 
     protected $fillable = [
         'user_id',
-        'dob',
-        'gender',
         'blood_group',
+        'marital_status',
+        'occupation',
+        'height',
+        'weight',
+        'past_surgeries',
+        'past_surgeries_details',
         'emergency_person',
+        'preferred_language',
         'emergency_relationship',
         'address',
         'emergency_contact',
@@ -28,6 +33,7 @@ class Patient extends Model
     {
         parent::boot();
 
+        // Automatically generate UUID on creation
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = (string) Str::uuid();
@@ -35,7 +41,9 @@ class Patient extends Model
         });
     }
 
-    //releatioships
+    /**
+     * Relationships
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
