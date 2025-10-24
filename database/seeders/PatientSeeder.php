@@ -39,6 +39,7 @@ class PatientSeeder extends Seeder
             DB::table('patients')->insert([
                 'id' => Str::uuid(),
                 'user_id' => $user->id,
+                'dob' => $faker->dateTimeBetween('-80 years', '-10 years')->format('Y-m-d'),
                 'blood_group' => $faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
                 'marital_status' => $faker->randomElement(['Single', 'Married', 'Divorced', 'Widowed']),
                 'occupation' => $faker->jobTitle(),
@@ -47,7 +48,7 @@ class PatientSeeder extends Seeder
                 'past_surgeries' => $faker->boolean(30) ? 'Yes' : 'No',
                 'past_surgeries_details' => $faker->sentence(),
                 'emergency_person' => $faker->name(),
-                'preferred_language' => $faker->randomElement(['Tamil', 'Sinhala', 'English']),
+                'preferred_language' => $faker->languageCode(),
                 'emergency_relationship' => $faker->randomElement(['Father', 'Mother', 'Sibling', 'Spouse', 'Friend']),
                 'emergency_contact' => $emergencyContact,
                 'created_at' => now(),

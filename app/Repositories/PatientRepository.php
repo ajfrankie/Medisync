@@ -154,4 +154,9 @@ class PatientRepository
         }
         throw new \Exception('Patient not found');
     }
+
+    public function findByUserId($userId)
+    {
+        return Patient::with('user')->where('user_id', $userId)->first();
+    }
 }

@@ -13,28 +13,43 @@ class DoctorSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Fetch all users with the Doctor role
+        // Fetch the "Doctor" role
         $doctorRole = DB::table('roles')->where('role_name', 'Doctor')->first();
 
-        if (!$doctorRole) return;
+        // If the role doesn't exist, stop seeding
+        if (!$doctorRole) {
+            $this->command->info('Doctor role not found. Seeder skipped.');
+            return;
+        }
 
+        // Get all users with the Doctor role
         $doctorUsers = DB::table('users')->where('role_id', $doctorRole->id)->get();
 
+        // Insert a doctor record for each doctor user
         foreach ($doctorUsers as $user) {
             DB::table('doctors')->insert([
-                'id' => Str::uuid(),
-                'user_id' => $user->id,
+                'id' => Str::uuid(),          // Unique doctor ID
+                'user_id' => $user->id,       // Link to user table
                 'specialization' => $faker->randomElement([
-                    'Cardiology', 'Pediatrics', 'Neurology', 'Dermatology', 'General Medicine'
+                    'Cardiology',
+                    'Pediatrics',
+                    'Neurology',
+                    'Dermatology',
+                    'General Medicine'
                 ]),
                 'department' => $faker->randomElement([
-                    'Outpatient', 'Emergency', 'Inpatient', 'Surgery'
+                    'Outpatient',
+                    'Emergency',
+                    'Inpatient',
+                    'Surgery'
                 ]),
                 'experience' => $faker->numberBetween(1, 20),
-                'is_activated' => $faker->boolean(90),
+                'is_activated' => $faker->boolean(90), // 90% chance of being true
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
+
+        $this->command->info(count($doctorUsers) . ' doctor records created successfully.');
     }
 }
