@@ -44,21 +44,21 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
                         <i class="bx bx-chat"></i>
                         <span key="t-chat">AI Chatbot Logs</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
                         <i class="bx bx-bell"></i>
                         <span key="t-chat">Notifications</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.customers.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
                         <i class="bx bx-chip"></i>
                         <span key="t-chat">AI Assistant</span>
                     </a>
