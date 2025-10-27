@@ -23,11 +23,13 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.doctor.index') }}" class="waves-effect">
+                    <a href="{{ route('admin.appointment.viewAppointmentDetails', Auth::user()->doctor->id) }}"
+                        class="waves-effect">
                         <i class="bx bx-user-circle"></i>
-                        <span key="t-chat">Doctors</span>
+                        <span key="t-chat">Doctor's Appointment</span>
                     </a>
                 </li>
+
 
                 <li>
                     <a href="{{ route('admin.patient.index') }}" class="waves-effect">
@@ -44,21 +46,21 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                         <i class="bx bx-chat"></i>
                         <span key="t-chat">AI Chatbot Logs</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                         <i class="bx bx-bell"></i>
                         <span key="t-chat">Notifications</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.dashboard')  }}" class="waves-effect">
+                    <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                         <i class="bx bx-chip"></i>
                         <span key="t-chat">AI Assistant</span>
                     </a>

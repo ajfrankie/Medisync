@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /* eslint-disable require-jsdoc, no-unused-vars */
 
@@ -21,7 +21,7 @@ function addCalendar(calendar) {
 function findCalendar(id) {
     var found;
 
-    CalendarList.forEach(function(calendar) {
+    CalendarList.forEach(function (calendar) {
         if (calendar.id === id) {
             found = calendar;
         }
@@ -36,82 +36,78 @@ function hexToRGBA(hex) {
         g = parseInt(hex.slice(3, 5), radix),
         b = parseInt(hex.slice(5, 7), radix),
         a = parseInt(hex.slice(7, 9), radix) / 255 || 1;
-    var rgba = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+    var rgba = "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
 
     return rgba;
 }
 
-(function() {
+//     'pending' => '#ffc107',              // warning - yellow
+//     'confirmed' => '#0dcaf0',            // info - cyan
+//     'completed' => '#198754',            // success - green
+//     'cancelled' => '#dc3545',            // danger - red
+//     'schedule next appointment' => '#0d6efd', // primary - blue
+
+(function () {
     var calendar;
     var id = 0;
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'My Calendar';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#556ee6';
-    calendar.dragBgColor = '#556ee6';
-    calendar.borderColor = '#556ee6';
+    calendar.name = "My Calendar";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#556ee6";
+    calendar.dragBgColor = "#556ee6";
+    calendar.borderColor = "#556ee6";
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'Company';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#50a5f1';
-    calendar.dragBgColor = '#50a5f1';
-    calendar.borderColor = '#50a5f1';
+    calendar.name = "pending";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#ffc107";
+    calendar.dragBgColor = "#ffc107";
+    calendar.borderColor = "#ffc107";
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'Family';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#f46a6a';
-    calendar.dragBgColor = '#f46a6a';
-    calendar.borderColor = '#f46a6a';
+    calendar.name = "confirmed";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#0dcaf0";
+    calendar.dragBgColor = "#0dcaf0";
+    calendar.borderColor = "#0dcaf0";
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'Friend';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#34c38f';
-    calendar.dragBgColor = '#34c38f';
-    calendar.borderColor = '#34c38f';
+    calendar.name = "completed";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#198754";
+    calendar.dragBgColor = "#198754";
+    calendar.borderColor = "#198754";
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'Travel';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#bbdc00';
-    calendar.dragBgColor = '#bbdc00';
-    calendar.borderColor = '#bbdc00';
+    calendar.name = "cancelled";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#dc3545";
+    calendar.dragBgColor = "#dc3545";
+    calendar.borderColor = "#dc3545";
     addCalendar(calendar);
 
     calendar = new CalendarInfo();
     id += 1;
     calendar.id = String(id);
-    calendar.name = 'Birthdays';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#f1b44c';
-    calendar.dragBgColor = '#f1b44c';
-    calendar.borderColor = '#f1b44c';
-    addCalendar(calendar);
-
-    calendar = new CalendarInfo();
-    id += 1;
-    calendar.id = String(id);
-    calendar.name = 'National Holidays';
-    calendar.color = '#ffffff';
-    calendar.bgColor = '#ff4040';
-    calendar.dragBgColor = '#ff4040';
-    calendar.borderColor = '#ff4040';
+    calendar.name = "schedule next appointment";
+    calendar.color = "#ffffff";
+    calendar.bgColor = "#0d6efd";
+    calendar.dragBgColor = "#0d6efd";
+    calendar.borderColor = "#0d6efd";
     addCalendar(calendar);
 })();

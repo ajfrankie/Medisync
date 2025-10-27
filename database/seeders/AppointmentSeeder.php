@@ -21,7 +21,7 @@ class AppointmentSeeder extends Seeder
 
         // If no patients or doctors exist, exit early
         if (empty($patients) || empty($doctors)) {
-            $this->command->warn('⚠️ Please seed patients and doctors before appointments.');
+            $this->command->warn('Please seed patients and doctors before appointments.');
             return;
         }
 
@@ -44,6 +44,6 @@ class AppointmentSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('✅ 15 Appointments seeded successfully!');
+        $this->command->info('15 Appointments seeded successfully!');
     }
 }

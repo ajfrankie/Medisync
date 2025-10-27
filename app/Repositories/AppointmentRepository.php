@@ -126,4 +126,10 @@ class AppointmentRepository
 
         throw new \Exception('appointment not found');
     }
+
+    public function getDoctorAppointments($doctorId)
+    {
+        return Appointment::where('doctor_id', $doctorId)->get();
+        // return Doctor::with('user')->where('user_id', $userId)->first();
+    }
 }
