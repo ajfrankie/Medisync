@@ -46,7 +46,7 @@ class AppointmentController extends Controller
             $appointments = $appointmentRepo->get($request)->paginate(10);
         }
 
-         $doctors = $doctorRepo->get($request)->get();
+        $doctors = $doctorRepo->get($request)->get();
         $patients = $patientRepo->get($request)->get();
 
         return view('backend.appointment.index', [
@@ -167,5 +167,42 @@ class AppointmentController extends Controller
         }
 
         return response()->json(['success' => false]);
+    }
+
+    //view appointments of Doctors
+    public function viewAppointmentDetails($id, Request $request)
+    {
+        $doctor = Auth::user()->doctor;
+
+        if (!$doctor) {
+            return redirect()
+                ->route('admin.appointment.index')
+                ->with('error', 'Doctor not found.');
+        }
+
+        $appointments = app(AppointmentRepository::class)->getDoctorAppointments($doctor->id);
+
+        $formattedAppointments = $appointments->map(function ($appointment) {
+            // Combine date + time into one Carbon datetime
+            $start = \Carbon\Carbon::parse($appointment->appointment_date . ' ' . $appointment->appointment_time);
+
+            // Add a 30-minute duration as end time
+            $end = $start->copy()->addMinutes(30);
+
+            return [
+                'id' => $appointment->id,
+                'title' => $appointment->patient->name ?? 'Appointment',
+                'category' => 'time',
+                'start' => $start->toIso8601String(),  
+                'end'   => $end->toIso8601String(),
+                'state' => $appointment->status ?? 'pending',
+            ];
+        });
+
+        return view('backend.appointment.doctorAppointmentDetails', [
+            'doctor' => $doctor,
+            'appointments' => $formattedAppointments,
+            'request' => $request,
+        ]);
     }
 }

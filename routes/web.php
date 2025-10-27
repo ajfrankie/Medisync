@@ -95,6 +95,7 @@ Route::prefix('/admin')->group(function () {
         Route::put('update/{id}', [AppointmentController::class, 'update'])->name('admin.appointment.update');
         Route::delete('delete/{id}', [AppointmentController::class, 'destroy'])->name('admin.appointment.destroy');
         Route::get('/get-doctor-details', [AppointmentController::class, 'getDoctorDetails'])->name('admin.appointment.getDoctorDetails');
+        Route::get('/view-appointment-details/{id}', [AppointmentController::class, 'viewAppointmentDetails'])->name('admin.appointment.viewAppointmentDetails');
     });
 
     //EHR Records
