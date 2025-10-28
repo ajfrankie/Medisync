@@ -35,6 +35,7 @@ class VitalRepository
             'blood_pressure' => $input['blood_pressure'],
             'pulse_rate'     => $input['pulse_rate'] ?? null,
             'oxygen_level'   => $input['oxygen_level'] ?? null,
+            'blood_sugar'   => $input['blood_sugar'] ?? null,
             'recorded_at'    => $input['recorded_at'] ?? now(),
         ]);
     }
@@ -56,6 +57,8 @@ class VitalRepository
             'blood_pressure' => $input['blood_pressure'] ?? $vital->blood_pressure,
             'pulse_rate'     => $input['pulse_rate'] ?? $vital->pulse_rate,
             'oxygen_level'   => $input['oxygen_level'] ?? $vital->oxygen_level,
+            'blood_sugar'    => $input['blood_sugar'] ?? $vital->blood_sugar,
+            'blood_sugar'    => $input['blood_sugar'] ?? $vital->blood_sugar,
             'recorded_at'    => $input['recorded_at'] ?? $vital->recorded_at,
         ]);
 

@@ -20,7 +20,7 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">Vitals</h5>
-                        <a href="{{ route('admin.nurse.create') }}" class="btn btn-outline-primary w-md">
+                        <a href="{{ route('admin.vital.create') }}" class="btn btn-outline-primary w-md">
                             <i class="fas fa-plus me-1"></i> Create Vital
                         </a>
                     </div>
@@ -37,6 +37,7 @@
                                     <th>Blood Pressure</th>
                                     <th>Pulse Rate</th>
                                     <th>Oxygen Level</th>
+                                    <th>Blood Suger</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -49,6 +50,7 @@
                                         <td>{{ $vital->blood_pressure ?? 'N/A' }}</td>
                                         <td>{{ $vital->pulse_rate ?? 'N/A' }}</td>
                                         <td>{{ $vital->oxygen_level ?? 'N/A' }}</td>
+                                        <td>{{ $vital->blood_sugar ?? 'N/A' }}</td>
                                         <td>
                                             <div class="btn-group text-nowrap" role="group">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
