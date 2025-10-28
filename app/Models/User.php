@@ -15,7 +15,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public $incrementing = false;
     protected $keyType = 'string';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -54,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
 
-     protected static function boot()
+    protected static function boot()
     {
         parent::boot();
 
@@ -65,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-     public function role()
+    public function role()
     {
         return $this->belongsTo(Role::class);
     }
@@ -93,5 +93,31 @@ class User extends Authenticatable implements MustVerifyEmail
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+
+    public function isDoctor(): bool
+    {
+        return optional($this->role)->role_name === 'Doctor';
+    }
+
+    public function isPatient(): bool
+    {
+        return optional($this->role)->role_name === 'Patient';
+    }
+
+    public function isNurse(): bool
+    {
+        return optional($this->role)->role_name === 'Nurse';
+    }
+
+    public function isAdmin(): bool
+    {
+        return optional($this->role)->role_name === 'Admin Officer';
+    }
+
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array(optional($this->role)->role_name, $roles);
     }
 }
