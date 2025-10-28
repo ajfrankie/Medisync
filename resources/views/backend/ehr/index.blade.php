@@ -45,10 +45,10 @@
                                     <tr>
                                         <td>{{ $ehr->doctor->user->name ?? 'N/A' }}</td>
                                         <td>{{ $ehr->patient->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $ehr->visit_date ?? 'N/A'  }}</td>
-                                        <td>{{ $ehr->diagnosis ?? 'N/A'  }}</td>
-                                        <td>{{ $ehr->treatment_summary ?? 'N/A'  }}</td>
-                                       
+                                        <td>{{ $ehr->visit_date ?? 'N/A' }}</td>
+                                        <td>{{ $ehr->diagnosis ?? 'N/A' }}</td>
+                                        <td>{{ $ehr->treatment_summary ?? 'N/A' }}</td>
+
                                         <td>
                                             <div class="btn-group text-nowrap" role="group">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
@@ -57,15 +57,19 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
 
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.ehr.show', $ehr->id) }}">
+                                                    <a class="dropdown-item" href="{{ route('admin.ehr.show', $ehr->id) }}">
                                                         <i class="bx bx-edit-alt"></i>Show
                                                     </a>
 
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.ehr.edit', $ehr->id) }}">
+                                                    <a class="dropdown-item" href="{{ route('admin.ehr.edit', $ehr->id) }}">
                                                         <i class="bx bx-edit-alt"></i>Edit
                                                     </a>
+
+                                                    {{-- <a class="dropdown-item"
+                                                        href="{{ route('admin.vital.index', ['ehr_id' => $ehr->id]) }}">
+                                                        <i class="bx bx-edit-alt"></i>Vitals
+                                                    </a> --}}
+
 
                                                 </div>
                                             </div>

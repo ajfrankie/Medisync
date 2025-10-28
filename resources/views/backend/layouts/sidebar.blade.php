@@ -166,6 +166,13 @@
                         </a>
                     </li>
 
+                     <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.vital.index') }}" class="waves-effect">
+                            <i class="bx bx-chip"></i>
+                            <span>Vitals</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="javascript:void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-cog"></i><span>Settings</span>
