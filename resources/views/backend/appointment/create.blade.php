@@ -110,7 +110,7 @@
                             </div>
 
                             <!-- Appointment Time -->
-                            <div class="col-md-3">
+                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="appointment_time" class="form-label">Appointment Time</label>
                                     <input type="time"

@@ -65,10 +65,11 @@
                                                         <i class="bx bx-edit-alt"></i>Edit
                                                     </a>
 
-                                                    {{-- <a class="dropdown-item"
-                                                        href="{{ route('admin.vital.index', ['ehr_id' => $ehr->id]) }}">
-                                                        <i class="bx bx-edit-alt"></i>Vitals
-                                                    </a> --}}
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.vital.create', ['ehr_id' => $ehr->id]) }}">
+                                                        <i class="bx bx-plus-circle"></i> Create Vitals
+                                                    </a>
+
 
 
                                                 </div>

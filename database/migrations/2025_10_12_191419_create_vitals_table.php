@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('blood_pressure')->nullable();
             $table->string('pulse_rate')->nullable();
             $table->string('oxygen_level')->nullable();
+            $table->string('blood_sugar')->nullable();
             $table->timestamp('recorded_at')->useCurrent();
             $table->timestamps();
 

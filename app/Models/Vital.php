@@ -19,6 +19,7 @@ class Vital extends Model
         'blood_pressure',
         'pulse_rate',
         'oxygen_level',
+        'blood_sugar',
         'recorded_at'
     ];
     protected static function boot()
