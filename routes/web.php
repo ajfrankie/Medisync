@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
+use App\Http\Controllers\Backend\VitalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,5 +107,15 @@ Route::prefix('/admin')->group(function () {
         Route::get('/show/{id}', [EHRController::class, 'show'])->name('admin.ehr.show');
         Route::get('/edit/{id}', [EHRController::class, 'edit'])->name('admin.ehr.edit');
         Route::put('update/{id}', [EHRController::class, 'update'])->name('admin.ehr.update');
+    });
+
+
+     Route::prefix('/vital')->middleware('auth')->group(function () {
+        Route::get('/', [VitalController::class, 'index'])->name('admin.vital.index');
+        Route::get('/create', [VitalController::class, 'create'])->name('admin.vital.create');
+        Route::post('/store', [VitalController::class, 'store'])->name('admin.vital.store');
+        Route::get('/show/{id}', [VitalController::class, 'show'])->name('admin.vital.show');
+        Route::get('/edit/{id}', [VitalController::class, 'edit'])->name('admin.vital.edit');
+        Route::put('update/{id}', [EHRController::class, 'update'])->name('admin.vital.update');
     });
 });
