@@ -20,7 +20,8 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">Vitals</h5>
-                        <a href="{{ route('admin.vital.create') }}" class="btn btn-outline-primary w-md">
+                        <a href="{{ route('admin.vital.create', ['ehr_id' => $ehr->id]) }}" class="btn btn-outline-primary w-md">
+
                             <i class="fas fa-plus me-1"></i> Create Vital
                         </a>
                     </div>
@@ -59,7 +60,7 @@
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('admin.nurse.show', $vital->id) }}">
+                                                        href="{{ route('admin.vital.show', $vital->id) }}">
                                                         <i class="bx bx-show-alt"></i> Show
                                                     </a>
                                                     <a class="dropdown-item"
