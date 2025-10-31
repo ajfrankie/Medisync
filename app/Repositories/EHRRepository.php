@@ -28,6 +28,19 @@ class EHRRepository
             });
         }
 
+        if (!empty($request->patient_id)) {
+            $query->where('patient_id', $request->patient_id);
+        }
+
+        if (!empty($request->doctor_id)) {
+            $query->where('doctor_id', $request->doctor_id);
+        }
+
+        if (!empty($request->visit_date)) {
+            $query->where('visit_date', $request->visit_date);
+        }
+
+
         return $query;
     }
 
