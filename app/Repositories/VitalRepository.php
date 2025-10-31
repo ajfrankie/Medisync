@@ -17,11 +17,17 @@ class VitalRepository
 
     public function get(Request $request)
     {
-        $query = Vital::with('ehrRecord') 
+        $query = Vital::with('ehrRecord')
             ->orderBy('created_at', 'desc');
+
+        // Filter by ehr_id if it exists in the request
+        if ($request->has('ehr_id') && !empty($request->ehr_id)) {
+            $query->where('ehr_id', $request->ehr_id);
+        }
 
         return $query;
     }
+
 
     public function create(array $input): Vital
     {
