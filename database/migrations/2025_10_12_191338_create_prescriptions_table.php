@@ -14,11 +14,12 @@ return new class extends Migration
     Schema::create('prescriptions', function (Blueprint $table) {
         $table->uuid('id')->primary();
         $table->uuid('ehr_id');
-        $table->string('medicine_name');
+        $table->string('medicine_name')->nullable();
         $table->string('dosage')->nullable();
         $table->string('frequency')->nullable();
         $table->string('duration')->nullable();
         $table->text('instructions')->nullable();
+        $table->string('prescription_img_path')->nullable();
         $table->timestamps();
 
         $table->foreign('ehr_id')->references('id')->on('ehr_records')->cascadeOnDelete();

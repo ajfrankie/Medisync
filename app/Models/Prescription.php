@@ -18,6 +18,7 @@ class Prescription extends Model
         'dosage',
         'frequency',
         'duration',
+        'prescription_img_path',
         'instructions'
     ];
     protected static function boot()
