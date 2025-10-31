@@ -9,16 +9,61 @@ use App\Repositories\DoctorRepository;
 use App\Repositories\EHRRepository;
 use App\Repositories\PatientRepository;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+
 
 class EHRController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     // Get paginated EHR records with filters applied from the repository
+    //     $ehrs = app(EHRRepository::class)->get($request)->paginate(10);
+
+    //     // Load doctors and patients for dropdown filters
+    //     $doctors = app(DoctorRepository::class)->get($request);
+    //     $patients = app(PatientRepository::class)->get($request);
+
+    //     // Pass everything to the view
+    //     return view('backend.ehr.index', [
+    //         'ehrs' => $ehrs,
+    //         'doctors' => $doctors,
+    //         'patients' => $patients,
+    //         'request' => $request,
+    //     ]);
+    // }
+
     public function index(Request $request)
     {
-        $ehrs = app(EHRRepository::class)->get(request())->paginate(10);
+        $authUser = Auth::user();
+
+        $roleName = strtolower($authUser->role->role_name);
+
+        $doctorRepo = app(DoctorRepository::class);
+        $patientRepo = app(PatientRepository::class);
+        $ehrRepo = app(EHRRepository::class);
+
+        if ($roleName === 'doctor') {
+            $doctor = $doctorRepo->findByUserId($authUser->id);
+            $ehrs = $ehrRepo->get($request)
+                ->where('doctor_id', $doctor->id)
+                ->paginate(10);
+        } elseif ($roleName === 'patient') {
+            $patient = $patientRepo->findByUserId($authUser->id);
+            $ehrs = $ehrRepo->get($request)
+                ->where('patient_id', $patient->id)
+                ->paginate(10);
+        } else {
+            $ehrs = $ehrRepo->get($request)->paginate(10);
+        }
+
+        $doctors = $doctorRepo->get($request)->get();
+        $patients = $patientRepo->get($request)->get();
 
         return view('backend.ehr.index', [
             'ehrs' => $ehrs,
             'request' => $request,
+            'doctors' => $doctors,
+            'patients' => $patients,
         ]);
     }
 
