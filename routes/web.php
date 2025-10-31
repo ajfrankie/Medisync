@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
 use App\Http\Controllers\Backend\VitalController;
+use App\Http\Controllers\PrescriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,6 @@ Route::prefix('/admin')->group(function () {
 
     // Handle form submission
     Route::post('/register', [RegisterController::class, 'register'])->name('admin.register.store');
-
 
     // Protected admin routes
     Route::middleware('auth')->group(function () {
@@ -75,7 +75,7 @@ Route::prefix('/admin')->group(function () {
         Route::post('/activate/{id}', [NurseController::class, 'activateNurse'])->name('admin.nurse.activate');
     });
 
-    //doctors
+    //patient
     Route::prefix('/patient')->middleware('auth')->group(function () {
         Route::get('/', [PatientController::class, 'index'])->name('admin.patient.index');
         Route::get('/create', [PatientController::class, 'create'])->name('admin.patient.create');
@@ -109,13 +109,23 @@ Route::prefix('/admin')->group(function () {
         Route::put('update/{id}', [EHRController::class, 'update'])->name('admin.ehr.update');
     });
 
-
-     Route::prefix('/vital')->middleware('auth')->group(function () {
+    //vital Records
+    Route::prefix('/vital')->middleware('auth')->group(function () {
         Route::get('/', [VitalController::class, 'index'])->name('admin.vital.index');
         Route::get('/create', [VitalController::class, 'create'])->name('admin.vital.create');
         Route::post('/store', [VitalController::class, 'store'])->name('admin.vital.store');
         Route::get('/show/{id}', [VitalController::class, 'show'])->name('admin.vital.show');
         Route::get('/edit/{id}', [VitalController::class, 'edit'])->name('admin.vital.edit');
         Route::put('update/{id}', [EHRController::class, 'update'])->name('admin.vital.update');
+    });
+
+    //prescription Records
+    Route::prefix('/prescription')->middleware('auth')->group(function () {
+        Route::get('/', [PrescriptionController::class, 'index'])->name('admin.prescription.index');
+        Route::get('/create', [PrescriptionController::class, 'create'])->name('admin.prescription.create');
+        Route::post('/store', [PrescriptionController::class, 'store'])->name('admin.prescription.store');
+        Route::get('/show/{id}', [PrescriptionController::class, 'show'])->name('admin.prescription.show');
+        Route::get('/edit/{id}', [PrescriptionController::class, 'edit'])->name('admin.prescription.edit');
+        Route::put('update/{id}', [PrescriptionController::class, 'update'])->name('admin.prescription.update');
     });
 });

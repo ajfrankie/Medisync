@@ -21,10 +21,8 @@ class VitalController extends Controller
     {
         $ehrId = $request->get('ehr_id');
 
-        // Retrieve vitals filtered by ehr_id (repository handles this)
         $vitals = app(VitalRepository::class)->get($request)->paginate(10);
 
-        // Load the actual EHR object so Blade can use it
         $ehr = null;
         if ($ehrId) {
             $ehr = app(EHRRepository::class)->find($ehrId);
@@ -36,11 +34,9 @@ class VitalController extends Controller
         return view('backend.vital.index', [
             'vitals' => $vitals,
             'request' => $request,
-            'ehr' => $ehr, 
+            'ehr' => $ehr,
         ]);
     }
-
-
 
     public function create()
     {
@@ -62,7 +58,7 @@ class VitalController extends Controller
             $vital = app(VitalRepository::class)->create($request->validated());
 
             return redirect()
-                ->route('admin.vital.index')
+                ->route('admin.ehr.index')
                 ->with('success', 'Vital record created successfully.');
         } catch (\Exception $e) {
             return back()
@@ -70,8 +66,6 @@ class VitalController extends Controller
                 ->with('error', 'Failed to create vital record: ' . $e->getMessage());
         }
     }
-
-
 
 
     public function edit(Request $request, $id) {}
