@@ -13,7 +13,7 @@ return new class extends Migration
 {
     Schema::create('prescriptions', function (Blueprint $table) {
         $table->uuid('id')->primary();
-        $table->uuid('ehr_id');
+        $table->uuid('vital_id');
         $table->string('medicine_name')->nullable();
         $table->string('dosage')->nullable();
         $table->string('frequency')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
         $table->string('prescription_img_path')->nullable();
         $table->timestamps();
 
-        $table->foreign('ehr_id')->references('id')->on('ehr_records')->cascadeOnDelete();
+        $table->foreign('vital_id')->references('id')->on('vitals')->cascadeOnDelete();
     });
 }
 

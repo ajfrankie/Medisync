@@ -13,7 +13,7 @@ class Prescription extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'ehr_id',
+        'vital_id',
         'medicine_name',
         'dosage',
         'frequency',
@@ -33,8 +33,8 @@ class Prescription extends Model
     }
 
     //releatioships
-    public function ehrRecord()
+    public function vital()
     {
-        return $this->belongsTo(EhrRecord::class, 'ehr_id');
+        return $this->belongsTo(Vital::class, 'vital_id');
     }
 }

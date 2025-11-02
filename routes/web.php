@@ -13,7 +13,7 @@ use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
 use App\Http\Controllers\Backend\VitalController;
-use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\Backend\PrescriptionController;
 
 /*
 |--------------------------------------------------------------------------

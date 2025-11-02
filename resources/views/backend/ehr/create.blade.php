@@ -6,7 +6,8 @@
 
 @section('css')
     <link href="{{ URL::asset('build/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('build/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
@@ -32,10 +33,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Doctor</label>
-                                    <input type="text" class="form-control" 
-                                           value="{{ auth()->user()->name ?? 'N/A' }}"
-" 
-                                           readonly>
+                                    <input type="text" class="form-control" value="{{ auth()->user()->name ?? 'N/A' }}"
+                                        readonly>
                                     <input type="hidden" name="doctor_id" value="{{ auth()->user()->doctor->id ?? '' }}">
                                 </div>
                             </div>
@@ -54,10 +53,12 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Patient</label>
-                                    <select class="form-select select2 @error('patient_id') is-invalid @enderror" name="patient_id">
+                                    <select class="form-select select2 @error('patient_id') is-invalid @enderror"
+                                        name="patient_id">
                                         <option value="">Select Patient...</option>
                                         @foreach ($patients as $patient)
-                                            <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                                            <option value="{{ $patient->id }}"
+                                                {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
                                                 {{ $patient->user->name }}
                                             </option>
                                         @endforeach
@@ -72,8 +73,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="visit_date" class="form-label">Visit Date</label>
-                                    <input type="date" class="form-control @error('visit_date') is-invalid @enderror" 
-                                           name="visit_date" value="{{ old('visit_date') }}">
+                                    <input type="date" class="form-control @error('visit_date') is-invalid @enderror"
+                                        name="visit_date" value="{{ old('visit_date') }}">
                                     @error('visit_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -84,8 +85,9 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="next_visit_date" class="form-label">Next Visit Date</label>
-                                    <input type="date" class="form-control @error('next_visit_date') is-invalid @enderror" 
-                                           name="next_visit_date" value="{{ old('next_visit_date') }}">
+                                    <input type="date"
+                                        class="form-control @error('next_visit_date') is-invalid @enderror"
+                                        name="next_visit_date" value="{{ old('next_visit_date') }}">
                                     @error('next_visit_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -98,9 +100,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="diagnosis" class="form-label">Diagnosis</label>
-                                    <textarea name="diagnosis" id="diagnosis" 
-                                              class="form-control @error('diagnosis') is-invalid @enderror" 
-                                              rows="3">{{ old('diagnosis') }}</textarea>
+                                    <textarea name="diagnosis" id="diagnosis" class="form-control @error('diagnosis') is-invalid @enderror" rows="3">{{ old('diagnosis') }}</textarea>
                                     @error('diagnosis')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -113,9 +113,8 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="treatment_summary" class="form-label">Treatment Summary</label>
-                                    <textarea name="treatment_summary" id="treatment_summary" 
-                                              class="form-control @error('treatment_summary') is-invalid @enderror" 
-                                              rows="3">{{ old('treatment_summary') }}</textarea>
+                                    <textarea name="treatment_summary" id="treatment_summary"
+                                        class="form-control @error('treatment_summary') is-invalid @enderror" rows="3">{{ old('treatment_summary') }}</textarea>
                                     @error('treatment_summary')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
