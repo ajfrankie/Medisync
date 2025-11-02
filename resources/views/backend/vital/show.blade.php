@@ -43,7 +43,8 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Temperature (°C)</label>
-                                <input type="text" class="form-control" value="{{ $vital->temperature ?? '-' }}" readonly>
+                                <input type="text" class="form-control" value="{{ $vital->temperature ?? '-' }}"
+                                    readonly>
                             </div>
                         </div>
 
@@ -51,7 +52,8 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Blood Pressure (mmHg)</label>
-                                <input type="text" class="form-control" value="{{ $vital->blood_pressure ?? '-' }}" readonly>
+                                <input type="text" class="form-control" value="{{ $vital->blood_pressure ?? '-' }}"
+                                    readonly>
                             </div>
                         </div>
 
@@ -59,7 +61,8 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Pulse Rate (bpm)</label>
-                                <input type="text" class="form-control" value="{{ $vital->pulse_rate ?? '-' }}" readonly>
+                                <input type="text" class="form-control" value="{{ $vital->pulse_rate ?? '-' }}"
+                                    readonly>
                             </div>
                         </div>
 
@@ -67,7 +70,8 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Oxygen Level (%)</label>
-                                <input type="text" class="form-control" value="{{ $vital->oxygen_level ?? '-' }}" readonly>
+                                <input type="text" class="form-control" value="{{ $vital->oxygen_level ?? '-' }}"
+                                    readonly>
                             </div>
                         </div>
 
@@ -75,21 +79,25 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Blood Sugar (mg/dl)</label>
-                                <input type="text" class="form-control" value="{{ $vital->blood_sugar ?? '-' }}" readonly>
+                                <input type="text" class="form-control" value="{{ $vital->blood_sugar ?? '-' }}"
+                                    readonly>
                             </div>
                         </div>
                     </div>
 
+                    <input type="hidden" name="vital_id" value="{{ $vital->id }}">
+
                     <!-- Buttons -->
                     <div class="text-end pe-3 mt-4">
-                        <a href="{{ route('admin.vital.create', ['ehr_id' => $vital->ehr_id]) }}" 
-                           class="btn btn-outline-secondary me-2">
+                        <a href="{{ route('admin.vital.create', ['ehr_id' => $vital->ehr_id]) }}"
+                            class="btn btn-outline-secondary me-2">
                             <i class="ri-add-line"></i> Add Vital
                         </a>
-                        <a href="#" 
-                           class="btn btn-outline-primary me-2">
+                        <a href="{{ route('admin.prescription.create', ['vital_id' => $vital->id]) }}"
+                            class="btn btn-outline-primary me-2">
                             <i class="ri-file-add-line"></i> Add Prescription
                         </a>
+
                         <a href="{{ route('admin.ehr.index') }}" class="btn btn-outline-danger">
                             Back
                         </a>
