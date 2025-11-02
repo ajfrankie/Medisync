@@ -154,8 +154,8 @@
                     aria-expanded="false">
 
                     @if ($imagePath)
-                        <img class="rounded-circle header-profile-user" src="{{ asset($imagePath) }}"
-                            alt="Header Avatar" style="width: 36px; height: 36px; object-fit: cover;">
+                        <img class="rounded-circle header-profile-user" src="{{ asset('storage/' . $imagePath) }}"
+                            alt="User Avatar" style="width: 36px; height: 36px; object-fit: cover;">
                     @else
                         <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
                             style="width: 36px; height: 36px; font-weight: bold; font-size: 14px;">
