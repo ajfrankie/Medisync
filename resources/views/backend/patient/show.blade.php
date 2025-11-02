@@ -17,28 +17,40 @@
 
             {{-- Profile Section --}}
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body d-flex align-items-center flex-column flex-md-row text-center text-md-start">
-                    @php
-                        $avatar = $patient->user->image_path
-                            ? asset('storage/' . $patient->user->image_path)
-                            : asset('assets/images/default-avatar.png');
+                @php
+                    $user = $patient->user;
+                    $avatar = $user->image_path ? asset('storage/' . $user->image_path) : null;
+                    $initials = strtoupper(substr($user->name ?? '', 0, 2));
 
-                        // BMI Badge color
-                        $bmiClass = match ($bmiData['category'] ?? '') {
-                            'Underweight' => 'bg-warning',
-                            'Normal' => 'bg-success',
-                            'Overweight' => 'bg-warning',
-                            'Obese' => 'bg-danger',
-                            default => 'bg-secondary',
-                        };
-                    @endphp
+                    // BMI Badge color
+                    $bmiClass = match ($bmiData['category'] ?? '') {
+                        'Underweight' => 'bg-warning',
+                        'Normal' => 'bg-success',
+                        'Overweight' => 'bg-warning',
+                        'Obese' => 'bg-danger',
+                        default => 'bg-secondary',
+                    };
+                @endphp
+
+                <div class="card-body d-flex align-items-center flex-column flex-md-row text-center text-md-start">
+                    {{-- Avatar / Initials --}}
                     <div class="me-md-4 mb-3 mb-md-0">
-                        <img src="{{ $avatar }}" alt="Avatar" class="rounded-circle border border-primary"
-                            width="120" height="120" style="object-fit: cover;">
+                        @if ($avatar)
+                            <img src="{{ $avatar }}" alt="Avatar"
+                                class="rounded-circle border border-primary"
+                                width="120" height="120" style="object-fit: cover;">
+                        @else
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                style="width: 120px; height: 120px; font-size: 36px; font-weight: bold;">
+                                {{ $initials }}
+                            </div>
+                        @endif
                     </div>
+
+                    {{-- User Details --}}
                     <div>
-                        <h3 class="mb-1">{{ $patient->user->name }}</h3>
-                        <p class="text-muted mb-2">{{ $patient->user->email }}</p>
+                        <h3 class="mb-1">{{ $user->name }}</h3>
+                        <p class="text-muted mb-2">{{ $user->email }}</p>
                         <div class="d-flex justify-content-center justify-content-md-start flex-wrap gap-2">
                             <span class="badge bg-success">Age: {{ $age ?? 'N/A' }}</span>
                             <span class="badge {{ $bmiClass }}">BMI: {{ $bmiData['bmi'] ?? 'N/A' }}
@@ -57,20 +69,20 @@
                 <div class="card-body row g-3">
                     <div class="col-md-6">
                         <i class="ri-phone-line me-1 text-primary"></i>
-                        <strong>Phone:</strong> <span class="text-primary">{{ $patient->user->phone ?? '-' }}</span>
+                        <strong>Phone:</strong> <span class="text-primary">{{ $user->phone ?? '-' }}</span>
                     </div>
                     <div class="col-md-6">
                         <i class="ri-id-card-line me-1 text-primary"></i>
-                        <strong>NIC:</strong> <span>{{ $patient->user->nic ?? '-' }}</span>
+                        <strong>NIC:</strong> <span>{{ $user->nic ?? '-' }}</span>
                     </div>
                     <div class="col-md-6">
                         <i class="ri-genderless-line me-1 text-info"></i>
-                        <strong>Gender:</strong> <span
-                            class="badge bg-info">{{ ucfirst($patient->user->gender ?? '-') }}</span>
+                        <strong>Gender:</strong>
+                        <span class="badge bg-info">{{ ucfirst($user->gender ?? '-') }}</span>
                     </div>
                     <div class="col-md-6">
                         <i class="ri-calendar-line me-1 text-success"></i>
-                        <strong>DOB:</strong> <span>{{ $patient->user->dob ?? '-' }}</span>
+                        <strong>DOB:</strong> <span>{{ $user->dob ?? '-' }}</span>
                     </div>
                     <div class="col-md-6">
                         <i class="ri-heart-line me-1 text-warning"></i>
@@ -120,23 +132,24 @@
                     <div class="col-md-6"><strong>Relationship:</strong>
                         <span>{{ $patient->emergency_relationship ?? '-' }}</span>
                     </div>
-                    <div class="col-md-6"><strong>Emergency Contact:</strong> <span
-                            class="text-danger">{{ $patient->emergency_contact ?? '-' }}</span></div>
+                    <div class="col-md-6"><strong>Emergency Contact:</strong>
+                        <span class="text-danger">{{ $patient->emergency_contact ?? '-' }}</span>
+                    </div>
                 </div>
             </div>
 
+            {{-- EHR Details --}}
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-info text-dainfork d-flex align-items-center">
-                    <i class="ri-emergency-line me-2 fs-5"></i>
+                <div class="card-header bg-info text-dark d-flex align-items-center">
+                    <i class="ri-folder-info-line me-2 fs-5"></i>
                     <span class="fw-semibold">EHR Details</span>
                 </div>
-
                 <div class="card-body">
                     @if ($ehrRecords->count() > 0)
                         <h5 class="mb-3">EHR Records</h5>
                         <div class="d-flex flex-wrap gap-2">
                             @foreach ($ehrRecords as $ehr)
-                                <a href="{{ route('admin.ehr.show', $ehr->id) }}" class="btn  btn-outline-info btn-sm">
+                                <a href="{{ route('admin.ehr.show', $ehr->id) }}" class="btn btn-outline-info btn-sm">
                                     <i class="ri-file-list-line me-1"></i>
                                     View EHR ({{ $ehr->visit_date ?? 'No date' }})
                                 </a>
@@ -148,8 +161,7 @@
                 </div>
             </div>
 
-
-            {{-- Back Button --}}
+            {{-- Action Buttons --}}
             <div class="d-flex justify-content-end gap-2 mb-4">
                 <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger btn-lg">
                     <i class="ri-arrow-go-back-line me-1"></i> Back to List
@@ -159,8 +171,6 @@
                     <i class="ri-add-line me-1"></i> Create EHR
                 </a>
             </div>
-
-
 
         </div>
     </div>
