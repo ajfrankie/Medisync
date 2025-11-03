@@ -17,7 +17,8 @@ class PrescriptionRepository
 
     public function get(Request $request)
     {
-        $query = Prescription::orderBy('created_at', 'desc');
+        $query = Prescription::with('vital.ehrRecord.patient.user')
+            ->orderBy('created_at', 'desc');
 
 
         return $query;
@@ -73,8 +74,29 @@ class PrescriptionRepository
 
     public function find($id)
     {
-        return Prescription::with('user')->find($id);
+        return Prescription::find($id);
     }
+
+    // public function findWithVital($id)
+    // {
+    //     return Prescription::with([
+    //         'vital.ehrRecord.patient.user',
+    //     ])->find($id);
+    // }
+
+    public function findByVitalId($vitalId)
+    {
+        return Prescription::with(['vital.ehrRecord.patient.user', 'vital.ehrRecord.doctor.user'])
+            ->where('vital_id', $vitalId)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function ($item) {
+                // Group by date only (Y-m-d)
+                return $item->created_at->format('Y-m-d');
+            });
+    }
+
+
 
     public function update($id, array $input) {}
 
