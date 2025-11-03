@@ -159,4 +159,69 @@ class PatientRepository
     {
         return Patient::with('user')->where('user_id', $userId)->first();
     }
+
+
+    public function updatePatient($id, array $input)
+    {
+        // Find patient
+        $patient = $this->find($id);
+
+        if (!$patient) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Patient not found');
+        }
+
+        // Update patient fields
+        $patientFields = [
+            'blood_group',
+            'marital_status',
+            'preferred_language',
+            'occupation',
+            'height',
+            'weight',
+            'past_surgeries',
+            'past_surgeries_details',
+            'emergency_person',
+            'emergency_relationship',
+            'emergency_contact'
+        ];
+
+        foreach ($patientFields as $field) {
+            if (isset($input[$field])) {
+                $patient->$field = $input[$field];
+            }
+        }
+
+        // Update related user safely
+        $user = $patient->user;
+        if ($user) {
+            $userFields = ['name', 'email', 'dob', 'nic', 'gender', 'phone'];
+            foreach ($userFields as $field) {
+                if (isset($input[$field])) {
+                    $user->$field = $input[$field];
+                }
+            }
+
+            // Password update if provided and confirmed
+            if (!empty($input['password'])) {
+                if (!empty($input['password_confirmation']) && $input['password'] === $input['password_confirmation']) {
+                    $user->password = bcrypt($input['password']);
+                } else {
+                    throw new \Exception('Password confirmation does not match.');
+                }
+            }
+
+            // Image upload path (assuming path is already handled)
+            if (!empty($input['image_path'])) {
+                $user->image_path = $input['image_path'];
+            }
+
+            $user->save(); // Save user first to ensure foreign key consistency
+        } else {
+            throw new \Exception('Linked user not found for this patient.');
+        }
+
+        $patient->save(); // Save patient
+
+        return $patient;
+    }
 }

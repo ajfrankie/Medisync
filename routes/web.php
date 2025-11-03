@@ -84,6 +84,9 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('admin.patient.edit');
         Route::put('update/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
         Route::delete('delete/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
+        Route::get('/showPatient/{id}', [PatientController::class, 'showPatient'])->name('admin.patient.showPatient');
+        Route::get('/editPatient/{id}', [PatientController::class, 'editPatient'])->name('admin.patient.editPatient');
+        Route::put('updatePatient/{id}', [PatientController::class, 'updatePatient'])->name('admin.patient.updatePatient');
     });
 
     //appointments
