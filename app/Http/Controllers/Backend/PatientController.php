@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
+use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\EHRRepository;
 use App\Repositories\PatientRepository;
@@ -199,22 +200,55 @@ class PatientController extends Controller
 
     public function updatePatient(Request $request, $id)
     {
-        $data = $request->all();
+        // Find the patient
+        $patient = Patient::with('user')->findOrFail($id);
+        $user = $patient->user;
 
-        // Handle file upload separately
-        if ($request->hasFile('image_path')) {
-            $file = $request->file('image_path');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/profile_images', $filename);
-            $data['image_path'] = 'profile_images/' . $filename;
+        // Handle user fields
+        if ($user) {
+            $user->name = $request->input('name', $user->name);
+            $user->email = $request->input('email', $user->email);
+            $user->dob = $request->input('dob', $user->dob);
+            $user->nic = $request->input('nic', $user->nic);
+            $user->gender = $request->input('gender', $user->gender);
+            $user->phone = $request->input('phone', $user->phone);
+
+            // Password update
+            if ($request->filled('password')) {
+                if ($request->input('password') === $request->input('password_confirmation')) {
+                    $user->password = bcrypt($request->input('password'));
+                } else {
+                    return redirect()->back()->with('error', 'Password confirmation does not match.')->withInput();
+                }
+            }
+
+            // File upload
+            if ($request->hasFile('image_path')) {
+                $file = $request->file('image_path');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/profile_images', $filename);
+                $user->image_path = 'profile_images/' . $filename;
+            }
+
+            $user->save();
         }
 
-        try {
-            $patient = app(PatientRepository::class)->updatePatient($id, $data);
-            return redirect()->route('admin.patient.showPatient', $id)
-                ->with('success', 'Patient profile updated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
+        // Handle patient fields
+        $patient->blood_group = $request->input('blood_group', $patient->blood_group);
+        $patient->marital_status = $request->input('marital_status', $patient->marital_status);
+        $patient->preferred_language = $request->input('preferred_language', $patient->preferred_language);
+        $patient->occupation = $request->input('occupation', $patient->occupation);
+        $patient->height = $request->input('height', $patient->height);
+        $patient->weight = $request->input('weight', $patient->weight);
+        $patient->past_surgeries = $request->input('past_surgeries', $patient->past_surgeries);
+        $patient->past_surgeries_details = $request->input('past_surgeries_details', $patient->past_surgeries_details);
+        $patient->emergency_person = $request->input('emergency_person', $patient->emergency_person);
+        $patient->emergency_relationship = $request->input('emergency_relationship', $patient->emergency_relationship);
+        $patient->emergency_contact = $request->input('emergency_contact', $patient->emergency_contact);
+
+        $patient->save();
+
+        return redirect()->route('admin.patient.showPatient', $patient->id)
+            ->with('success', 'Patient profile updated successfully.');
     }
 }

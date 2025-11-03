@@ -102,7 +102,7 @@
 
     {{-- Action Buttons --}}
     <div class="text-end mb-4">
-        <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-secondary me-2">
+        <a href="/admin" class="btn btn-outline-secondary me-2">
             <i class="bx bx-left-arrow-alt"></i> Back
         </a>
         <a href="{{ route('admin.patient.editPatient', $patient->id) }}" class="btn btn-outline-primary w-md">
