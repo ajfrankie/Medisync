@@ -20,10 +20,17 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">Vitals</h5>
-                        <a href="{{ route('admin.vital.create', ['ehr_id' => $ehr->id]) }}" class="btn btn-outline-primary w-md">
+                        @php
+                            $user = auth()->user();
+                        @endphp
 
-                            <i class="fas fa-plus me-1"></i> Create Vital
-                        </a>
+                        @if ($user->role_id != 4 && $user->role->role_name != 'Admin Officer')
+                            <a href="{{ route('admin.vital.create', ['ehr_id' => $ehr->id]) }}"
+                                class="btn btn-outline-primary w-md">
+                                <i class="fas fa-plus me-1"></i> Create Vital
+                            </a>
+                        @endif
+
                     </div>
                 </div>
 
@@ -69,7 +76,7 @@
                                                     </a>
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.prescription.show', $vital->id) }}">
-                                                        <i class="bx bx-edit-alt"></i> prescription 
+                                                        <i class="bx bx-edit-alt"></i> prescription
                                                     </a>
                                                 </div>
                                             </div>

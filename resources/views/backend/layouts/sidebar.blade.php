@@ -43,14 +43,14 @@
                     </li>
 
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                        <a href="#" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>
                         </a>
                     </li>
 
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                        <a href="#" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>
@@ -91,14 +91,14 @@
                     </li>
 
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                        <a href="#" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>
                         </a>
                     </li>
 
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                        <a href="#" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>

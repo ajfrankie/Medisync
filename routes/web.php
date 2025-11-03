@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
 use App\Http\Controllers\Backend\VitalController;
 use App\Http\Controllers\Backend\PrescriptionController;
+use App\Http\Controllers\Backend\SupportiveDocumentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,5 +137,17 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [PrescriptionController::class, 'edit'])->name('admin.prescription.edit');
         Route::put('update/{id}', [PrescriptionController::class, 'update'])->name('admin.prescription.update');
         Route::get('showPrescription/{id}', [PrescriptionController::class, 'showPrescription'])->name('admin.prescription.showPrescription');
+    });
+
+    //document
+    Route::prefix('/document')->middleware('auth')->group(function () {
+        Route::get('/', [SupportiveDocumentController::class, 'index'])->name('admin.document.index');
+        // Route::get('/create', [SupportiveDocumentController::class, 'create'])->name('admin.document.create');
+        Route::get('/create/{patient_id}', [SupportiveDocumentController::class, 'create'])
+            ->name('admin.document.create');
+
+        Route::post('/store', [SupportiveDocumentController::class, 'store'])->name('admin.document.store');
+        Route::get('show/{patient_id}', [SupportiveDocumentController::class, 'show'])
+            ->name('admin.document.show');
     });
 });
