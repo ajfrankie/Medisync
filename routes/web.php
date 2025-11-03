@@ -60,6 +60,10 @@ Route::prefix('/admin')->group(function () {
         Route::delete('delete/{id}', [DoctorController::class, 'destroy'])->name('admin.doctor.destroy');
         Route::post('/deactivate/{id}', [DoctorController::class, 'deactivateDoctor'])->name('admin.doctor.deactivate');
         Route::post('/activate/{id}', [DoctorController::class, 'activateDoctor'])->name('admin.doctor.activate');
+        //Doctor Profile 
+        Route::get('/showDoctor/{id}', [DoctorController::class, 'showDoctor'])->name('admin.doctor.showDoctor');
+        Route::get('/editDoctor/{id}', [DoctorController::class, 'editDoctor'])->name('admin.doctor.editDoctor');
+        Route::put('updateDoctor/{id}', [DoctorController::class, 'updateDoctor'])->name('admin.doctor.updateDoctor');
     });
 
     //doctors
@@ -84,6 +88,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('admin.patient.edit');
         Route::put('update/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
         Route::delete('delete/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
+        //patient profile
         Route::get('/showPatient/{id}', [PatientController::class, 'showPatient'])->name('admin.patient.showPatient');
         Route::get('/editPatient/{id}', [PatientController::class, 'editPatient'])->name('admin.patient.editPatient');
         Route::put('updatePatient/{id}', [PatientController::class, 'updatePatient'])->name('admin.patient.updatePatient');
@@ -131,6 +136,5 @@ Route::prefix('/admin')->group(function () {
         Route::get('/edit/{id}', [PrescriptionController::class, 'edit'])->name('admin.prescription.edit');
         Route::put('update/{id}', [PrescriptionController::class, 'update'])->name('admin.prescription.update');
         Route::get('showPrescription/{id}', [PrescriptionController::class, 'showPrescription'])->name('admin.prescription.showPrescription');
-        
     });
 });

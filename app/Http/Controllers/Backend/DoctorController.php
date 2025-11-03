@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeDoctorRequest;
+use App\Models\Doctor;
 use App\Models\User;
 use App\Repositories\DoctorRepository;
 use Illuminate\Support\Facades\App;
@@ -158,5 +159,73 @@ class DoctorController extends Controller
       $this->logError('activateDoctor', $e, $id);
       return back()->withInput()->with('error', 'Failed to activate Doctor: ' . $e->getMessage());
     }
+  }
+
+  //patient profile section 
+  public function showDoctor($id)
+  {
+    $doctor = app(DoctorRepository::class)->find($id);
+
+    // dd($patient->user->id);
+    return view('backend.doctor.profile', [
+      'doctor' => $doctor,
+    ]);
+  }
+
+  public function editDoctor(Request $request, $id)
+  {
+    $doctor = app(DoctorRepository::class)->find($id);
+
+    return view('backend.doctor.editprofile', [
+      'doctor' => $doctor,
+    ]);
+  }
+
+
+  public function updateDoctor(Request $request, $id)
+  {
+    // Find the patient
+    $doctor = Doctor::with('user')->findOrFail($id);
+    $user = $doctor->user;
+
+    // Handle user fields
+    if ($user) {
+      $user->name = $request->input('name', $user->name);
+      $user->email = $request->input('email', $user->email);
+      $user->dob = $request->input('dob', $user->dob);
+      $user->nic = $request->input('nic', $user->nic);
+      $user->gender = $request->input('gender', $user->gender);
+      $user->phone = $request->input('phone', $user->phone);
+
+      // Password update
+      if ($request->filled('password')) {
+        if ($request->input('password') === $request->input('password_confirmation')) {
+          $user->password = bcrypt($request->input('password'));
+        } else {
+          return redirect()->back()->with('error', 'Password confirmation does not match.')->withInput();
+        }
+      }
+
+      // File upload
+      if ($request->hasFile('image_path')) {
+        $file = $request->file('image_path');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('public/profile_images', $filename);
+        $user->image_path = 'profile_images/' . $filename;
+      }
+
+      $user->save();
+    }
+
+    // Handle Doctor fields
+    $doctor->specialization = $request->input('specialization', $doctor->specialization);
+    $doctor->department = $request->input('department', $doctor->department);
+    $doctor->experience = $request->input('experience', $doctor->experience);
+    
+
+    $doctor->save();
+
+    return redirect()->route('admin.doctor.showDoctor', $doctor->id)
+      ->with('success', 'Doctor profile updated successfully.');
   }
 }
