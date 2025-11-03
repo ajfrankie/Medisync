@@ -175,4 +175,46 @@ class PatientController extends Controller
             'category' => $category,
         ];
     }
+
+    //patient profile section 
+    public function showPatient($id)
+    {
+        $patient = app(PatientRepository::class)->find($id);
+
+        // dd($patient->user->id);
+        return view('backend.patient.profile', [
+            'patient' => $patient,
+        ]);
+    }
+
+    public function editPatient(Request $request, $id)
+    {
+        $patient = app(PatientRepository::class)->find($id);
+
+        return view('backend.patient.editprofile', [
+            'patient' => $patient,
+        ]);
+    }
+
+
+    public function updatePatient(Request $request, $id)
+    {
+        $data = $request->all();
+
+        // Handle file upload separately
+        if ($request->hasFile('image_path')) {
+            $file = $request->file('image_path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/profile_images', $filename);
+            $data['image_path'] = 'profile_images/' . $filename;
+        }
+
+        try {
+            $patient = app(PatientRepository::class)->updatePatient($id, $data);
+            return redirect()->route('admin.patient.showPatient', $id)
+                ->with('success', 'Patient profile updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
 }
