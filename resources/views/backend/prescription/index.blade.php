@@ -20,11 +20,11 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">prescription</h5>
-                        <a href="{{ route('admin.prescription.create', ['vital_id' => $vital->id]) }}"
+                        {{-- <a href="{{ route('admin.prescription.create', ['vital_id' => $vital->id]) }}"
                             class="btn btn-outline-primary w-md">
 
                             <i class="fas fa-plus me-1"></i> prescription Vital
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
 
@@ -33,26 +33,20 @@
                         <table class="table align-middle dt-responsive nowrap w-100 table-check">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Patient Name</th>
-                                    <th>Recorded Doctor</th>
-                                    <th>Temperature</th>
-                                    <th>Blood Pressure</th>
-                                    <th>Pulse Rate</th>
-                                    <th>Oxygen Level</th>
-                                    <th>Blood Suger</th>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th>Diagnosis</th>
                                     <th>Actions</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($prescriptions as $prescription)
                                     <tr>
-                                        {{-- <td>{{ $vital->ehrRecord->patient->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $vital->ehrRecord->doctor->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $vital->temperature ?? 'N/A' }}</td>
-                                        <td>{{ $vital->blood_pressure ?? 'N/A' }}</td>
-                                        <td>{{ $vital->pulse_rate ?? 'N/A' }}</td>
-                                        <td>{{ $vital->oxygen_level ?? 'N/A' }}</td>
-                                        <td>{{ $vital->blood_sugar ?? 'N/A' }}</td> --}}
+                                        <td>{{ $prescription->vital->ehrRecord->doctor->user->name ?? 'N/A' }}</td>
+                                        <td>{{ $prescription->vital->ehrRecord->diagnosis ?? 'N/A' }}</td>
+                                        <td>{{ $prescription->created_at ?? 'N/A' }}</td>
+                                    
                                         <td>
                                             <div class="btn-group text-nowrap" role="group">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
@@ -61,13 +55,10 @@
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('admin.prescription.show', $prescription->id) }}">
+                                                        href="{{ route('admin.prescription.showPrescription', $prescription->id) }}">
                                                         <i class="bx bx-show-alt"></i> Show
                                                     </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.prescription.edit', $prescription->id) }}">
-                                                        <i class="bx bx-edit-alt"></i> Edit
-                                                    </a>
+                                                    
                                                     {{-- <a class="dropdown-item"
                                                         href="{{ route('admin.prescription.index', ['vital' => $vital->id]) }}">
                                                         <i class="bx bx-plus-circle"></i> Prescription Details

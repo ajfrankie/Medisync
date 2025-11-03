@@ -7,30 +7,36 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storePrescriptionRequest;
 use App\Repositories\PrescriptionRepository;
 use App\Repositories\VitalRepository;
+use Illuminate\Support\Facades\Auth;
+
 
 class PrescriptionController extends Controller
 {
 
+
     public function index(Request $request)
     {
-        $vitalId = $request->get('vital');
+        // Get logged-in user's patient ID
+        $patient = Auth::user()->patient ?? null;
 
-        $prescriptions = app(PrescriptionRepository::class)->get($request)->paginate(10);
-
-        $vital = null;
-        if ($vitalId) {
-            $vital = app(VitalRepository::class)->find($vitalId);
-            if (!$vital) {
-                return redirect()->back()->with('error', 'Vital not found.');
-            }
+        if (!$patient) {
+            abort(403, 'You are not authorized to view prescriptions.');
         }
 
-        return view('backend.vital.index', [
+        // Get prescriptions for this patient
+        $prescriptions = app(PrescriptionRepository::class)
+            ->get($request)
+            ->whereHas('vital.ehrRecord', function ($query) use ($patient) {
+                $query->where('patient_id', $patient->id);
+            })
+            ->paginate(10);
+
+        return view('backend.prescription.index', [
             'prescriptions' => $prescriptions,
             'request' => $request,
-            'vital' => $vital,
         ]);
     }
+
     public function create()
     {
         $vital = app(VitalRepository::class)->find(request()->get('vital_id'));
@@ -63,7 +69,7 @@ class PrescriptionController extends Controller
 
     public function show($vitalId)
     {
-        $prescriptionsByDate = app(\App\Repositories\PrescriptionRepository::class)
+        $prescriptionsByDate = app(PrescriptionRepository::class)
             ->findByVitalId($vitalId);
 
         if ($prescriptionsByDate->isEmpty()) {
@@ -73,6 +79,22 @@ class PrescriptionController extends Controller
         return view('backend.prescription.show', compact('prescriptionsByDate'));
     }
 
+
+    public function showPrescription($id)
+    {
+        $prescriptionsByDate = app(PrescriptionRepository::class)->find($id);
+
+        if (!$prescriptionsByDate) {
+            abort(404, 'No prescription found.');
+        }
+
+        return view(
+            'backend.prescription.show',
+            [
+                'prescriptionsByDate' => $prescriptionsByDate,
+            ]
+        );
+    }
 
 
     public function edit($id)

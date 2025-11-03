@@ -74,8 +74,17 @@ class PrescriptionRepository
 
     public function find($id)
     {
-        return Prescription::find($id);
+        return Prescription::with('vital.ehrRecord.patient.user', 'vital.ehrRecord.doctor.user')
+            ->where('id', $id)  // Fix: compare 'id' to the given $id
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function ($item) {
+                // Group by date only (Y-m-d)
+                return $item->created_at->format('Y-m-d');
+            });
     }
+
+
 
     // public function findWithVital($id)
     // {

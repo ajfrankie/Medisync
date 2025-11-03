@@ -6,7 +6,7 @@
                 <li class="menu-title">@lang('translation.Menu')</li>
 
                 {{-- ================= PATIENT ACCESS ================= --}}
-                @if(Auth::user()->isPatient())
+                @if (Auth::user()->isPatient())
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
@@ -20,13 +20,20 @@
                             <span>Appointments</span>
                         </a>
                     </li>
-
+                    {{-- 
                     <li class="{{ request()->routeIs('admin.patient.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.patient.index') }}" class="waves-effect">
                             <i class="bx bx-user-circle"></i>
                             <span>Appointment Calender</span>
                         </a>
-                    </li>
+                    </li> --}}
+                    
+                    <li class="{{ request()->routeIs('admin.patient.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.prescription.index') }}" class="waves-effect">
+                            <i class="bx bx-user-circle"></i>
+                            <span>Prescription Details</span>
+                        </a>
+                    </li> 
 
                     <li class="{{ request()->routeIs('admin.ehr.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.ehr.index') }}" class="waves-effect">
@@ -52,7 +59,7 @@
 
 
                 {{-- ================= DOCTOR ACCESS ================= --}}
-                @if(Auth::user()->isDoctor())
+                @if (Auth::user()->isDoctor())
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
@@ -67,8 +74,10 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.appointment.viewAppointmentDetails') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.appointment.viewAppointmentDetails', Auth::user()->doctor->id ?? '') }}" class="waves-effect">
+                    <li
+                        class="{{ request()->routeIs('admin.appointment.viewAppointmentDetails') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.appointment.viewAppointmentDetails', Auth::user()->doctor->id ?? '') }}"
+                            class="waves-effect">
                             <i class="bx bx-user-circle"></i>
                             <span>Appointment Calender</span>
                         </a>
@@ -109,7 +118,7 @@
 
 
                 {{-- ================= ADMIN / NURSE ACCESS ================= --}}
-                @if(Auth::user()->isAdmin() || Auth::user()->isNurse())
+                @if (Auth::user()->isAdmin() || Auth::user()->isNurse())
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
@@ -166,7 +175,7 @@
                         </a>
                     </li>
 
-                     <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
+                    <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.vital.index') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>Vitals</span>
