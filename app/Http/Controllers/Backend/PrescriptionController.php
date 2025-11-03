@@ -61,10 +61,19 @@ class PrescriptionController extends Controller
     }
 
 
-    public function show($id)
+    public function show($vitalId)
     {
-        return view('backend.prescription.show', ['id' => $id]);
+        $prescriptionsByDate = app(\App\Repositories\PrescriptionRepository::class)
+            ->findByVitalId($vitalId);
+
+        if ($prescriptionsByDate->isEmpty()) {
+            abort(404, 'No prescriptions found for this vital.');
+        }
+
+        return view('backend.prescription.show', compact('prescriptionsByDate'));
     }
+
+
 
     public function edit($id)
     {

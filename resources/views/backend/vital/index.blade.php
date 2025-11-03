@@ -67,6 +67,10 @@
                                                         href="{{ route('admin.nurse.edit', $vital->id) }}">
                                                         <i class="bx bx-edit-alt"></i> Edit
                                                     </a>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.prescription.show', $vital->id) }}">
+                                                        <i class="bx bx-edit-alt"></i> prescription 
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>
