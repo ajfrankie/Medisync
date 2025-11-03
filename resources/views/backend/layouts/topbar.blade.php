@@ -173,15 +173,20 @@
                         <span key="t-settings">@lang('translation.Settings')</span></a> --}}
 
                     @php
-                        $patient = auth()->user()->patient ?? null;
+                        $user = auth()->user();
                     @endphp
 
-                    @if ($patient)
+                    @if ($user->patient)
                         <a class="dropdown-item d-block"
-                            href="{{ route('admin.patient.showPatient', $patient->id) }}">
+                            href="{{ route('admin.patient.showPatient', $user->patient->id) }}">
+                            <i class="bx bx-wrench font-size-16 align-middle me-1"></i> Profile
+                        </a>
+                    @elseif($user->doctor)
+                        <a class="dropdown-item d-block" href="{{ route('admin.doctor.showDoctor', $user->doctor->id) }}">
                             <i class="bx bx-wrench font-size-16 align-middle me-1"></i> Profile
                         </a>
                     @endif
+
 
                     <a class="dropdown-item text-danger" href="javascript:void();"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
