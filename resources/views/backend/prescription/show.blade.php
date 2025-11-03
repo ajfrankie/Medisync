@@ -48,7 +48,7 @@
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-info text-dark d-flex align-items-center">
                 <i class="ri-file-list-line me-2 fs-5"></i>
-                <span class="fw-semibold">Prescriptions on {{ \Carbon\Carbon::parse($date)->format('Y-m-d') }}</span>
+                <span class="fw-semibold">Prescriptions on {{ \Carbon\Carbon::parse($date)->format('Y-m-d') ?? 'N/A' }}</span>
             </div>
 
             <div class="card-body">

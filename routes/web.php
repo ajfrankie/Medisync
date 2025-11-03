@@ -127,5 +127,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/show/{id}', [PrescriptionController::class, 'show'])->name('admin.prescription.show');
         Route::get('/edit/{id}', [PrescriptionController::class, 'edit'])->name('admin.prescription.edit');
         Route::put('update/{id}', [PrescriptionController::class, 'update'])->name('admin.prescription.update');
+        Route::get('showPrescription/{id}', [PrescriptionController::class, 'showPrescription'])->name('admin.prescription.showPrescription');
+        
     });
 });
