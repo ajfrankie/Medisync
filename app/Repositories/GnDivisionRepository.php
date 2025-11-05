@@ -6,7 +6,7 @@ use App\Models\GnDivision;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class DistrictReopository
+class GnDivisionRepository
 {
     protected $model;
 
