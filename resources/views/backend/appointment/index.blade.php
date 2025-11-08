@@ -25,6 +25,8 @@
             Appointments
         @endslot
     @endcomponent
+    @include('backend.layouts.alert')
+
 
     @include('backend.appointment.filter')
 
@@ -65,11 +67,11 @@
                                         <td>
                                             @php
                                                 $statusColors = [
-                                                    'pending' => 'warning',
-                                                    'confirmed' => 'info',
-                                                    'completed' => 'success',
-                                                    'cancelled' => 'danger',
-                                                    'schedule next appointment' => 'primary',
+                                                    'Pending' => 'warning',
+                                                    'Confirmed' => 'info',
+                                                    'Completed' => 'success',
+                                                    'Cancelled' => 'danger',
+                                                    'Next Appointment' => 'primary',
                                                 ];
                                             @endphp
                                             <span
