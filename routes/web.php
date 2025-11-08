@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\Auth\RegisterController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
 use App\Http\Controllers\Backend\EHRController;
+use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
 use App\Http\Controllers\Backend\VitalController;
@@ -149,5 +150,13 @@ Route::prefix('/admin')->group(function () {
         Route::post('/store', [SupportiveDocumentController::class, 'store'])->name('admin.document.store');
         Route::get('show/{patient_id}', [SupportiveDocumentController::class, 'show'])
             ->name('admin.document.show');
+    });
+
+    //document
+    Route::prefix('/notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('admin.notification.index');
+        Route::get('/show/{id}', [NotificationController::class, 'show'])->name('admin.notification.show');
+        Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('admin.notification.mark-as-read');
+        Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notification.mark-all-as-read');
     });
 });

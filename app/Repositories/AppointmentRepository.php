@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Appointment;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -48,11 +49,11 @@ class AppointmentRepository
             throw new \InvalidArgumentException('Both patient_id and doctor_id are required.');
         }
 
-        $input['appointment_date'] = carbon::parse($input['appointment_date'])->toDateString();
-        $input['appointment_time'] = Carbon::parse($input['appointment_time'])->format('H:i:s');
+        $input['appointment_date'] = \Carbon\Carbon::parse($input['appointment_date'])->toDateString();
+        $input['appointment_time'] = \Carbon\Carbon::parse($input['appointment_time'])->format('H:i:s');
 
         if (!empty($input['next_appointment_date'])) {
-            $input['next_appointment_date'] = Carbon::parse($input['next_appointment_date'])->toDateString();
+            $input['next_appointment_date'] = \Carbon\Carbon::parse($input['next_appointment_date'])->toDateString();
         } else {
             $input['next_appointment_date'] = null;
         }
@@ -60,7 +61,38 @@ class AppointmentRepository
         $input['status'] = $input['status'] ?? 'pending';
         $input['notes'] = $input['notes'] ?? null;
 
-        return Appointment::create($input);
+        // Create appointment
+        $appointment = Appointment::create($input);
+
+
+        $doctor = $appointment->doctor;
+        $patient = $appointment->patient;
+
+        if ($doctor && $patient) {
+            Notification::create([
+                'id' => Str::uuid(),
+                'user_id' => $doctor->user_id,
+                'doctor_id' => $doctor->id,
+                'patient_id' => $patient->id,
+                'appointment_id' => $appointment->id,
+                'subject' => 'New Appointment Booked',
+                'message' => "You have a new appointment with {$patient->name} on {$appointment->appointment_date} at {$appointment->appointment_time}.",
+            ]);
+
+
+            Notification::create([
+                'id' => Str::uuid(),
+                'user_id' => $patient->user_id,
+                'doctor_id' => $doctor->id,
+                'patient_id' => $patient->id,
+                'appointment_id' => $appointment->id, //UUID from appointment
+                'subject' => 'Appointment Confirmed',
+                'message' => "Your appointment with Dr. {$doctor->name} is confirmed for {$appointment->appointment_date} at {$appointment->appointment_time}.",
+            ]);
+        }
+
+
+        return $appointment;
     }
 
 
@@ -74,25 +106,55 @@ class AppointmentRepository
     {
         $appointment = Appointment::findOrFail($id);
 
+        // Detect status change before saving
+        $oldStatus = $appointment->status;
+
         if (!empty($input['appointment_date'])) {
-            $input['appointment_date'] = Carbon::parse($input['appointment_date'])->toDateString();
+            $input['appointment_date'] = \Carbon\Carbon::parse($input['appointment_date'])->toDateString();
         }
 
         if (!empty($input['appointment_time'])) {
-            $input['appointment_time'] = Carbon::parse($input['appointment_time'])->format('H:i:s');
+            $input['appointment_time'] = \Carbon\Carbon::parse($input['appointment_time'])->format('H:i:s');
         }
 
         if (array_key_exists('next_appointment_date', $input)) {
             $input['next_appointment_date'] = !empty($input['next_appointment_date'])
-                ? Carbon::parse($input['next_appointment_date'])->toDateString()
+                ? \Carbon\Carbon::parse($input['next_appointment_date'])->toDateString()
                 : null;
         }
 
+        // Update appointment
         $appointment->fill($input);
         $appointment->save();
 
+        if (isset($input['status']) && $input['status'] !== $oldStatus) {
+            $doctor = $appointment->doctor;
+            $patient = $appointment->patient;
+
+            if ($doctor && $patient) {
+                // Doctor notification
+                Notification::create([
+                    'id' => Str::uuid(),
+                    'user_id' => $doctor->user_id,
+                    'appointment_id' => $appointment->id,
+                    'subject' => 'Appointment Status Updated',
+                    'message' => "The appointment with {$patient->name} has been updated to status: {$appointment->status}.",
+                ]);
+
+                // Patient notification
+                Notification::create([
+                    'id' => Str::uuid(),
+                    'user_id' => $patient->user_id,
+                    'appointment_id' => $appointment->id,
+                    'subject' => 'Appointment Status Updated',
+                    'message' => "Your appointment with Dr. {$doctor->name} has been updated to status: {$appointment->status}.",
+                ]);
+            }
+        }
+
         return $appointment;
     }
+
 
 
     public function delete($id)
