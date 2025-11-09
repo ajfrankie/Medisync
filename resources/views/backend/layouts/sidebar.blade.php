@@ -60,8 +60,8 @@
 
                 {{-- ================= DOCTOR ACCESS ================= --}}
                 @if (Auth::user()->isDoctor())
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                    <li class="{{ request()->routeIs('admin.doctor-dashboard.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.doctor-dashboard.index') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
                             <span>Doctor Dashboard</span>
                         </a>
@@ -90,7 +90,7 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                    <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.notification.index') }}" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>

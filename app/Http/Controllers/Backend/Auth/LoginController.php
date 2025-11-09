@@ -18,13 +18,24 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            return redirect()->intended(route('admin.dashboard'));
+
+            $user = Auth::user();
+
+            // Redirect based on role
+            if ($user->role == 'Doctor') {
+                return redirect()->route('admin.doctor-dashboard.index');
+            } elseif ($user->role == 'Patient') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('admin.dashboard');
+            }
         }
 
         return back()->withErrors([
             'email' => 'Invalid login credentials.',
         ])->withInput();
     }
+
 
     public function logout(Request $request)
     {
