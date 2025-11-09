@@ -72,8 +72,6 @@ class AppointmentRepository
             Notification::create([
                 'id' => Str::uuid(),
                 'user_id' => $doctor->user_id,
-                'doctor_id' => $doctor->id,
-                'patient_id' => $patient->id,
                 'appointment_id' => $appointment->id,
                 'subject' => 'New Appointment Booked',
                 'message' => "You have a new appointment with {$patient->name} on {$appointment->appointment_date} at {$appointment->appointment_time}.",
@@ -83,8 +81,6 @@ class AppointmentRepository
             Notification::create([
                 'id' => Str::uuid(),
                 'user_id' => $patient->user_id,
-                'doctor_id' => $doctor->id,
-                'patient_id' => $patient->id,
                 'appointment_id' => $appointment->id, //UUID from appointment
                 'subject' => 'Appointment Confirmed',
                 'message' => "Your appointment with Dr. {$doctor->name} is confirmed for {$appointment->appointment_date} at {$appointment->appointment_time}.",

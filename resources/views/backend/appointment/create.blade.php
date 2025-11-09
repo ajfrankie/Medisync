@@ -60,6 +60,7 @@
                                 </div>
                             </div>
 
+                            
                             <!-- Doctor Department (Display only) -->
                             <div class="col-md-4">
                                 <div class="mt-3">
@@ -83,18 +84,27 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label">Patient's Name</label>
-                                    <select class="form-select select2 @error('patient_id') is-invalid @enderror"
-                                        id="patient_id" name="patient_id">
-                                        <option value="">Select Patient...</option>
-                                        @foreach ($patients as $patient)
-                                            <option value="{{ $patient->id }}">{{ $patient->user->name }}</option>
-                                        @endforeach
-                                    </select>
+
+                                    @if (auth()->user()->role->role_name == 'Patient')
+                                        <input type="text" class="form-control" value="{{ auth()->user()->name }}"
+                                            readonly>
+                                        <input type="hidden" name="patient_id" value="{{ auth()->user()->patient->id }}">
+                                    @else
+                                        <select class="form-select select2 @error('patient_id') is-invalid @enderror"
+                                            id="patient_id" name="patient_id">
+                                            <option value="">Select Patient...</option>
+                                            @foreach ($patients as $patient)
+                                                <option value="{{ $patient->id }}">{{ $patient->user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+
                                     @error('patient_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
 
                             <!-- Appointment Date -->
                             <div class="col-md-3">
@@ -110,7 +120,7 @@
                             </div>
 
                             <!-- Appointment Time -->
-                             <div class="col-md-3">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="appointment_time" class="form-label">Appointment Time</label>
                                     <input type="time"
@@ -129,24 +139,31 @@
                                     <select id="status1"
                                         class="form-control select2 @error('status') is-invalid @enderror" name="status">
                                         <option selected disabled value="">Choose...</option>
-                                        <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>
-                                            Pending</option>
-                                        <option value="Confirmed" {{ old('status') == 'Confirmed' ? 'selected' : '' }}>
-                                            Confirmed</option>
-                                        <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>
-                                            Completed</option>
-                                        <option value="Cancelled" {{ old('status') == 'Cancelled' ? 'selected' : '' }}>
-                                            Cancelled</option>
-                                        <option value="Next Appointment"
-                                            {{ old('status') == 'Next Appointment' ? 'selected' : '' }}>
-                                            Next Appointment</option>
-                                        {{-- 'pending', 'confirmed', 'completed', 'cancelled', 'schedule next appointment' --}}
+
+                                        @if (auth()->user()->role->role_name == 'Patient')
+                                            <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>
+                                                Pending</option>
+                                        @else
+                                            <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>
+                                                Pending</option>
+                                            <option value="Confirmed" {{ old('status') == 'Confirmed' ? 'selected' : '' }}>
+                                                Confirmed</option>
+                                            <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>
+                                                Completed</option>
+                                            <option value="Cancelled" {{ old('status') == 'Cancelled' ? 'selected' : '' }}>
+                                                Cancelled</option>
+                                            <option value="Next Appointment"
+                                                {{ old('status') == 'Next Appointment' ? 'selected' : '' }}>Next
+                                                Appointment</option>
+                                        @endif
                                     </select>
-                                    @error('department')
+
+                                    @error('status')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
                         </div>
                         <div class="row mt-4">
                             <!-- Notes -->
@@ -216,6 +233,17 @@
                     $('#specialization').val('');
                 }
             });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#appointment_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minuteIncrement: 15 // <-- This sets 15-minute intervals
         });
     </script>
 @endsection
