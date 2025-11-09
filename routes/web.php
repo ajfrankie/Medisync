@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\Auth\RegisterController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DoctorController;
+use App\Http\Controllers\Backend\DoctorDashboardController;
 use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\NurseController;
@@ -159,4 +160,12 @@ Route::prefix('/admin')->group(function () {
         Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('admin.notification.mark-as-read');
         Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notification.mark-all-as-read');
     });
+
+
+     Route::prefix('/doctor-dashboard')->group(function () {
+        Route::get('/', [DoctorDashboardController::class, 'index'])->name('admin.doctor-dashboard.index');
+       
+    });
+
+
 });
