@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\EHRController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\NurseController;
 use App\Http\Controllers\Backend\PatientController;
+use App\Http\Controllers\Backend\PatientDashboardController;
 use App\Http\Controllers\Backend\VitalController;
 use App\Http\Controllers\Backend\PrescriptionController;
 use App\Http\Controllers\Backend\SupportiveDocumentController;
@@ -161,11 +162,11 @@ Route::prefix('/admin')->group(function () {
         Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notification.mark-all-as-read');
     });
 
-
-     Route::prefix('/doctor-dashboard')->group(function () {
+    //dashboard
+    Route::prefix('/doctor-dashboard')->group(function () {
         Route::get('/', [DoctorDashboardController::class, 'index'])->name('admin.doctor-dashboard.index');
-       
     });
-
-
+    Route::prefix('/patient-dashboard')->group(function () {
+        Route::get('/', [PatientDashboardController::class, 'index'])->name('admin.patient-dashboard.index');
+    });
 });

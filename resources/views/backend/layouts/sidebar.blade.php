@@ -10,7 +10,14 @@
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
-                            <span>Patient Dashboard</span>
+                            <span>Patient</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.patient-dashboard.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.patient-dashboard.index') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Patient</span>
                         </a>
                     </li>
 
@@ -62,6 +69,13 @@
                 @if (Auth::user()->isDoctor())
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Doctor</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.doctor-dashboard.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.doctor-dashboard.index') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
                             <span>Doctor Dashboard</span>
                         </a>
