@@ -162,11 +162,15 @@ Route::prefix('/admin')->group(function () {
         Route::get('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('admin.notification.mark-all-as-read');
     });
 
-    //dashboard
+
+    //doctor-dashboard
     Route::prefix('/doctor-dashboard')->group(function () {
         Route::get('/', [DoctorDashboardController::class, 'index'])->name('admin.doctor-dashboard.index');
     });
+
+    //patient-dashboard
     Route::prefix('/patient-dashboard')->group(function () {
         Route::get('/', [PatientDashboardController::class, 'index'])->name('admin.patient-dashboard.index');
     });
+
 });
