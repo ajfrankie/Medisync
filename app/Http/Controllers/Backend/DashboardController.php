@@ -95,7 +95,7 @@ class DashboardController extends Controller
     public function totalCancledAppointments()
     {
         return $this->appointmentQuery()
-            ->where('status', 'Cancled')
+            ->where('status', 'Cancelled')
             ->count();
     }
 
