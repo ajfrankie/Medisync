@@ -190,4 +190,23 @@ class AppointmentRepository
         return Appointment::where('doctor_id', $doctorId)->get();
         // return Doctor::with('user')->where('user_id', $userId)->first();
     }
+
+    public function countAppointments()
+    {
+        return Appointment::count();
+    }
+
+    public function countCompletedAppointments()
+    {
+        return Appointment::where('status', 'completed')->count();
+    }
+
+    public function countCancelledAppoinments()
+    {
+        return Appointment::where('status', 'cancelled')->count();
+    }
+    public function countPendingAppoinments()
+    {
+        return Appointment::where('status', 'pending')->count();
+    }
 }

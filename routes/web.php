@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\AppointmentController;
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -171,6 +172,11 @@ Route::prefix('/admin')->group(function () {
     //patient-dashboard
     Route::prefix('/patient-dashboard')->group(function () {
         Route::get('/', [PatientDashboardController::class, 'index'])->name('admin.patient-dashboard.index');
+    });
+
+    //admin-dashboard
+    Route::prefix('/admin-dashboard')->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.admin-dashboard.index');
     });
 
 });
