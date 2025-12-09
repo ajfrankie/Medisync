@@ -10,7 +10,7 @@
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
-                            <span>Patient</span>
+                            <span>Home</span>
                         </a>
                     </li>
 
@@ -56,8 +56,8 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="#" class="waves-effect">
+                    <li class="{{ request()->routeIs('admin.ai-chat.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.ai-chat.index') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>
@@ -70,7 +70,7 @@
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
-                            <span>Doctor</span>
+                            <span>Home</span>
                         </a>
                     </li>
 
@@ -135,6 +135,14 @@
                 @if (Auth::user()->isAdmin() || Auth::user()->isNurse())
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    
+                    <li class="{{ request()->routeIs('admin.admin-dashboard.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.admin-dashboard.index') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
                             <span>Dashboard</span>
                         </a>
