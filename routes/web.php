@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\AIController;
-use App\Http\Controllers\Backend\AIController;
 use App\Http\Controllers\Backend\AppointmentController;
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Auth;
