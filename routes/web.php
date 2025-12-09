@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\AIController;
+use App\Http\Controllers\Backend\AIController;
 use App\Http\Controllers\Backend\AppointmentController;
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -178,16 +179,6 @@ Route::prefix('/admin')->group(function () {
     //admin-dashboard
     Route::prefix('/admin-dashboard')->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.admin-dashboard.index');
-    });
-
-    Route::prefix('/admin-dashboard')->group(function () {
-        Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.admin-dashboard.index');
-    });
-
-    Route::prefix('/ai-chat')->group(function () {
-        Route::get('/', [AIController::class, 'index'])->name('admin.ai-chat.index');
-        Route::post('/send', [AIController::class, 'sendMessage'])->name('admin.ai-chat.send');
-        Route::get('/history', [AIController::class, 'history'])->name('admin.ai-chat.history');
     });
 
     Route::prefix('/admin-dashboard')->group(function () {
