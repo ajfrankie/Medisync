@@ -56,8 +56,8 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="#" class="waves-effect">
+                    <li class="{{ request()->routeIs('admin.ai-chat.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.ai-chat.index') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>
