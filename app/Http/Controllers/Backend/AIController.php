@@ -19,231 +19,222 @@ class AIController extends Controller
 
     public function history()
     {
-        return response()->json(
-            ChatLog::where('user_id', Auth::id())
-                ->orderBy('created_at')
-                ->get()
-        );
+        $logs = ChatLog::where('user_id', Auth::id())
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json($logs);
     }
 
-    // ------------------------------------------
-    // MAIN CHAT HANDLER
-    // ------------------------------------------
+    // =====================================================
+    // MAIN CHAT MESSAGE HANDLER
+    // =====================================================
     public function sendMessage(Request $request)
     {
-        $msg = trim($request->message);
+        $message = strtolower($request->message);
         $user = Auth::user();
 
-        // Detect intent using AI classifier
-        $intent = $this->detectIntentAI($msg);
+        $intent = $this->detectIntent($message);
 
         switch ($intent) {
-
-            case "symptoms":
-                $reply = $this->handleSymptoms($msg);
+            case 'symptom_check':
+                $reply = $this->processSymptomCheck($message);
                 break;
 
-            case "doctor_referral":
-                $reply = $this->referDoctorFromDB($msg);
+            case 'doctor_referral':
+                $reply = $this->referDoctorAndShowTimes($message); // improved
                 break;
 
-            case "appointment_query":
-                $reply = $this->doctorAvailability($msg);
-                break;
-
-            case "appointment_booking":
-                $reply = $this->bookDoctor($msg);
+            case 'appointment_check':
+                $reply = $this->checkDoctorAvailability($message);
                 break;
 
             default:
-                $reply = $this->askOpenAI($msg);
+                $reply = $this->askOpenAI($message);
         }
 
         ChatLog::create([
-            "user_id" => $user->id,
-            "query_text" => $msg,
+            "user_id"      => $user->id,
+            "query_text"   => $message,
             "response_text" => $reply
         ]);
 
         return response()->json(["reply" => $reply]);
     }
 
-    // ------------------------------------------
-    // AI POWERED INTENT DETECTOR
-    // ------------------------------------------
-    private function detectIntentAI($text)
+    // =====================================================
+    // INTENT DETECTOR
+    // =====================================================
+    private function detectIntent($text)
     {
-        $prompt = "
-Classify this message into one intent ONLY:
-- symptoms     (user describing symptoms)
-- doctor_referral (user wants specialist / doctor)
-- appointment_query (user asks doctor availability)
-- appointment_booking (user wants to book)
-- general
+        if (str_contains($text, 'pain') || str_contains($text, 'hurt') || str_contains($text, 'fever') || str_contains($text, 'cough'))
+            return 'symptom_check';
 
-Message: \"$text\"
-Return only the intent word.
-";
+        if (str_contains($text, 'refer') || str_contains($text, 'doctor') || str_contains($text, 'specialist') || str_contains($text, 'yes'))
+            return 'doctor_referral';
 
-        $intent = strtolower($this->askOpenAI($prompt));
+        if (str_contains($text, 'book') || str_contains($text, 'available') || str_contains($text, 'appointment') || str_contains($text, 'time'))
+            return 'appointment_check';
 
-        if (!in_array($intent, [
-            'symptoms', 'doctor_referral',
-            'appointment_query', 'appointment_booking',
-            'general'
-        ])) {
-            return "general";
-        }
-
-        return $intent;
+        return 'general';
     }
 
-    // ------------------------------------------
-    // 1. SYMPTOM HANDLER (AI)
-    // ------------------------------------------
-    private function handleSymptoms($text)
+    // =====================================================
+    // 1. AI SYMPTOM CHECKING
+    // =====================================================
+    private function processSymptomCheck($symptoms)
     {
         $prompt = "
-User symptoms: $text
-1. Analyse symptoms.
-2. Give possible causes.
-3. Suggest type of doctor needed.
-4. Ask: 'Would you like me to refer a doctor?'
-Keep it short.
+You are a medical assistant.
+User symptoms: $symptoms
+1. Give possible causes in bullet points.
+2. Give simple advice.
+3. Ask: “Do you want a doctor referral?”
 ";
 
         return $this->askOpenAI($prompt);
     }
 
-    // ------------------------------------------
-    // 2. DOCTOR REFERRAL (DB)
-    // ------------------------------------------
-    private function referDoctorFromDB($msg)
+    // =====================================================
+    // 2. AI DOCTOR REFERRAL + SHOW AVAILABLE TIMES
+    // =====================================================
+    private function referDoctorAndShowTimes($message)
     {
-        // Extract specialization smartly using AI
-        $specPrompt = "
-Identify the medical specialization needed from this message:
-\"$msg\"
-Return only 1 word like: Cardiology, Neurology, Dermatology, Pediatrics, General Medicine.
+        // AI picks correct field
+        $prompt = "
+Message: '$message'
+Pick the most suitable specialization from this list:
+Cardiology, Pediatrics, Neurology, Dermatology, General Medicine, General Dentistry
+Return ONLY one word.
 ";
 
-        $spec = trim($this->askOpenAI($specPrompt));
+        $specialization = trim($this->askOpenAI($prompt));
 
-        $doctors = Doctor::where('specialization', 'LIKE', "%$spec%")->get();
+        // Find doctor
+        $doctor = Doctor::where('specialization', 'LIKE', "%$specialization%")->first();
 
-        if ($doctors->isEmpty()) {
-            return "I couldn't find any **$spec** specialists in the hospital.";
-        }
+        if (!$doctor)
+            return "⚠️ No doctor available for $specialization.";
 
-        $list = "";
-        foreach ($doctors as $d) {
-            $list .= "- Dr. {$d->user->name} ({$d->specialization})\n";
+        $name = $doctor->user->name;
+
+        // Fetch next available times
+        $appointments = Appointment::where('doctor_id', $doctor->id)
+            ->where('appointment_date', '>=', today()->format('Y-m-d'))
+            ->orderBy('appointment_date', 'asc')
+            ->orderBy('appointment_time', 'asc')
+            ->take(5)
+            ->get();
+
+        $slots = "No times available.";
+
+        if ($appointments->count() > 0) {
+            $slots = "";
+            foreach ($appointments as $appt) {
+                $slots .= "- {$appt->appointment_date} at {$appt->appointment_time}\n";
+            }
         }
 
         return "
-Here are the available **$spec** doctors:\n$list
-If you want to check availability, type:  
-**check Dr. Name**
+Based on your symptoms, I recommend a **$specialization** doctor.
+
+👨‍⚕️ **Dr. $name**  
+Specialization: $specialization
+
+📅 **Available Times:**  
+$slots
+
+To book an appointment, type:  
+**book Dr. $name**
 ";
     }
 
-    // ------------------------------------------
-    // 3. CHECK DOCTOR AVAILABLE TIMES
-    // ------------------------------------------
-    private function doctorAvailability($msg)
+    // =====================================================
+    // 3. CHECK AVAILABILITY (USER ASKS)
+    // =====================================================
+    private function checkDoctorAvailability($message)
     {
-        preg_match('/dr\.?\s*([a-zA-Z ]+)/i', $msg, $match);
+        // Extract doctor name
+        preg_match('/dr\\.\\s*([a-zA-Z ]+)/i', $message, $match);
 
         if (!isset($match[1])) {
-            return "Please specify the doctor name.";
+            return "Please specify doctor name, e.g. *Check availability for Dr. John*";
         }
 
         $name = trim($match[1]);
 
-        $doctor = Doctor::whereHas('user', fn($q) =>
-            $q->where('name', 'LIKE', "%$name%")
-        )->first();
+        // Find doctor
+        $doctor = Doctor::whereHas('user', function ($q) use ($name) {
+            $q->where('name', 'LIKE', "%$name%");
+        })->first();
 
         if (!$doctor) {
-            return "No doctor found under the name **Dr. $name**.";
+            return "I couldn’t find a doctor named Dr. $name.";
         }
 
-        $appts = Appointment::where('doctor_id', $doctor->id)
-            ->where('date', '>=', now())
-            ->orderBy('date')
-            ->take(5)
+        // Fetch all upcoming appointments
+        $appointments = Appointment::where('doctor_id', $doctor->id)
+            ->where('appointment_date', '>=', now()->format('Y-m-d'))
+            ->orderBy('appointment_date', 'asc')
+            ->orderBy('appointment_time', 'asc')
             ->get();
 
-        if ($appts->isEmpty()) {
-            return "Dr. {$doctor->user->name} has no scheduled times.";
+        $count = $appointments->count();
+
+        // CASE 1: Slots full
+        if ($count >= 10) {
+            return "
+❌ **Dr. {$doctor->user->name}'s schedule is full.**
+He already has **$count appointments**, so no time slots left.
+";
         }
 
+        // CASE 2: Show available slots (less than 10)
+        if ($count == 0) {
+            return "
+📅 Dr. {$doctor->user->name} has **no appointments yet**.
+All dates are open.
+";
+        }
+
+        // Build list of available times
         $slots = "";
-        foreach ($appts as $a) {
-            $slots .= "- {$a->date} at {$a->time}\n";
+        foreach ($appointments as $appt) {
+            $slots .= "- {$appt->appointment_date} at {$appt->appointment_time}\n";
         }
 
         return "
-Available times for **Dr. {$doctor->user->name}**:\n$slots
-To book, type:  
-**book Dr. {$doctor->user->name} on YYYY-MM-DD at HH:MM**
+📅 **Dr. {$doctor->user->name} Availability**
+
+He currently has **$count / 10 appointments**.
+
+Here are his upcoming scheduled days (less than 10):
+
+$slots
+
+You may ask:  
+👉 *“What date can I meet him?”* (to show free dates)
 ";
     }
 
-    // ------------------------------------------
-    // 4. BOOK APPOINTMENT
-    // ------------------------------------------
-    private function bookDoctor($msg)
-    {
-        preg_match('/book\s+dr\.?\s*([a-zA-Z ]+)\s*on\s*(\d{4}-\d{2}-\d{2})\s*at\s*([0-9:]+)/i', $msg, $m);
 
-        if (count($m) < 4) {
-            return "Use format:  
-**book Dr. Name on 2025-01-10 at 09:00**";
-        }
-
-        $name = trim($m[1]);
-        $date = $m[2];
-        $time = $m[3];
-
-        $doctor = Doctor::whereHas('user', fn($q) =>
-            $q->where('name', 'LIKE', "%$name%")
-        )->first();
-
-        if (!$doctor) {
-            return "Doctor not found.";
-        }
-
-        Appointment::create([
-            "doctor_id" => $doctor->id,
-            "patient_id" => Auth::id(),
-            "date" => $date,
-            "time" => $time,
-            "status" => 'Pending'
-        ]);
-
-        return "✅ Appointment booked with **Dr. $name** on **$date at $time**.";
-    }
-
-    // ------------------------------------------
-    // OpenAI Wrapper
-    // ------------------------------------------
+    // =====================================================
+    // OPENAI WRAPPER
+    // =====================================================
     private function askOpenAI($prompt)
     {
         try {
-            $client = OpenAI::client(env('OPENAI_API_KEY'));
+            $client = \OpenAI::client(env('OPENAI_API_KEY'));
 
             $response = $client->chat()->create([
                 'model' => 'gpt-4o-mini',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are MediSync AI Assistant. Short, helpful answers.'],
-                    ['role' => 'user', 'content' => $prompt],
-                ],
-                'temperature' => 0.4
+                    ['role' => 'system', 'content' => 'You are MediSync AI. Provide short, clear answers.'],
+                    ['role' => 'user', 'content' => $prompt]
+                ]
             ]);
 
             return trim($response->choices[0]->message->content);
-
         } catch (\Exception $e) {
             return "⚠️ AI Error: " . $e->getMessage();
         }
