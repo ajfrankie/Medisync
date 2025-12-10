@@ -35,7 +35,9 @@ class DoctorSeeder extends Seeder
                     'Pediatrics',
                     'Neurology',
                     'Dermatology',
-                    'General Medicine'
+                    'General Medicine',
+                    'General Dentistry',
+
                 ]),
                 'department' => $faker->randomElement([
                     'Outpatient',

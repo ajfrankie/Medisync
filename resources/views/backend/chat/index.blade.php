@@ -9,212 +9,172 @@
 @slot('title') Chat @endslot
 @endcomponent
 
-<div class="d-lg-flex">
-    <div class="w-100 user-chat">
+<div class="row">
+    <div class="col-12">
         <div class="card">
-            <div class="p-4 border-bottom ">
-                <div class="row">
-                    <div class="col-md-4 col-9">
-                        <h5 class="font-size-15 mb-1">AI Assistant</h5>
-                        <p class="text-muted mb-0"><i class="mdi mdi-circle text-success align-middle me-1"></i> Active now</p>
+            <div class="card-body p-0">
+                <div class="d-flex align-items-center p-3 border-bottom">
+                    <div>
+                        <h5 class="mb-0">AI Assistant</h5>
+                        <small class="text-muted">Ask general questions or describe symptoms (comma separated).</small>
                     </div>
-                    <div class="col-md-8 col-3">
-                        <ul class="list-inline user-chat-nav text-end mb-0">
-                            <li class="list-inline-item d-none d-sm-inline-block">
-                                <div class="dropdown">
-                                    <button class="btn nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-search-alt-2"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
-                                        <form class="p-3">
-                                            <div class="form-group m-0">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-
-                                                    <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-inline-item  d-none d-sm-inline-block">
-                                <div class="dropdown">
-                                    <button class="btn nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-cog"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">View Profile</a>
-                                        <a class="dropdown-item" href="#">Clear chat</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="ms-auto">
+                        <button id="btn-clear" class="btn btn-sm btn-outline-secondary">Clear chat</button>
                     </div>
                 </div>
-            </div>
 
-
-            <div>
-                <div class="chat-conversation p-3">
-                    <ul class="list-unstyled mb-0" data-simplebar style="max-height: 486px;">
-                        <li>
-                            <div class="chat-day-title">
-                                <span class="title">Today</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="conversation-list">
-                                <div class="dropdown">
-
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Copy</a>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Forward</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                                <div class="ctext-wrap">
-                                    <div class="conversation-name">Steven Franklin</div>
-                                    <p>
-                                        Hello!
-                                    </p>
-                                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:00</p>
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <li class="right">
-                            <div class="conversation-list">
-                                <div class="dropdown">
-
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Copy</a>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Forward</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                                <div class="ctext-wrap">
-                                    <div class="conversation-name">Henry Wells</div>
-                                    <p>
-                                        Hi, How are you? What about our next meeting?
-                                    </p>
-
-                                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:02</p>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="conversation-list">
-                                <div class="dropdown">
-
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Copy</a>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Forward</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                                <div class="ctext-wrap">
-                                    <div class="conversation-name">Steven Franklin</div>
-                                    <p>
-                                        Yeah everything is fine
-                                    </p>
-
-                                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <li class="last-chat">
-                            <div class="conversation-list">
-                                <div class="dropdown">
-
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Copy</a>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Forward</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                                <div class="ctext-wrap">
-                                    <div class="conversation-name">Steven Franklin</div>
-                                    <p>& Next meeting tomorrow 10.00AM</p>
-                                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:06</p>
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <li class=" right">
-                            <div class="conversation-list">
-                                <div class="dropdown">
-
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Copy</a>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Forward</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                                <div class="ctext-wrap">
-                                    <div class="conversation-name">Henry Wells</div>
-                                    <p>
-                                        Wow that's great
-                                    </p>
-
-                                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle me-1"></i> 10:07</p>
-                                </div>
-                            </div>
-                        </li>
-
-
+                <div id="chat-area" class="p-3" style="height:520px; overflow-y:auto; background:#F7F9FB;">
+                    <ul id="messages" class="list-unstyled mb-0">
+                        <!-- messages appended here -->
                     </ul>
                 </div>
-                <div class="p-3 chat-input-section">
-                    <div class="row">
+
+                <div class="p-3 border-top">
+                    <form id="chat-form" class="row g-2" autocomplete="off">
+                        @csrf
                         <div class="col">
-                            <div class="position-relative">
-                                <input type="text" class="form-control chat-input" placeholder="Enter Message...">
-                                <div class="chat-input-links" id="tooltip-container">
-                                    <ul class="list-inline mb-0">
-                                        <li class="list-inline-item"><a href="javascript: void(0);" title="Emoji"><i class="mdi mdi-emoticon-happy-outline"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript: void(0);" title="Images"><i class="mdi mdi-file-image-outline"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript: void(0);" title="Add Files"><i class="mdi mdi-file-document-outline"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <input id="chat-input" name="message" type="text" class="form-control" placeholder="Say hi, ask about symptoms (e.g. fever, cough) or 'book appointment'...">
+                            <div class="form-text">Tip: send multiple symptoms separated by commas (e.g. "fever, cough, headache").</div>
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary btn-rounded chat-send w-md waves-effect waves-light"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send"></i></button>
+                            <button id="send-btn" type="submit" class="btn btn-primary">Send</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-<!-- end row -->
+
+<style>
+/* Clean left/right bubbles */
+.msg-row { display:flex; margin-bottom:12px; }
+.msg-left { justify-content:flex-start; }
+.msg-right { justify-content:flex-end; }
+.bubble { max-width:78%; padding:12px 14px; border-radius:14px; box-shadow:0 1px 2px rgba(16,24,40,0.05); font-size:14px; }
+.bubble-left { background: #ffffff; border:1px solid #eef2f6; border-bottom-left-radius:4px; }
+.bubble-right { background: linear-gradient(90deg,#67b26f,#4ca2cd); color:white; border-bottom-right-radius:4px; }
+.meta { margin-top:6px; font-size:12px; color:#6b7280; }
+.time { font-size:11px; color:#94a3b8; margin-left:8px; }
+.system-note { text-align:center; color:#64748b; font-size:12px; margin:10px 0; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const messagesEl = document.getElementById('messages');
+    const chatArea = document.getElementById('chat-area');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const clearBtn = document.getElementById('btn-clear');
+
+    const scrollToBottom = () => { chatArea.scrollTop = chatArea.scrollHeight; };
+
+    // Helper to render a message
+    function renderMessage({ who = 'ai', text = '', time = null }) {
+        const li = document.createElement('li');
+        li.className = 'msg-row ' + (who === 'user' ? 'msg-right' : 'msg-left');
+
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble ' + (who === 'user' ? 'bubble-right' : 'bubble-left');
+        wrap.innerHTML = '<div>' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>' +
+            '<div class="meta text-end"><span class="time">' + (time || new Date().toLocaleTimeString()) + '</span></div>';
+
+        li.appendChild(wrap);
+        messagesEl.appendChild(li);
+        scrollToBottom();
+    }
+
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/\'/g, '&#039;');
+    }
+
+    // Load history
+    async function loadHistory() {
+        try {
+            const res = await fetch("{{ route('admin.ai-chat.history') }}", {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (!res.ok) throw new Error('Failed to load');
+            const data = await res.json(); // expected: [{query_text, response_text, created_at, from}] 
+            messagesEl.innerHTML = '';
+            if (data.length === 0) {
+                const note = document.createElement('div');
+                note.className = 'system-note';
+                note.textContent = 'No previous chats. Say hi to start.';
+                chatArea.prepend(note);
+            }
+            data.forEach(item => {
+                renderMessage({ who: 'user', text: item.query_text, time: new Date(item.created_at).toLocaleTimeString() });
+                if (item.response_text) renderMessage({ who: 'ai', text: item.response_text, time: new Date(item.created_at).toLocaleTimeString() });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    loadHistory();
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        // show user message immediately
+        renderMessage({ who: 'user', text });
+        input.value = '';
+
+        // show typing indicator
+        const typingId = 'typing-' + Date.now();
+        renderMessage({ who: 'ai', text: 'AI is typing...' });
+
+        try {
+            const token = document.querySelector('input[name="_token"]').value;
+            const res = await fetch("{{ route('admin.ai-chat.send') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token, 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ message: text })
+            });
+
+            if (!res.ok) throw new Error('Network response was not ok');
+            const payload = await res.json(); // expected { reply: '...', saved: true }
+
+            // remove last AI typing bubble and replace with real reply
+            // simplest approach: remove last element if it contains 'AI is typing...'
+            const last = messagesEl.lastElementChild;
+            if (last && last.innerText.includes('AI is typing')) last.remove();
+
+            renderMessage({ who: 'ai', text: payload.reply || 'Sorry, I could not generate a reply.' });
+
+        } catch (err) {
+            // replace typing with error
+            const last = messagesEl.lastElementChild;
+            if (last && last.innerText.includes('AI is typing')) last.remove();
+            renderMessage({ who: 'ai', text: 'Error: Unable to reach server. Try again later.' });
+            console.error(err);
+        }
+    });
+
+    // Clear chat button (frontend only)
+    clearBtn.addEventListener('click', function () {
+        if (!confirm('Clear local chat view? This does not delete server logs.')) return;
+        messagesEl.innerHTML = '';
+    });
+
+    // make Enter send (already handled) and Shift+Enter for newline
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendBtn.click();
+        }
+    });
+
+});
+</script>
 
 @endsection
