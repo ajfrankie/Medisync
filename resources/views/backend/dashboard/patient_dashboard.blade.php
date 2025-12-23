@@ -125,6 +125,117 @@
                 </div>
             </div>
 
+            {{-- vital Details --}}
+            <div class="row">
+                {{-- Sugar Level Details --}}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Vital Detail – Sugar Level</h4>
+                            <h5>
+                                {{ $sugarDetails['value'] ?? 'N/A' }} mg/dL
+                                <span class="badge bg-{{ $sugarDetails['color'] }}">
+                                    {{ $sugarDetails['status'] }}
+                                </span>
+                            </h5>
+                            <div class="progress mt-3">
+                                <div class="progress-bar bg-{{ $sugarDetails['color'] }}" role="progressbar"
+                                    style="width: {{ $sugarDetails['percentage'] }}%"
+                                    aria-valuenow="{{ $sugarDetails['percentage'] }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Blood Pressure Details --}}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Vital Detail – Blood Pressure</h4>
+                            <h5>
+                                {{ $bloodPressure['value'] ?? 'N/A' }} mmHg
+                                <span class="badge bg-{{ $bloodPressure['color'] }}">
+                                    {{ $bloodPressure['status'] }}
+                                </span>
+                            </h5>
+                            <div class="progress mt-3">
+                                <div class="progress-bar bg-{{ $bloodPressure['color'] }}" role="progressbar"
+                                    style="width: {{ $bloodPressure['percentage'] }}%"
+                                    aria-valuenow="{{ $bloodPressure['percentage'] }}" aria-valuemin="0"
+                                    aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Pulse Rate Details --}}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Vital Detail – Pulse Rate</h4>
+                            <h5>
+                                {{ $pulseRate['value'] ?? 'N/A' }} bpm
+                                <span class="badge bg-{{ $pulseRate['color'] }}">
+                                    {{ $pulseRate['status'] }}
+                                </span>
+                            </h5>
+                            <div class="progress mt-3">
+                                <div class="progress-bar bg-{{ $pulseRate['color'] }}" role="progressbar"
+                                    style="width: {{ $pulseRate['percentage'] }}%"
+                                    aria-valuenow="{{ $pulseRate['percentage'] }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- BMI Details --}}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Vital Detail – BMI</h4>
+
+                            <h5>
+                                {{ $bmiDetails['bmi'] ?? 'N/A' }}
+                                <span
+                                    class="badge 
+                    @if ($bmiDetails['category'] === 'Underweight') bg-danger
+                    @elseif($bmiDetails['category'] === 'Normal weight') bg-success
+                    @elseif($bmiDetails['category'] === 'Overweight') bg-info
+                    @else bg-warning @endif">
+                                    {{ $bmiDetails['category'] }}
+                                </span>
+                            </h5>
+
+                            <div class="progress mt-3">
+                                @php
+                                    $percentage = match ($bmiDetails['category'] ?? '') {
+                                        'Underweight' => 30,
+                                        'Normal weight' => 70,
+                                        'Overweight' => 85,
+                                        'Obese' => 95,
+                                        default => 0,
+                                    };
+                                    $color = match ($bmiDetails['category'] ?? '') {
+                                        'Underweight' => 'danger',
+                                        'Normal weight' => 'success',
+                                        'Overweight' => 'info',
+                                        'Obese' => 'warning',
+                                        default => 'secondary',
+                                    };
+                                @endphp
+
+                                <div class="progress-bar bg-{{ $color }}" role="progressbar"
+                                    style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
 
         </div>

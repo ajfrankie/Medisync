@@ -26,9 +26,7 @@ class AIController extends Controller
         return response()->json($logs);
     }
 
-    // =====================================================
     // MAIN CHAT MESSAGE HANDLER
-    // =====================================================
     public function sendMessage(Request $request)
     {
         $message = strtolower($request->message);
@@ -62,9 +60,8 @@ class AIController extends Controller
         return response()->json(["reply" => $reply]);
     }
 
-    // =====================================================
+
     // INTENT DETECTOR
-    // =====================================================
     private function detectIntent($text)
     {
         if (str_contains($text, 'pain') || str_contains($text, 'hurt') || str_contains($text, 'fever') || str_contains($text, 'cough'))
@@ -79,34 +76,30 @@ class AIController extends Controller
         return 'general';
     }
 
-    // =====================================================
-    // 1. AI SYMPTOM CHECKING
-    // =====================================================
+    // AI SYMPTOM CHECKING
     private function processSymptomCheck($symptoms)
     {
         $prompt = "
-You are a medical assistant.
-User symptoms: $symptoms
-1. Give possible causes in bullet points.
-2. Give simple advice.
-3. Ask: “Do you want a doctor referral?”
-";
+        You are a medical assistant.
+        User symptoms: $symptoms
+        1. Give possible causes in bullet points. 
+        2. Give simple advice.
+        3. Ask: “Do you want a doctor referral?”
+        ";
 
         return $this->askOpenAI($prompt);
     }
 
-    // =====================================================
-    // 2. AI DOCTOR REFERRAL + SHOW AVAILABLE TIMES
-    // =====================================================
+    //AI DOCTOR REFERRAL + SHOW AVAILABLE TIMES
     private function referDoctorAndShowTimes($message)
     {
         // AI picks correct field
         $prompt = "
-Message: '$message'
-Pick the most suitable specialization from this list:
-Cardiology, Pediatrics, Neurology, Dermatology, General Medicine, General Dentistry
-Return ONLY one word.
-";
+        Message: '$message'
+        Pick the most suitable specialization from this list:
+        Cardiology, Pediatrics, Neurology, Dermatology, General Medicine, General Dentistry
+        Return ONLY one word.
+        ";
 
         $specialization = trim($this->askOpenAI($prompt));
 
@@ -114,7 +107,7 @@ Return ONLY one word.
         $doctor = Doctor::where('specialization', 'LIKE', "%$specialization%")->first();
 
         if (!$doctor)
-            return "⚠️ No doctor available for $specialization.";
+            return " No doctor available for $specialization.";
 
         $name = $doctor->user->name;
 
@@ -136,22 +129,20 @@ Return ONLY one word.
         }
 
         return "
-Based on your symptoms, I recommend a **$specialization** doctor.
+            Based on your symptoms, I recommend a $specialization doctor.
 
-👨‍⚕️ **Dr. $name**  
-Specialization: $specialization
+            Dr. $name 
+            Specialization: $specialization
 
-📅 **Available Times:**  
-$slots
+            Available Times: 
+            $slots
 
-To book an appointment, type:  
-**book Dr. $name**
-";
+            To book an appointment, type:  
+            book Dr. $name
+            ";
     }
 
-    // =====================================================
     // 3. CHECK AVAILABILITY (USER ASKS)
-    // =====================================================
     private function checkDoctorAvailability($message)
     {
         // Extract doctor name
@@ -184,17 +175,17 @@ To book an appointment, type:
         // CASE 1: Slots full
         if ($count >= 10) {
             return "
-❌ **Dr. {$doctor->user->name}'s schedule is full.**
-He already has **$count appointments**, so no time slots left.
-";
+            **Dr. {$doctor->user->name}'s schedule is full.**
+            He already has **$count appointments**, so no time slots left.
+            ";
         }
 
         // CASE 2: Show available slots (less than 10)
         if ($count == 0) {
             return "
-📅 Dr. {$doctor->user->name} has **no appointments yet**.
-All dates are open.
-";
+        Dr. {$doctor->user->name} has no appointments yet.
+        All dates are open.
+        ";
         }
 
         // Build list of available times
@@ -204,23 +195,21 @@ All dates are open.
         }
 
         return "
-📅 **Dr. {$doctor->user->name} Availability**
+        Dr. {$doctor->user->name} Availability
 
-He currently has **$count / 10 appointments**.
+        He currently has $count / 10 appointments.
 
-Here are his upcoming scheduled days (less than 10):
+        Here are his upcoming scheduled days (less than 10):
 
-$slots
+        $slots
 
-You may ask:  
-👉 *“What date can I meet him?”* (to show free dates)
-";
+        You may ask:  
+        “What date can I meet him?”* (to show free dates)
+        ";
     }
 
 
-    // =====================================================
     // OPENAI WRAPPER
-    // =====================================================
     private function askOpenAI($prompt)
     {
         try {
@@ -236,7 +225,7 @@ You may ask:
 
             return trim($response->choices[0]->message->content);
         } catch (\Exception $e) {
-            return "⚠️ AI Error: " . $e->getMessage();
+            return "AI Error: " . $e->getMessage();
         }
     }
 }
