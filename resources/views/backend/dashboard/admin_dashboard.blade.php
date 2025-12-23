@@ -394,7 +394,65 @@
             </div>
         </div>
 
-        
+
+        <div class="col-md-12">
+            {{-- <div class="card"> --}}
+            {{-- <div class="card-body"> --}}
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Patient Gender Distribution</h4>
+                            <div id="gender_pie_chart" class="apex-charts" dir="ltr"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Patient Age vs Birth Year</h4>
+                            <div id="age_line_chart" class="apex-charts" dir="ltr"></div>
+                        </div>
+                    </div>
+                </div>
+                {{-- </div>
+                </div> --}}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Height Distribution (Patient Count)</h4>
+                            <div id="heightChart" class="apex-charts"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Blood Group Distribution</h4>
+                            <div id="bloodGroupChart" class="apex-charts"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Weight Distribution (Patient Count)</h4>
+                            <div id="weightChart" class="apex-charts"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -404,6 +462,208 @@
     <!-- apexcharts -->
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var weightOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 300
+                },
+                series: [{
+                    name: 'Patient Count',
+                    data: @json($weightData['counts'])
+                }],
+                xaxis: {
+                    categories: @json($weightData['rangeLabels'])
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " patients";
+                        }
+                    }
+                }
+            };
+
+            var weightChart = new ApexCharts(document.querySelector("#weightChart"), weightOptions);
+            weightChart.render();
+
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var heightOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 300
+                },
+                series: [{
+                    name: 'Patient Count',
+                    data: @json($heightData['counts'])
+                }],
+                xaxis: {
+                    categories: @json($heightData['rangeLabels'])
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " patients";
+                        }
+                    }
+                }
+            };
+
+            var heightChart = new ApexCharts(document.querySelector("#heightChart"), heightOptions);
+            heightChart.render();
+
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Blood Group Chart
+            var bloodGroupOptions = {
+                chart: {
+                    type: 'pie',
+                    height: 350
+                },
+                series: @json($bloodGroupData['bloodCounts']),
+                labels: @json($bloodGroupData['bloodGroups']),
+                colors: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14', '#20c997',
+                    '#0dcaf0'
+                ],
+                legend: {
+                    position: 'bottom'
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " patients";
+                        }
+                    }
+                }
+            };
+            new ApexCharts(document.querySelector("#bloodGroupChart"), bloodGroupOptions).render();
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var maleCount = {{ $genderSummary['male'] ?? 0 }};
+            var femaleCount = {{ $genderSummary['female'] ?? 0 }};
+
+            var options = {
+                chart: {
+                    type: 'pie',
+                    height: 350
+                },
+                labels: ['Male', 'Female'],
+                series: [maleCount, femaleCount],
+                colors: ['#0d6efd', '#d63384'],
+                legend: {
+                    position: 'bottom'
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function(val, opts) {
+                        return val.toFixed(0) + '%';
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 300
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#gender_pie_chart"), options);
+            chart.render();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var birthYears = @json($ageData['birthYears'] ?? []);
+            var avgAges = @json($ageData['avgAges'] ?? []);
+            var counts = @json($ageData['counts'] ?? []);
+
+            var options = {
+                chart: {
+                    type: 'line',
+                    height: 320,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                series: [{
+                    name: 'Average Age',
+                    data: avgAges
+                }],
+                xaxis: {
+                    categories: birthYears,
+                    title: {
+                        text: 'Birth Year'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Age'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                markers: {
+                    size: 5
+                },
+                tooltip: {
+                    shared: true,
+                    custom: function({
+                        series,
+                        seriesIndex,
+                        dataPointIndex,
+                        w
+                    }) {
+                        return `
+                    <div>
+                        <strong>Birth Year: ${w.globals.labels[dataPointIndex]}</strong><br/>
+                        Average Age: ${series[seriesIndex][dataPointIndex]}<br/>
+                        Patients Count: ${counts[dataPointIndex]}
+                    </div>
+                `;
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#age_line_chart"), options);
+            chart.render();
+        });
+    </script>
     <!-- dashboard init -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {

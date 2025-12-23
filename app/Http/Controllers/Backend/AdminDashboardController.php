@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\NotificationRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,11 @@ class AdminDashboardController extends Controller
         $pulseRateSummary = $this->adminPulseRateSummary();
         $bmiSummary = $this->adminBMISummary();
 
-        // $genderSummary = $this->genderSummary();
+        $genderSummary = $this->genderSummary();
+        $ageData = $this->patientAgeDistribution();
+        $bloodGroupData = $this->bloodGroupChartData();
+        $heightData = $this->heightChartData();
+        $weightData = $this->weightChartData();
 
         return view('backend.dashboard.admin_dashboard', [
             "countDoctors" => $countDoctors,
@@ -44,7 +49,11 @@ class AdminDashboardController extends Controller
             "bloodPressureSummary" => $bloodPressureSummary,
             "pulseRateSummary" => $pulseRateSummary,
             "bmiSummary" => $bmiSummary,
-            // "genderSummary" => $genderSummary,
+            "genderSummary" => $genderSummary,
+            "ageData" => $ageData,
+            "bloodGroupData" => $bloodGroupData,
+            "heightData" => $heightData,
+            "weightData" => $weightData,
             "request" => $request,
         ]);
     }
@@ -275,19 +284,130 @@ class AdminDashboardController extends Controller
     }
 
 
-    // public function genderSummary()
-    // {
-    //     $maleCount = User::where('role_id', 2)
-    //         ->where('gender', 'male')
-    //         ->count();
+    public function genderSummary()
+    {
+        $maleCount = User::where('role_id', 2)
+            ->where('gender', 'male')
+            ->count();
 
-    //     $femaleCount = User::where('role_id', 2)
-    //         ->where('gender', 'female')
-    //         ->count();
+        $femaleCount = User::where('role_id', 2)
+            ->where('gender', 'female')
+            ->count();
 
-    //     return [
-    //         'male' => $maleCount,
-    //         'female' => $femaleCount,
-    //     ];
-    // }
+        return [
+            'male' => $maleCount,
+            'female' => $femaleCount,
+        ];
+    }
+
+    public function patientAgeDistribution()
+    {
+        $patients = User::where('role_id', 2)
+            ->whereNotNull('dob')
+            ->get();
+
+        // Group patients by birth year
+        $grouped = $patients->groupBy(function ($patient) {
+            return Carbon::parse($patient->dob)->year;
+        })->sortKeys(); // <-- Sort keys ascending
+
+        $birthYears = [];
+        $avgAges = [];
+        $counts = [];
+
+        foreach ($grouped as $year => $patientsInYear) {
+            $birthYears[] = $year;
+
+            $averageAge = round($patientsInYear->avg(function ($p) {
+                return Carbon::now()->year - Carbon::parse($p->dob)->year;
+            }), 1);
+
+            $avgAges[] = $averageAge;
+            $counts[] = $patientsInYear->count();
+        }
+
+        return [
+            'birthYears' => $birthYears,
+            'avgAges' => $avgAges,
+            'counts' => $counts
+        ];
+    }
+
+    protected function bloodGroupChartData()
+    {
+        $patients = Patient::whereNotNull('blood_group')->get();
+
+        $bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+        $bloodCounts = [];
+
+        foreach ($bloodGroups as $bg) {
+            $bloodCounts[] = $patients->where('blood_group', $bg)->count();
+        }
+
+        return [
+            'bloodGroups' => $bloodGroups,
+            'bloodCounts' => $bloodCounts
+        ];
+    }
+
+    protected function heightChartData()
+    {
+        $patients = Patient::whereNotNull('height')->pluck('height')->toArray();
+
+        // Define ranges (in cm)
+        $ranges = [
+            '140-149' => 0,
+            '150-159' => 0,
+            '160-169' => 0,
+            '170-179' => 0,
+            '180-189' => 0,
+            '190-199' => 0,
+        ];
+
+        // Count patients per range
+        foreach ($patients as $height) {
+            if ($height >= 140 && $height <= 149) $ranges['140-149']++;
+            elseif ($height >= 150 && $height <= 159) $ranges['150-159']++;
+            elseif ($height >= 160 && $height <= 169) $ranges['160-169']++;
+            elseif ($height >= 170 && $height <= 179) $ranges['170-179']++;
+            elseif ($height >= 180 && $height <= 189) $ranges['180-189']++;
+            elseif ($height >= 190 && $height <= 199) $ranges['190-199']++;
+        }
+
+        return [
+            'rangeLabels' => array_keys($ranges),
+            'counts' => array_values($ranges),
+        ];
+    }
+    protected function weightChartData()
+    {
+        $patients = Patient::whereNotNull('weight')->pluck('weight')->toArray();
+
+        // Define weight ranges (kg)
+        $ranges = [
+            '40-49' => 0,
+            '50-59' => 0,
+            '60-69' => 0,
+            '70-79' => 0,
+            '80-89' => 0,
+            '90-99' => 0,
+            '100+'  => 0,
+        ];
+
+        // Count patients per range
+        foreach ($patients as $weight) {
+            if ($weight >= 40 && $weight <= 49) $ranges['40-49']++;
+            elseif ($weight >= 50 && $weight <= 59) $ranges['50-59']++;
+            elseif ($weight >= 60 && $weight <= 69) $ranges['60-69']++;
+            elseif ($weight >= 70 && $weight <= 79) $ranges['70-79']++;
+            elseif ($weight >= 80 && $weight <= 89) $ranges['80-89']++;
+            elseif ($weight >= 90 && $weight <= 99) $ranges['90-99']++;
+            elseif ($weight >= 100) $ranges['100+']++;
+        }
+
+        return [
+            'rangeLabels' => array_keys($ranges),
+            'counts' => array_values($ranges),
+        ];
+    }
 }
