@@ -148,7 +148,253 @@
             </div>
         </div>
 
+
+
         {{-- dataset --}}
+        <div class="col-md-12"> {{-- CARD FULL WIDTH --}}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Blood Sugar Status</h4>
+                    {{-- Blood Sugar Status --}}
+                    <div class="row"> {{-- REQUIRED ROW --}}
+
+                        {{-- LOW --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger fw-bold">Low</span>
+                                    <span>{{ $sugarSummary['low'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $sugarSummary['total'] > 0 ? ($sugarSummary['low'] / $sugarSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- GOOD --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-success fw-bold">Good</span>
+                                    <span>{{ $sugarSummary['good'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $sugarSummary['total'] > 0 ? ($sugarSummary['good'] / $sugarSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- HIGH --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-warning fw-bold">High</span>
+                                    <span>{{ $sugarSummary['high'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning"
+                                        style="width: {{ $sugarSummary['total'] > 0 ? ($sugarSummary['high'] / $sugarSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> {{-- END ROW --}}
+                </div>
+            </div>
+        </div>
+        {{-- BMI Level Summary --}}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Blood Pressure Status</h4>
+
+                    <div class="row">
+
+                        {{-- LOW --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger fw-bold">Low</span>
+                                    <span>{{ $bloodPressureSummary['low'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $bloodPressureSummary['total'] > 0 ? ($bloodPressureSummary['low'] / $bloodPressureSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- NORMAL --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-success fw-bold">Normal</span>
+                                    <span>{{ $bloodPressureSummary['normal'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $bloodPressureSummary['total'] > 0 ? ($bloodPressureSummary['normal'] / $bloodPressureSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- HIGH --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-warning fw-bold">High</span>
+                                    <span>{{ $bloodPressureSummary['high'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning"
+                                        style="width: {{ $bloodPressureSummary['total'] > 0 ? ($bloodPressureSummary['high'] / $bloodPressureSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Pulse Rate Status --}}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Pulse Rate Status</h4>
+
+                    <div class="row">
+
+                        {{-- LOW --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger fw-bold">Low</span>
+                                    <span>{{ $pulseRateSummary['low'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $pulseRateSummary['total'] > 0 ? ($pulseRateSummary['low'] / $pulseRateSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- NORMAL --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-success fw-bold">Normal</span>
+                                    <span>{{ $pulseRateSummary['normal'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $pulseRateSummary['total'] > 0 ? ($pulseRateSummary['normal'] / $pulseRateSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- HIGH --}}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-warning fw-bold">High</span>
+                                    <span>{{ $pulseRateSummary['high'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning"
+                                        style="width: {{ $pulseRateSummary['total'] > 0 ? ($pulseRateSummary['high'] / $pulseRateSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- BMI Level Summary --}}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">BMI Level Summary</h4>
+
+                    <div class="row">
+
+                        {{-- UNDERWEIGHT --}}
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-info fw-bold">Underweight</span>
+                                    <span>{{ $bmiSummary['underweight'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info"
+                                        style="width: {{ $bmiSummary['total'] > 0 ? ($bmiSummary['underweight'] / $bmiSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- NORMAL --}}
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-success fw-bold">Normal</span>
+                                    <span>{{ $bmiSummary['normal'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $bmiSummary['total'] > 0 ? ($bmiSummary['normal'] / $bmiSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- OVERWEIGHT --}}
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-warning fw-bold">Overweight</span>
+                                    <span>{{ $bmiSummary['overweight'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning"
+                                        style="width: {{ $bmiSummary['total'] > 0 ? ($bmiSummary['overweight'] / $bmiSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- OBESE --}}
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger fw-bold">Obese</span>
+                                    <span>{{ $bmiSummary['obese'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $bmiSummary['total'] > 0 ? ($bmiSummary['obese'] / $bmiSummary['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
 
 
     </div>
@@ -203,7 +449,7 @@
             chart.render();
         });
     </script>
-     <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Grab PHP variable
             var appointmentsPercentage = {{ $pendingAppoinmentPercentage ?? 0 }};
@@ -247,7 +493,7 @@
             chart.render();
         });
     </script>
-     <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Grab PHP variable
             var appointmentsPercentage = {{ $cancelledAppoinmentPercentage ?? 0 }};
