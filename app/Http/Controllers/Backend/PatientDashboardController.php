@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\AppointmentRepository;
-use App\Repositories\NotificationRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,12 +18,20 @@ class PatientDashboardController extends Controller
         $nextAppointmentDate = $this->nextAppointmentDate();
         $cancleAppointment = $this->cancleAppointment();
         $yearAppointmetDetails = $this->yearAppointmetDetails();
+        $sugerDetails = $this->sugarDetails();
+        $bloodPressure = $this->bloodPressure();
+        $bmiDetails = $this->BMIcalculate($request);
+        $pulseRate = $this->pulseRate();
         return view('backend.dashboard.patient_dashboard', [
             "AppointmentDate" => $AppointmentDate,
             "completedAppointments" => $completedAppointments,
             "nextAppointmentDate" => $nextAppointmentDate,
             "cancleAppointment" => $cancleAppointment,
             "yearAppointmetDetails" => $yearAppointmetDetails,
+            "sugarDetails" => $sugerDetails,
+            "bloodPressure" => $bloodPressure,
+            "bmiDetails" => $bmiDetails,
+            "pulseRate" => $pulseRate,
         ]);
     }
 
@@ -113,6 +120,180 @@ class PatientDashboardController extends Controller
             'pending' => $pending,
             'cancelled' => $cancelled,
             'confirmed' => $confirmed,
+        ];
+    }
+
+    public function sugarDetails()
+    {
+        $user = Auth::user();
+        $patient = $user->patient;
+
+        $vital = $patient->ehrRecords()
+            ->with('vitals')
+            ->latest()
+            ->first()
+            ?->vitals()
+            ->latest()
+            ->first();
+
+        $bloodSugar = $vital?->blood_sugar; // mg/dL
+
+        // Defaults
+        $status = 'No Data';
+        $color = 'secondary';
+        $percentage = 0;
+
+        if ($bloodSugar !== null) {
+            if ($bloodSugar < 70) {
+                $status = 'Low';
+                $color = 'danger';
+                $percentage = 25;
+            } elseif ($bloodSugar <= 140) {
+                $status = 'Good';
+                $color = 'success';
+                $percentage = 60;
+            } else {
+                $status = 'High';
+                $color = 'warning';
+                $percentage = 90;
+            }
+        }
+
+        return [
+            'value' => $bloodSugar,
+            'status' => $status,
+            'color' => $color,
+            'percentage' => $percentage,
+        ];
+    }
+
+    public function bloodPressure()
+    {
+        $user = Auth::user();
+        $patient = $user->patient;
+
+        // Get latest vital record
+        $vital = $patient->ehrRecords()
+            ->with('vitals')
+            ->latest()
+            ->first()
+            ?->vitals()
+            ->latest()
+            ->first();
+
+        $bloodPressure = $vital?->blood_pressure; // assuming stored as "systolic/diastolic" like "120/80"
+
+        // Defaults
+        $status = 'No Data';
+        $color = 'secondary';
+        $percentage = 0;
+
+        if ($bloodPressure) {
+            // Split into systolic & diastolic
+            [$systolic, $diastolic] = explode('/', $bloodPressure);
+
+            $systolic = (int) $systolic;
+            $diastolic = (int) $diastolic;
+
+            // Simple categorization based on standard ranges
+            // Normal: 90-120 / 60-80
+            // High: >= 130 / >= 80
+            // Low: < 90 / < 60
+            if ($systolic < 90 || $diastolic < 60) {
+                $status = 'Low';
+                $color = 'danger';
+                $percentage = 30;
+            } elseif ($systolic <= 120 && $diastolic <= 80) {
+                $status = 'Normal';
+                $color = 'success';
+                $percentage = 70;
+            } else {
+                $status = 'High';
+                $color = 'warning';
+                $percentage = 90;
+            }
+        }
+
+        return [
+            'value' => $bloodPressure,
+            'status' => $status,
+            'color' => $color,
+            'percentage' => $percentage,
+        ];
+    }
+
+    public function pulseRate()
+    {
+        $user = Auth::user();
+        $patient = $user->patient;
+
+        // Get latest vital record
+        $vital = $patient->ehrRecords()
+            ->with('vitals')
+            ->latest()
+            ->first()
+            ?->vitals()
+            ->latest()
+            ->first();
+
+        $pulse = $vital?->pulse_rate; // assuming numeric value (bpm)
+
+        // Defaults
+        $status = 'No Data';
+        $color = 'secondary';
+        $percentage = 0;
+
+        if ($pulse !== null) {
+            // Categorize based on normal resting heart rate
+            // Normal: 60-100 bpm
+            // Low: <60 bpm
+            // High: >100 bpm
+            if ($pulse < 60) {
+                $status = 'Low';
+                $color = 'danger';
+                $percentage = 30;
+            } elseif ($pulse <= 100) {
+                $status = 'Normal';
+                $color = 'success';
+                $percentage = 70;
+            } else {
+                $status = 'High';
+                $color = 'warning';
+                $percentage = 90;
+            }
+        }
+
+        return [
+            'value' => $pulse,
+            'status' => $status,
+            'color' => $color,
+            'percentage' => $percentage,
+        ];
+    }
+
+    public function BMIcalculate()
+    {
+        $patient = Auth::user()->patient;
+
+        if (!$patient || !$patient->height || !$patient->weight) {
+            return [
+                'bmi' => null,
+                'category' => 'Insufficient data',
+            ];
+        }
+
+        $bmi = round($patient->weight / pow($patient->height / 100, 2), 2);
+
+        $category = match (true) {
+            $bmi < 18.5 => 'Underweight',
+            $bmi < 25 => 'Normal weight',
+            $bmi < 30 => 'Overweight',
+            default => 'Obese',
+        };
+
+        return [
+            'bmi' => $bmi,
+            'category' => $category,
         ];
     }
 }

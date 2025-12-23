@@ -23,9 +23,8 @@ class NICValidationRule implements ValidationRule
         $this->gender = strtolower((string) $gender); // normalize
     }
 
-    /**
-     * Run the validation rule.
-     */
+
+    // Run the validation rule.
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Accept both old (9 digits + V/X) and new (12 digits) NIC formats
@@ -51,9 +50,7 @@ class NICValidationRule implements ValidationRule
         }
     }
 
-    /**
-     * Extract birthdate from NIC.
-     */
+    // Extract birthdate from NIC.
     private function extractBirthDate(string $nic): ?string
     {
         if (strlen($nic) === 10) {
@@ -84,9 +81,7 @@ class NICValidationRule implements ValidationRule
         return $date ? $date->format('Y-m-d') : null;
     }
 
-    /**
-     * Extract gender from NIC.
-     */
+    //  Extract gender from NIC.
     private function extractGender(string $nic): ?string
     {
         $dayOfYear = strlen($nic) === 10
@@ -96,9 +91,7 @@ class NICValidationRule implements ValidationRule
         return $dayOfYear > 500 ? 'female' : 'male';
     }
 
-    /**
-     * Check leap year.
-     */
+    //  Check leap year.
     private function isLeapYear(int $year): bool
     {
         return ($year % 4 === 0 && $year % 100 !== 0) || ($year % 400 === 0);

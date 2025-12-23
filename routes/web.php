@@ -72,7 +72,7 @@ Route::prefix('/admin')->group(function () {
         Route::put('updateDoctor/{id}', [DoctorController::class, 'updateDoctor'])->name('admin.doctor.updateDoctor');
     });
 
-    //doctors
+    //nurse
     Route::prefix('/nurse')->middleware('auth')->group(function () {
         Route::get('/', [NurseController::class, 'index'])->name('admin.nurse.index');
         Route::get('/create', [NurseController::class, 'create'])->name('admin.nurse.create');
