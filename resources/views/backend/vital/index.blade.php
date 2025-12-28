@@ -70,15 +70,23 @@
                                                         href="{{ route('admin.vital.show', $vital->id) }}">
                                                         <i class="bx bx-show-alt"></i> Show
                                                     </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.nurse.edit', $vital->id) }}">
-                                                        <i class="bx bx-edit-alt"></i> Edit
-                                                    </a>
+
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.prescription.show', $vital->id) }}">
                                                         <i class="bx bx-edit-alt"></i> prescription
                                                     </a>
+
+                                                    @php
+                                                        $user = auth()->user();
+                                                    @endphp
+                                                    @if ($user->role->role_name == 'Doctor')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.nurse.edit', $vital->id) }}">
+                                                            <i class="bx bx-edit-alt"></i> Edit
+                                                        </a>
+                                                    @endif
                                                 </div>
+
                                             </div>
                                         </td>
                                     </tr>

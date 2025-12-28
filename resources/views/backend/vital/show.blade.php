@@ -89,14 +89,24 @@
 
                     <!-- Buttons -->
                     <div class="text-end pe-3 mt-4">
-                        <a href="{{ route('admin.vital.create', ['ehr_id' => $vital->ehr_id]) }}"
-                            class="btn btn-outline-secondary me-2">
-                            <i class="ri-add-line"></i> Add Vital
-                        </a>
-                        <a href="{{ route('admin.prescription.create', ['vital_id' => $vital->id]) }}"
-                            class="btn btn-outline-primary me-2">
-                            <i class="ri-file-add-line"></i> Add Prescription
-                        </a>
+
+
+                        @php
+                            $user = auth()->user();
+                        @endphp
+                        @if ($user->role->role_name == 'Doctor')
+                            <a href="{{ route('admin.prescription.create', ['vital_id' => $vital->id]) }}"
+                                class="btn btn-outline-primary me-2">
+                                <i class="ri-file-add-line"></i> Add Prescription
+                            </a>
+                        @endif
+
+                        @if ($user->role->role_name == 'Doctor')
+                            <a href="{{ route('admin.vital.create', ['ehr_id' => $vital->ehr_id]) }}"
+                                class="btn btn-outline-secondary me-2">
+                                <i class="ri-add-line"></i> Add Vital
+                            </a>
+                        @endif
 
                         <a href="{{ route('admin.ehr.index') }}" class="btn btn-outline-danger">
                             Back

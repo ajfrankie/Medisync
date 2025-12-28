@@ -21,10 +21,17 @@
                 <div class="card-body border-bottom">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-0 card-title flex-grow-1">EHR Records</h5>
-                        <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary w-md">
-                            <i class="fas fa-plus me-1"></i>
-                            Create EHR Record
-                        </a>
+                        @php
+                            $user = auth()->user();
+                        @endphp
+                        @if ($user->role->role_name == 'Doctor')
+                            <a href="{{ route('admin.ehr.create') }}" class="btn btn-outline-primary w-md">
+                                <i class="fas fa-plus me-1"></i>
+                                Create EHR Record
+                            </a>
+                        @endif
+
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -61,14 +68,23 @@
                                                         <i class="bx bx-edit-alt"></i>Show
                                                     </a>
 
-                                                    <a class="dropdown-item" href="{{ route('admin.ehr.edit', $ehr->id) }}">
-                                                        <i class="bx bx-edit-alt"></i>Edit
-                                                    </a>
+
 
                                                     {{-- <a class="dropdown-item"
                                                         href="{{ route('admin.vital.create', ['ehr_id' => $ehr->id]) }}">
                                                         <i class="bx bx-plus-circle"></i> Create Vitals
                                                     </a> --}}
+
+                                                    @php
+                                                        $user = auth()->user();
+                                                    @endphp
+                                                    @if ($user->role->role_name == 'Doctor')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.ehr.edit', $ehr->id) }}">
+                                                            <i class="bx bx-edit-alt"></i>Edit
+                                                        </a>
+                                                    @endif
+
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.vital.index', ['ehr_id' => $ehr->id]) }}">
                                                         <i class="bx bx-plus-circle"></i> Vital List
