@@ -111,6 +111,7 @@ Route::prefix('/admin')->group(function () {
         Route::delete('delete/{id}', [AppointmentController::class, 'destroy'])->name('admin.appointment.destroy');
         Route::get('/get-doctor-details', [AppointmentController::class, 'getDoctorDetails'])->name('admin.appointment.getDoctorDetails');
         Route::get('/view-appointment-details/{id}', [AppointmentController::class, 'viewAppointmentDetails'])->name('admin.appointment.viewAppointmentDetails');
+        Route::get('/export-pdf/{id}', [AppointmentController::class, 'exportPdf'])->name('admin.appointment.exportPdf');
     });
 
     //EHR Records
@@ -189,5 +190,4 @@ Route::prefix('/admin')->group(function () {
         Route::post('/send', [AIController::class, 'sendMessage'])->name('admin.ai-chat.send');
         Route::get('/history', [AIController::class, 'history'])->name('admin.ai-chat.history');
     });
-
 });

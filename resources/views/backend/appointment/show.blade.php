@@ -10,7 +10,7 @@
 
 @section('content')
     @component('components.breadcrumb')
-        @slot('li_1')
+        @slot('li_1') 
             Appointment
         @endslot
         @slot('title')
@@ -27,20 +27,30 @@
                         <h4 class="fw-semibold text-dark mb-0">
                             Appointment Information
                         </h4>
-                        <a href="{{ route('admin.appointment.index') }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="mdi mdi-arrow-left"></i> Back
-                        </a>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.appointment.index') }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="mdi mdi-arrow-left"></i> Back
+                            </a>
+                            <a href="{{ route('admin.appointment.exportPdf', $appointment->id) }}"
+                                class="btn btn-sm btn-outline-secondary">
+                                <i class="mdi mdi-printer"></i>
+                            </a>
+                        </div>
                     </div>
+
 
                     <!-- Appointment Info -->
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Appointment Date</h6>
-                            <p class="fw-semibold">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}</p>
+                            <p class="fw-semibold">
+                                {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}</p>
                         </div>
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Appointment Time</h6>
-                            <p class="fw-semibold">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
+                            <p class="fw-semibold">
+                                {{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</p>
                         </div>
                         <div class="col-md-4">
                             <h6 class="text-muted mb-1">Status</h6>
@@ -59,7 +69,8 @@
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <h6 class="text-muted mb-1">Next Appointment Date</h6>
-                                <p class="fw-semibold text-primary">{{ \Carbon\Carbon::parse($appointment->next_appointment_date)->format('F d, Y') }}</p>
+                                <p class="fw-semibold text-primary">
+                                    {{ \Carbon\Carbon::parse($appointment->next_appointment_date)->format('F d, Y') }}</p>
                             </div>
                         </div>
                     @endif
@@ -121,7 +132,8 @@
                         <a href="{{ route('admin.doctor.show', $appointment->doctor->id) }}" class="btn btn-outline-info">
                             <i class="mdi mdi-eye"></i> View Doctor Details
                         </a>
-                        <a href="{{ route('admin.patient.show', $appointment->patient->id) }}" class="btn btn-outline-success">
+                        <a href="{{ route('admin.patient.show', $appointment->patient->id) }}"
+                            class="btn btn-outline-success">
                             <i class="mdi mdi-eye"></i> View Patient Details
                         </a>
                     </div>
