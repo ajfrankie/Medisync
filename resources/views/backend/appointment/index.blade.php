@@ -90,10 +90,16 @@
                                                         href="{{ route('admin.appointment.show', $appointment->id) }}">
                                                         <i class="bx bx-show"></i> Show
                                                     </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.appointment.edit', $appointment->id) }}">
-                                                        <i class="bx bx-edit-alt"></i> Edit
-                                                    </a>
+                                                    @php
+                                                        $user = auth()->user();
+                                                    @endphp
+                                                    @if ($user->role->role_name == 'Doctor')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.appointment.edit', $appointment->id) }}">
+                                                            <i class="bx bx-edit-alt"></i> Edit
+                                                        </a>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                         </td>
