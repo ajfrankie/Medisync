@@ -60,7 +60,7 @@
                                 </div>
                             </div>
 
-                            
+
                             <!-- Doctor Department (Display only) -->
                             <div class="col-md-4">
                                 <div class="mt-3">
@@ -237,13 +237,16 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
         flatpickr("#appointment_time", {
             enableTime: true,
             noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: true,
-            minuteIncrement: 15 // <-- This sets 15-minute intervals
+            dateFormat: "h:i K", // 12-hour format with AM/PM
+            time_24hr: false, // IMPORTANT: enables AM/PM
+            minTime: "09:00",
+            maxTime: "18:00",
+            minuteIncrement: 30
         });
     </script>
 @endsection
