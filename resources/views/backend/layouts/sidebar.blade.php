@@ -132,7 +132,8 @@
 
 
                 {{-- ================= ADMIN / NURSE ACCESS ================= --}}
-                @if (Auth::user()->isAdmin() || Auth::user()->isNurse())
+                @if (Auth::user()->isAdmin())
+                    {{-- Admin Menu --}}
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
@@ -140,7 +141,6 @@
                         </a>
                     </li>
 
-                    
                     <li class="{{ request()->routeIs('admin.admin-dashboard.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.admin-dashboard.index') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
@@ -183,7 +183,7 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                    <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.notification.index') }}" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>
@@ -214,7 +214,62 @@
                             <li><a href="{{ route('admin.patient.index') }}">Patients</a></li>
                         </ul>
                     </li>
+                @elseif(Auth::user()->isNurse())
+                    {{-- Nurse Menu --}}
+                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.admin-dashboard.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.admin-dashboard.index') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.appointment.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.appointment.index') }}" class="waves-effect">
+                            <i class="bx bx-calendar"></i>
+                            <span>Appointments</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.doctor.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.doctor.index') }}" class="waves-effect">
+                            <i class="bx bx-user-circle"></i>
+                            <span>Doctors</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.patient.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.patient.index') }}" class="waves-effect">
+                            <i class="bx bx-user"></i>
+                            <span>Patients</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.ehr.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.ehr.index') }}" class="waves-effect">
+                            <i class="bx bx-folder-open"></i>
+                            <span>EHR Records</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.vital.index') }}" class="waves-effect">
+                            <i class="bx bx-chip"></i>
+                            <span>Vitals</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.notification.index') }}" class="waves-effect">
+                            <i class="bx bx-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
                 @endif
+
             </ul>
         </div>
     </div>
