@@ -10,6 +10,7 @@ use App\Models\Doctor;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\DoctorRepository;
 use App\Repositories\PatientRepository;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
@@ -205,4 +206,28 @@ class AppointmentController extends Controller
             'request' => $request,
         ]);
     }
+
+    public function exportPdf($id)
+{
+    try {
+        $appointment = app(AppointmentRepository::class)->find($id);
+
+        if (!$appointment) {
+            return redirect()
+                ->route('admin.appointment.index')
+                ->with('error', 'Appointment not found.');
+        }
+
+        // Load the PDF view
+        $pdf = Pdf::loadView('backend.appointment.summary-appointment', [
+            'appointment' => $appointment
+        ]);
+
+        // Download PDF with a custom filename
+        return $pdf->download('appointment_details_'.$appointment->id.'.pdf');
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'Failed to export PDF: ' . $e->getMessage());
+    }
+}
 }
