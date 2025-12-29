@@ -11,7 +11,7 @@
             prescription Record
         @endslot
     @endcomponent
-
+   @include('backend.layouts.alert')
     {{-- @include('backend.nurse.filter') --}}
 
     <div class="row">

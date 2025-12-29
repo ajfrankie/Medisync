@@ -28,6 +28,11 @@
                     <form method="POST" action="{{ route('admin.ehr.store') }}">
                         @csrf
 
+                        @if (session('success'))
+                            <div class="alert alert-success mt-2">{{ session('success') }}</div>
+                        @elseif (session('error'))
+                            <div class="alert alert-danger mt-2">{{ session('error') }}</div>
+                        @endif
                         <!-- Doctor Name (readonly) + hidden ID -->
                         <div class="row mt-3">
                             <div class="col-md-4">

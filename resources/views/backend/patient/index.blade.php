@@ -12,7 +12,7 @@
             Patients
         @endslot
     @endcomponent
-
+   @include('backend.layouts.alert')
     @include('backend.patient.filter')
 
     <div class="row">
