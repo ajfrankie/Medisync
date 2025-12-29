@@ -12,7 +12,7 @@
             Nurses
         @endslot
     @endcomponent
-
+    @include('backend.layouts.alert')
     @include('backend.nurse.filter')
 
     <div class="row">
@@ -45,8 +45,8 @@
                                     <tr>
                                         <td>{{ $nurse->user->name ?? 'N/A' }}</td>
                                         <td>{{ $nurse->user->phone ?? 'N/A' }}</td>
-                                        <td>{{ $nurse->department ?? 'N/A'  }}</td>
-                                        <td>{{ $nurse->shift_time ?? 'N/A'  }}</td>
+                                        <td>{{ $nurse->department ?? 'N/A' }}</td>
+                                        <td>{{ $nurse->shift_time ?? 'N/A' }}</td>
                                         <td>
                                             @if ($nurse->is_activated)
                                                 <span class="badge bg-success">Avilable</span>

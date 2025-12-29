@@ -12,7 +12,7 @@
             EHR Records
         @endslot
     @endcomponent
-
+   @include('backend.layouts.alert')
     @include('backend.ehr.filter')
 
     <div class="row">

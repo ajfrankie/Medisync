@@ -11,8 +11,8 @@
             Vital Record
         @endslot
     @endcomponent
-
-    {{-- @include('backend.nurse.filter') --}}
+    @include('backend.layouts.alert')
+    @include('backend.nurse.filter')
 
     <div class="row">
         <div class="col-lg-12">
