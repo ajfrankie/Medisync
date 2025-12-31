@@ -11,6 +11,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\EHRRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\SupportiveDocumentRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -130,6 +131,7 @@ class PatientController extends Controller
 
         // Use repository method, not Eloquent relationship
         $ehrRecords = app(EHRRepository::class)->findByPatientID($id);
+        $documents = app(SupportiveDocumentRepository::class)->getByPatientId($id);
 
         $request->merge(['patient_id' => $id]);
         $age = $this->ageCalculate($request);
@@ -140,6 +142,7 @@ class PatientController extends Controller
             'age' => $age,
             'bmiData' => $bmiData,
             'ehrRecords' => $ehrRecords, // collection
+            'documents' => $documents, // collection
         ]);
     }
 

@@ -45,10 +45,10 @@
     </div>
 
     {{-- Patient Details --}}
-    <div class="row">
+    <div class="row align-items-stretch">
         {{-- Personal Info --}}
         <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm flex-fill mb-3">
                 <div class="card-header bg-info text-dark">
                     <h5 class="mb-0">Personal Information</h5>
                 </div>
@@ -64,9 +64,9 @@
             </div>
         </div>
 
-        {{-- Emergency Contact --}}
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+        {{-- Emergency Contacts --}}
+        <div class="col-md-6 mb-4 d-flex flex-column">
+            <div class="card shadow-sm flex-fill mb-3">
                 <div class="card-header bg-warning text-dark">
                     <h5 class="mb-0">Emergency Contact</h5>
                 </div>
@@ -76,8 +76,20 @@
                     <p><strong>Phone:</strong> {{ $patient->emergency_contact ?? '-' }}</p>
                 </div>
             </div>
+
+            <div class="card shadow-sm flex-fill">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Location Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>District:</strong> {{ $patient->district->name ?? '-' }}</p>
+                    <p><strong>GN Division:</strong> {{ $patient->gnDivision->name ?? '-' }}</p>
+                </div>
+            </div>
         </div>
+
     </div>
+
 
     {{-- Account Details --}}
     <div class="card shadow-sm mb-4">

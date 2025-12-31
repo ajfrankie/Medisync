@@ -149,12 +149,10 @@ Route::prefix('/admin')->group(function () {
     Route::prefix('/document')->middleware('auth')->group(function () {
         Route::get('/', [SupportiveDocumentController::class, 'index'])->name('admin.document.index');
         // Route::get('/create', [SupportiveDocumentController::class, 'create'])->name('admin.document.create');
-        Route::get('/create/{patient_id}', [SupportiveDocumentController::class, 'create'])
-            ->name('admin.document.create');
+        Route::get('/create/{patient_id}', [SupportiveDocumentController::class, 'create'])->name('admin.document.create');
 
         Route::post('/store', [SupportiveDocumentController::class, 'store'])->name('admin.document.store');
-        Route::get('show/{patient_id}', [SupportiveDocumentController::class, 'show'])
-            ->name('admin.document.show');
+        Route::get('show/{patient_id}', [SupportiveDocumentController::class, 'show'])->name('admin.document.show');
     });
 
     //document

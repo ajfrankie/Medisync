@@ -22,8 +22,11 @@ class SupportiveDocumentController extends Controller
 
     public function index(Request $request)
     {
+        $patientId = auth()->user()->patient->id ?? null;
+
         $documents = app(SupportiveDocumentRepository::class)
             ->get($request)
+            ->where('patient_id', $patientId) // filter by logged-in patient
             ->paginate(5);
 
         return view('backend.documents.index', [
@@ -31,6 +34,7 @@ class SupportiveDocumentController extends Controller
             'request' => $request,
         ]);
     }
+
 
     /**
      * Show the form to create a new supportive document.
@@ -48,13 +52,11 @@ class SupportiveDocumentController extends Controller
      */
     public function store(Request $request)
     {
-        // Automatically get patient_id from logged-in user
-        $patient_id = auth()->user()->patient->id ?? null;
-
-        // Validate other fields (no need to require patient_id from form)
+        // Validate fields
         $request->validate([
-            'title' => 'required|string|max:255',
-            'file_path' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
+            'patient_id' => 'required|exists:patients,id',
+            'title'      => 'required|string|max:255',
+            'file_path'  => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
             'description' => 'nullable|string',
         ]);
 
@@ -64,7 +66,7 @@ class SupportiveDocumentController extends Controller
 
         // Save via repository
         $this->supportiveDocumentRepository->create([
-            'patient_id'  => $patient_id, // ✅ auto-filled
+            'patient_id'  => $request->patient_id,
             'title'       => $request->title,
             'file_path'   => $path,
             'description' => $request->description,
@@ -75,6 +77,7 @@ class SupportiveDocumentController extends Controller
             ->with('success', 'Supportive document added successfully!');
     }
 
+
     /**
      * Display a specific supportive document.
      */
@@ -84,5 +87,17 @@ class SupportiveDocumentController extends Controller
 
         // Always return the page, even if no documents exist
         return view('backend.documents.show', compact('documents', 'patient_id'));
+    }
+
+    public function showDocument($id)
+    {
+        $document = app(SupportiveDocumentRepository::class)->find($id);
+
+        if (!$document) {
+            abort(404);
+        }
+
+        $filePath = storage_path('app/public/' . $document->file_path);
+        return response()->file($filePath);
     }
 }
