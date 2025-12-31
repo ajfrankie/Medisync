@@ -15,13 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call(RoleSeeder::class);
+         $this->call(DistrictSeeder::class);
+        $this->call(GnDivisionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(DoctorSeeder::class);
         $this->call(NurseSeeder::class);
         $this->call(PatientSeeder::class);
         $this->call(AppointmentSeeder::class);
         $this->call(EhrRecordsSeeder::class);
-        $this->call(DistrictSeeder::class);
-        $this->call(GnDivisionSeeder::class);
+       
     }
 }

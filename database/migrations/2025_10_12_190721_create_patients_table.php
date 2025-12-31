@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
+            $table->uuid('district_id');
+            $table->uuid('gn_division_id');
             $table->string('blood_group', 5)->nullable();
             $table->string('marital_status')->nullable();
             $table->string('occupation')->nullable();
@@ -27,7 +29,9 @@ return new class extends Migration
             $table->string('emergency_contact')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();   
+            $table->foreign('district_id')->references('id')->on('districts')->cascadeOnDelete();
+            $table->foreign('gn_division_id')->references('id')->on('gn_divisions')->cascadeOnDelete();
             $table->unique('user_id');
         });
     }

@@ -90,6 +90,8 @@ class PatientRepository
             'preferred_language'       => $input['preferred_language'] ?? null,
             'emergency_relationship'   => $input['emergency_relationship'] ?? null,
             'emergency_contact'        => $input['emergency_contact'] ?? null,
+            'district_id' => $input['district_id'],
+            'gn_division_id' => $input['gn_division_id'],
         ]);
     }
 

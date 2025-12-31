@@ -15,6 +15,8 @@ class Patient extends Model
 
     protected $fillable = [
         'user_id',
+        'district_id',
+        'gn_division_id',
         'blood_group',
         'marital_status',
         'occupation',
@@ -57,5 +59,15 @@ class Patient extends Model
     public function ehrRecords()
     {
         return $this->hasMany(EhrRecord::class);
+    }
+
+     public function district()
+    {
+        return $this->hasMany(District::class);
+    }
+
+     public function gnDivision()
+    {
+        return $this->hasMany(GnDivision::class);
     }
 }

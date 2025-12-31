@@ -27,6 +27,8 @@ class StorePatientRequest extends FormRequest
             'preferred_language' => ['nullable', 'in:Tamil,Sinhala,English'],
             'emergency_relationship' => ['required', 'in:Father,Mother,Sibling,Spouse,Friend'],
             'emergency_contact' => ['required', 'string', 'regex:/^\+94[0-9]{9}$/'],
+            'district_id' => 'required|exists:districts,id',
+            'gn_division_id' => 'required|exists:gn_divisions,id',
         ];
     }
 

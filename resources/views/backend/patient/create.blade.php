@@ -192,8 +192,40 @@
                                 </div>
                             </div>
                         </div>
+                        <h5 class="mt-4 mb-3">Location Details</h5>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="mt-3">
+                                    <label class="form-label">District's Name</label>
+                                    <select class="form-select select2 @error('district_id') is-invalid @enderror"
+                                        id="district_id" name="district_id">
+                                        <option value="">Select District...</option>
+                                        @foreach ($districts as $district)
+                                            <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('district_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
-
+                            <div class="col-xl-6">
+                                <div class="mt-3">
+                                    <label class="form-label">Gn Division's Name</label>
+                                    <select class="form-select select2 @error('gn_division_id') is-invalid @enderror"
+                                        id="gn_division_id" name="gn_division_id">
+                                        <option value="">Select Gn Division...</option>
+                                        @foreach ($gn_divisions as $gn_division)
+                                            <option value="{{ $gn_division->id }}">{{ $gn_division->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('gn_division_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                         {{-- Emergency Contact --}}
                         <h5 class="mt-4 mb-3">Emergency Contact</h5>
                         <div class="row">

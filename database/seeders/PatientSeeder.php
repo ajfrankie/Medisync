@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Faker\Factory as Faker;
+use App\Models\District;
+use App\Models\GnDivision;
 
 class PatientSeeder extends Seeder
 {
@@ -29,16 +31,35 @@ class PatientSeeder extends Seeder
             return;
         }
 
-        $mobilePrefixes = ['71', '72', '75', '76', '77', '78']; 
+        $mobilePrefixes = ['71', '72', '75', '76', '77', '78'];
+
+        // Get Trincomalee district
+        $district = District::where('name', 'Trincomalee')->first();
+        if (!$district) {
+            $this->command->warn('Trincomalee district not found. Run DistrictSeeder first.');
+            return;
+        }
+
+        // Get all GN divisions in Trincomalee
+        $gnDivisions = GnDivision::where('district_id', $district->id)->get();
+        if ($gnDivisions->isEmpty()) {
+            $this->command->warn('No GN divisions found for Trincomalee. Run GnDivisionSeeder first.');
+            return;
+        }
 
         foreach ($patientUsers as $user) {
             $prefix = $faker->randomElement($mobilePrefixes);
             $number = $faker->numerify('#######');
             $emergencyContact = '+94' . $prefix . $number;
 
+            // Randomly pick a GN division from Trincomalee
+            $gnDivision = $faker->randomElement($gnDivisions);
+
             DB::table('patients')->insert([
                 'id' => Str::uuid(),
                 'user_id' => $user->id,
+                'district_id' => $district->id,
+                'gn_division_id' => $gnDivision->id,
                 'blood_group' => $faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
                 'marital_status' => $faker->randomElement(['Single', 'Married', 'Divorced', 'Widowed']),
                 'occupation' => $faker->jobTitle(),
