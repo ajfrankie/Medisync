@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
+use App\Models\District;
+use App\Models\GnDivision;
 use App\Models\Patient;
 use App\Models\User;
 use App\Repositories\EHRRepository;
@@ -29,7 +31,8 @@ class PatientController extends Controller
     public function create()
     {
         $authUser = Auth::user();
-
+        $districts = District::all();
+        $gn_divisions = GnDivision::all();
         // Allow only Admin Officer
         if ($authUser->role->role_name !== 'Admin Officer') {
             abort(403, 'Access denied. Only Admin Officers can create Nurse accounts.');
@@ -41,6 +44,8 @@ class PatientController extends Controller
 
         return view('backend.patient.create', [
             'patientUsers' => $patientUsers,
+            'districts' => $districts,
+            'gn_divisions' => $gn_divisions,
         ]);
     }
 

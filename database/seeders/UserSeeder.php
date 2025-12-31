@@ -94,33 +94,109 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ];
 
-        // --- Random users for each role (except Admin Officer) ---
-        foreach (['Patient', 'Nurse', 'Doctor'] as $roleName) {
-            for ($i = 0; $i < 30; $i++) {
-                $dob = $faker->dateTimeBetween('-80 years', '-10 years')->format('Y-m-d');
-                $gender = $faker->randomElement(['male', 'female']);
-                $nic = $generateNIC($dob, $gender);
+        // --- Random users ---
 
-                $prefix = $faker->randomElement($mobilePrefixes);
-                $number = $faker->numerify('#######');
-                $randomContact = '0' . $prefix . $number;
+        // Nurses (50)
+        for ($i = 0; $i < 50; $i++) {
+            $dob = $faker->dateTimeBetween('-65 years', '-22 years')->format('Y-m-d');
+            $gender = $faker->randomElement(['male', 'female']);
+            $nic = $generateNIC($dob, $gender);
 
-                $users[] = [
-                    'id' => Str::uuid(),
-                    'role_id' => $roles[$roleName] ?? null,
-                    'name' => $faker->name($gender),
-                    'email' => $faker->unique()->safeEmail(),
-                    'password' => Hash::make('password'),
-                    'phone' => $randomContact,
-                    'nic' => $nic,
-                    'dob' => $dob,
-                    'gender' => $gender,
-                    'image_path' => null,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
+            $prefix = $faker->randomElement($mobilePrefixes);
+            $number = $faker->numerify('#######');
+
+            $users[] = [
+                'id' => Str::uuid(),
+                'role_id' => $roles['Nurse'] ?? null,
+                'name' => $faker->name($gender),
+                'email' => $faker->unique()->safeEmail(),
+                'password' => Hash::make('password'),
+                'phone' => '0' . $prefix . $number,
+                'nic' => $nic,
+                'dob' => $dob,
+                'gender' => $gender,
+                'image_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+
+        // Doctors (20)
+        for ($i = 0; $i < 20; $i++) {
+            $dob = $faker->dateTimeBetween('-70 years', '-28 years')->format('Y-m-d');
+            $gender = $faker->randomElement(['male', 'female']);
+            $nic = $generateNIC($dob, $gender);
+
+            $prefix = $faker->randomElement($mobilePrefixes);
+            $number = $faker->numerify('#######');
+
+            $users[] = [
+                'id' => Str::uuid(),
+                'role_id' => $roles['Doctor'] ?? null,
+                'name' => $faker->name($gender),
+                'email' => $faker->unique()->safeEmail(),
+                'password' => Hash::make('password'),
+                'phone' => '0' . $prefix . $number,
+                'nic' => $nic,
+                'dob' => $dob,
+                'gender' => $gender,
+                'image_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // Patients — 100 total
+        // 60% Elderly (60–90 years)
+        for ($i = 0; $i < 60; $i++) {
+            $dob = $faker->dateTimeBetween('-90 years', '-60 years')->format('Y-m-d');
+            $gender = $faker->randomElement(['male', 'female']);
+            $nic = $generateNIC($dob, $gender);
+
+            $prefix = $faker->randomElement($mobilePrefixes);
+            $number = $faker->numerify('#######');
+
+            $users[] = [
+                'id' => Str::uuid(),
+                'role_id' => $roles['Patient'] ?? null,
+                'name' => $faker->name($gender),
+                'email' => $faker->unique()->safeEmail(),
+                'password' => Hash::make('password'),
+                'phone' => '0' . $prefix . $number,
+                'nic' => $nic,
+                'dob' => $dob,
+                'gender' => $gender,
+                'image_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // 40% Non-elderly patients (18–59 years)
+        for ($i = 0; $i < 40; $i++) {
+            $dob = $faker->dateTimeBetween('-59 years', '-18 years')->format('Y-m-d');
+            $gender = $faker->randomElement(['male', 'female']);
+            $nic = $generateNIC($dob, $gender);
+
+            $prefix = $faker->randomElement($mobilePrefixes);
+            $number = $faker->numerify('#######');
+
+            $users[] = [
+                'id' => Str::uuid(),
+                'role_id' => $roles['Patient'] ?? null,
+                'name' => $faker->name($gender),
+                'email' => $faker->unique()->safeEmail(),
+                'password' => Hash::make('password'),
+                'phone' => '0' . $prefix . $number,
+                'nic' => $nic,
+                'dob' => $dob,
+                'gender' => $gender,
+                'image_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
 
         DB::table('users')->insert($users);
     }

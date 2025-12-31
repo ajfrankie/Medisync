@@ -31,12 +31,21 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $dob = $data['dob'] ?? null;
+        $age = $dob ? \Carbon\Carbon::parse($dob)->age : 0;
+
         return Validator::make($data, [
             'role_id' => ['required', 'exists:roles,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'dob' => ['required', 'date', 'before:today'],
-            'nic' => ['required', 'string', 'max:12', 'unique:users,nic', new NICValidationRule($data['dob'] ?? null, $data['gender'] ?? null)],
+            'nic' => array_filter([
+                $age >= 18 ? 'required' : 'nullable',   // required only if age >= 18
+                'string',
+                'max:12',
+                'unique:users,nic',
+                !empty($data['nic']) ? new NICValidationRule($dob, $data['gender'] ?? null) : null, // apply NIC validation only if value exists
+            ]),
             'gender' => ['required', 'in:male,female'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['required', 'string', 'max:15'],

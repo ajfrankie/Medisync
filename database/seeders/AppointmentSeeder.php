@@ -39,7 +39,7 @@ class AppointmentSeeder extends Seeder
                 'next_appointment_date' => rand(0, 1)
                     ? $appointmentDate->copy()->addDays(rand(7, 30))->toDateString()
                     : null,
-                'status' => ['pending', 'confirmed', 'completed', 'cancelled', 'schedule next appointment'][rand(0, 4)],
+                'status' => ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'Next Appointment'][rand(0, 4)],
                 'notes' => fake()->sentence(),
             ]);
         }
