@@ -61,13 +61,13 @@ class Patient extends Model
         return $this->hasMany(EhrRecord::class);
     }
 
-     public function district()
+    public function district()
     {
-        return $this->hasMany(District::class);
+        return $this->belongsTo(District::class, 'district_id');
     }
 
-     public function gnDivision()
+    public function gnDivision()
     {
-        return $this->hasMany(GnDivision::class);
+        return $this->belongsTo(GnDivision::class, 'gn_division_id');
     }
 }

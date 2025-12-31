@@ -17,7 +17,7 @@
                     <li class="{{ request()->routeIs('admin.patient-dashboard.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.patient-dashboard.index') }}" class="waves-effect">
                             <i class="bx bx-home-circle"></i>
-                            <span>Patient</span>
+                            <span>Patient Dashboard</span>
                         </a>
                     </li>
 
@@ -60,6 +60,13 @@
                         <a href="{{ route('admin.ai-chat.index') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->routeIs('admin.ai-chat.index') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.document.index') }}" class="waves-effect">
+                            <i class="bx bx-file"></i>
+                            <span>Supportive Documents</span>
                         </a>
                     </li>
                 @endif

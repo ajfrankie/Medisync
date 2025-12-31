@@ -48,8 +48,8 @@ class EhrRecord extends Model
     //     return $this->hasMany(Prescription::class, 'ehr_id');
     // }
 
-    public function vitals()
+    public function findByID($id)
     {
-        return $this->hasMany(Vital::class, 'ehr_id');
+        return SupportiveDocument::where('id', $id)->first();
     }
 }

@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="col-5 align-self-end">
-                            <img src="{{ URL::asset('build/images/profile-img.png') }}" alt="" class="img-fluid">
+                            {{-- <img src="{{ URL::asset('build/images/profile-img.png') }}" alt="" class="img-fluid"> --}}
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
 
                                 @php
                                     $user = auth()->user();
-                                    $avatar = $user->avatar ? asset($user->avatar) : null;
+                                     $avatar = $user->image_path ? asset('storage/' . $user->image_path) : null;
                                     $initials = strtoupper(substr($user->name ?? '', 0, 2));
 
                                     if ($user->doctor) {

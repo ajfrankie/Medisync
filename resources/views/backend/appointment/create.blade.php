@@ -242,8 +242,8 @@
         flatpickr("#appointment_time", {
             enableTime: true,
             noCalendar: true,
-            dateFormat: "h:i K", // 12-hour format with AM/PM
-            time_24hr: false, // IMPORTANT: enables AM/PM
+            dateFormat: "H:i", // 24-hour format (HH:MM)
+            time_24hr: true, // ensures 24-hour time
             minTime: "09:00",
             maxTime: "18:00",
             minuteIncrement: 30
