@@ -183,12 +183,12 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                    {{-- <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-chat"></i>
                             <span>AI Chatbot Logs</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.notification.index') }}" class="waves-effect">
