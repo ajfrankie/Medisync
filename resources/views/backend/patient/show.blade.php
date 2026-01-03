@@ -169,6 +169,38 @@
             </div>
         </div>
 
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-danger text-dark d-flex align-items-center">
+                <i class="ri-folder-info-line me-2 fs-5"></i>
+                <span class="fw-semibold">Supportive Documents</span>
+            </div>
+
+            <div class="card-body">
+                @if ($documents->total() > 0)
+
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach ($documents as $document)
+                            @if ($document->file_path)
+                                <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank"
+                                    class="btn btn-outline-info btn-sm">
+                                    <i class="ri-file-line me-1"></i>
+                                    View File
+                                    ({{ $document->created_at->format('Y-m-d') }})
+                                </a>
+                            @else
+                                <span class="text-muted">No File</span>
+                            @endif
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-muted mb-0">
+                        No documents found for this patient.
+                    </p>
+                @endif
+            </div>
+        </div>
+
+
         {{-- Action Buttons --}}
         <div class="d-flex justify-content-end gap-2 mb-4">
             <a href="{{ route('admin.patient.index') }}" class="btn btn-outline-danger btn-lg">

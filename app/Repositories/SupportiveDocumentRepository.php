@@ -52,7 +52,7 @@ class SupportiveDocumentRepository
      */
     public function find($id)
     {
-        return $this->model->with('patient')->find($id);
+        return SupportiveDocument::find($id);
     }
 
     public function getByPatientId($patient_id)
