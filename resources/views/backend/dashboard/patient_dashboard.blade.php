@@ -7,10 +7,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Dashboards
+            Dashboard
         @endslot
         @slot('title')
-            Dashboard
+            Patient Dashboard
         @endslot
     @endcomponent
 

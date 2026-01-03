@@ -32,6 +32,13 @@ class DoctorDashboardController extends Controller
         $notifications = $this->notifications();
         $yearAppointmetDetails = $this->yearAppointmetDetails();
 
+        $countMalePatients = $this->malePatientsCount();
+        $countFemalePatients = $this->femalePatientsCount();
+        $countUnder18Patients = $this->under18PatientsCount();
+        $countAdultPatients = $this->adultPatientsCount();
+
+        $bmiStats = $this->bmiSummary();
+
         // Pass all data to the view
         return view('backend.dashboard.doctor_dashboard', [
             'user' => $user,
@@ -45,6 +52,11 @@ class DoctorDashboardController extends Controller
             'cancledAppointmentsByMonth' => $cancledAppointmentsByMonth,
             'confirmedAppointmentsByMonth' => $confirmedAppointmentsByMonth,
             'yearAppointmetDetails' => $yearAppointmetDetails,
+            'countMalePatients' => $countMalePatients,
+            'countFemalePatients' => $countFemalePatients,
+            'countUnder18Patients' => $countUnder18Patients,
+            'countAdultPatients' => $countAdultPatients,
+            'bmiStats' => $bmiStats,
         ]);
     }
 
@@ -163,6 +175,106 @@ class DoctorDashboardController extends Controller
             'pending' => $pending,
             'cancelled' => $cancelled,
             'confirmed' => $confirmed,
+        ];
+    }
+
+    public function malePatientsCount()
+    {
+        $doctor = Auth::user()->doctor;
+
+        return $doctor->appointments()
+            ->whereHas('patient.user', function ($query) {
+                $query->where('gender', 'Male');
+            })
+            ->count();
+    }
+
+
+    public function femalePatientsCount()
+    {
+        $doctor = Auth::user()->doctor;
+
+        return $doctor->appointments()
+            ->whereHas('patient.user', function ($query) {
+                $query->where('gender', 'Female');
+            })
+            ->count();
+    }
+
+
+    public function under18PatientsCount()
+    {
+        $doctor = Auth::user()->doctor;
+
+        return $doctor->appointments()
+            ->whereHas('patient.user', function ($query) {
+                $query->whereDate(
+                    'dob',
+                    '>',
+                    now()->subYears(18)
+                );
+            })
+            ->count();
+    }
+
+
+    public function adultPatientsCount()
+    {
+        $doctor = Auth::user()->doctor;
+
+        return $doctor->appointments()
+            ->whereHas('patient.user', function ($query) {
+                $query->whereDate(
+                    'dob',
+                    '<=',
+                    now()->subYears(18)
+                );
+            })
+            ->count();
+    }
+
+    public function bmiSummary()
+    {
+        $doctor = Auth::user()->doctor;
+
+        $appointments = $doctor->appointments()
+            ->with('patient')
+            ->get();
+
+        $underweight = 0;
+        $normal = 0;
+        $overweight = 0;
+        $obese = 0;
+
+        foreach ($appointments as $appointment) {
+            $patient = $appointment->patient;
+
+            if (!$patient || !$patient->height|| !$patient->weight) {
+                continue;
+            }
+
+            $heightM = $patient->height / 100;
+            $bmi = $patient->weight / ($heightM * $heightM);
+
+            if ($bmi < 18.5) {
+                $underweight++;
+            } elseif ($bmi < 25) {
+                $normal++;
+            } elseif ($bmi < 30) {
+                $overweight++;
+            } else {
+                $obese++;
+            }
+        }
+
+        $total = $underweight + $normal + $overweight + $obese;
+
+        return [
+            'underweight' => $underweight,
+            'normal' => $normal,
+            'overweight' => $overweight,
+            'obese' => $obese,
+            'total' => $total
         ];
     }
 }

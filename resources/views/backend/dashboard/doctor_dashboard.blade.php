@@ -7,10 +7,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Dashboards
+            Dashboard
         @endslot
         @slot('title')
-            Dashboard
+            Docotr Dashboard
         @endslot
     @endcomponent
 
@@ -107,6 +107,61 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12">
+                {{-- <div class="card"> --}}
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Patient Overview</h4>
+
+                    <div class="row">
+
+                        {{-- ADULT --}}
+                        <div class="col-md-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <i class="fas fa-user-md fa-2x text-info mb-2"></i>
+                                    <h6 class="text-muted">Adults (18+)</h6>
+                                    <h3 class="fw-bold text-info">{{ $countAdultPatients }}</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- UNDER 18 --}}
+                        <div class="col-md-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <i class="fas fa-child fa-2x text-success mb-2"></i>
+                                    <h6 class="text-muted">Under 18</h6>
+                                    <h3 class="fw-bold text-success">{{ $countUnder18Patients }}</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- FEMALE --}}
+                        <div class="col-md-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <i class="fas fa-female fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Female Patients</h6>
+                                    <h3 class="fw-bold text-warning">{{ $countFemalePatients }}</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- MALE --}}
+                        <div class="col-md-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <i class="fas fa-male fa-2x text-danger mb-2"></i>
+                                    <h6 class="text-muted">Male Patients</h6>
+                                    <h3 class="fw-bold text-danger">{{ $countMalePatients }}</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{-- </div> --}}
+            </div>
 
             <!-- end row -->
 
@@ -135,86 +190,148 @@
 
 
 
-        </div>
-    </div>
-    <!-- end row -->
-@endsection
-@section('script')
-    <!-- apexcharts -->
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Patient BMI Overview</h4>
 
-    <!-- dashboard init -->
-    <script src="{{ URL::asset('build/js/pages/dashboard.init.js') }}"></script>
+                        <div class="row">
+                            {{-- UNDERWEIGHT --}}
+                            <div class="col-md-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-info">Underweight</span>
+                                    <span>{{ $bmiStats['underweight'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info"
+                                        style="width: {{ $bmiStats['total'] > 0 ? ($bmiStats['underweight'] / $bmiStats['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
 
-    {{-- ApexCharts Script --}}
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.0"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var options = {
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                    toolbar: {
-                        show: false
-                    },
-                },
-                series: [{
-                        name: 'Completed',
-                        data: @json($yearAppointmetDetails['completed'] ?? [])
-                    },
-                    {
-                        name: 'Pending',
-                        data: @json($yearAppointmetDetails['pending'] ?? [])
-                    },
-                    {
-                        name: 'Cancelled',
-                        data: @json($yearAppointmetDetails['cancelled'] ?? [])
-                    },
-                    {
-                        name: 'Confirmed',
-                        data: @json($yearAppointmetDetails['confirmed'] ?? [])
-                    },
-                ],
-                xaxis: {
-                    categories: @json($yearAppointmetDetails['months'] ?? []),
-                    title: {
-                        text: 'Months'
-                    }
-                },
-                yaxis: {
-                    min: 0,
-                    tickAmount: 8, // number of intervals on Y-axis
-                    labels: {
-                        formatter: function(val) {
-                            return val.toFixed(1); // show decimals like 0.5, 1.0, 1.5
+                            {{-- NORMAL --}}
+                            <div class="col-md-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-success">Normal</span>
+                                    <span>{{ $bmiStats['normal'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $bmiStats['total'] > 0 ? ($bmiStats['normal'] / $bmiStats['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- OVERWEIGHT --}}
+                            <div class="col-md-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-warning">Overweight</span>
+                                    <span>{{ $bmiStats['overweight'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning"
+                                        style="width: {{ $bmiStats['total'] > 0 ? ($bmiStats['overweight'] / $bmiStats['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- OBESE --}}
+                            <div class="col-md-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold text-danger">Obese</span>
+                                    <span>{{ $bmiStats['obese'] }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $bmiStats['total'] > 0 ? ($bmiStats['obese'] / $bmiStats['total']) * 100 : 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        @endsection
+
+        @section('script')
+            <!-- apexcharts -->
+            <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+
+            <!-- dashboard init -->
+            <script src="{{ URL::asset('build/js/pages/dashboard.init.js') }}"></script>
+
+            {{-- ApexCharts Script --}}
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.0"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var options = {
+                        chart: {
+                            type: 'bar',
+                            height: 350,
+                            stacked: true,
+                            toolbar: {
+                                show: false
+                            },
+                        },
+                        series: [{
+                                name: 'Completed',
+                                data: @json($yearAppointmetDetails['completed'] ?? [])
+                            },
+                            {
+                                name: 'Pending',
+                                data: @json($yearAppointmetDetails['pending'] ?? [])
+                            },
+                            {
+                                name: 'Cancelled',
+                                data: @json($yearAppointmetDetails['cancelled'] ?? [])
+                            },
+                            {
+                                name: 'Confirmed',
+                                data: @json($yearAppointmetDetails['confirmed'] ?? [])
+                            },
+                        ],
+                        xaxis: {
+                            categories: @json($yearAppointmetDetails['months'] ?? []),
+                            title: {
+                                text: 'Months'
+                            }
+                        },
+                        yaxis: {
+                            min: 0,
+                            tickAmount: 8, // number of intervals on Y-axis
+                            labels: {
+                                formatter: function(val) {
+                                    return val.toFixed(1); // show decimals like 0.5, 1.0, 1.5
+                                }
+                            },
+                            title: {
+                                text: 'Appointments'
+                            }
+                        },
+                        colors: ['#28a745', '#ffc107', '#dc3545', '#007bff'],
+                        legend: {
+                            position: 'top'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: '60%',
+                                borderRadius: 5
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        grid: {
+                            borderColor: '#f1f1f1'
                         }
-                    },
-                    title: {
-                        text: 'Appointments'
-                    }
-                },
-                colors: ['#28a745', '#ffc107', '#dc3545', '#007bff'],
-                legend: {
-                    position: 'top'
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '60%',
-                        borderRadius: 5
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                grid: {
-                    borderColor: '#f1f1f1'
-                }
-            };
+                    };
 
-            var chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options);
-            chart.render();
-        });
-    </script>
-@endsection
+                    var chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options);
+                    chart.render();
+                });
+            </script>
+        @endsection
