@@ -117,24 +117,24 @@
                             <span>Notifications</span>
                         </a>
                     </li>
-
+{{-- 
                     <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="#" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>
-                    </li>
+                    </li> --}}
 
-                    {{-- <li>
+                    <li>
                         <a href="javascript:void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-cog"></i><span>Settings</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('admin.doctor.index') }}">Doctors</a></li>
-                            <li><a href="{{ route('admin.nurse.index') }}">Nurses</a></li>
+                            {{-- <li><a href="{{ route('admin.doctor.index') }}">Doctors</a></li>
+                            <li><a href="{{ route('admin.nurse.index') }}">Nurses</a></li> --}}
                             <li><a href="{{ route('admin.patient.index') }}">Patients</a></li>
                         </ul>
-                    </li> --}}
+                    </li>
                 @endif
 
 
