@@ -194,7 +194,7 @@ class AppointmentController extends Controller
                 'id' => $appointment->id,
                 'title' => $appointment->patient->name ?? 'Appointment',
                 'category' => 'time',
-                'start' => $start->toIso8601String(),  
+                'start' => $start->toIso8601String(),
                 'end'   => $end->toIso8601String(),
                 'state' => $appointment->status ?? 'pending',
             ];
@@ -208,26 +208,25 @@ class AppointmentController extends Controller
     }
 
     public function exportPdf($id)
-{
-    try {
-        $appointment = app(AppointmentRepository::class)->find($id);
+    {
+        try {
+            $appointment = app(AppointmentRepository::class)->find($id);
 
-        if (!$appointment) {
-            return redirect()
-                ->route('admin.appointment.index')
-                ->with('error', 'Appointment not found.');
+            if (!$appointment) {
+                return redirect()
+                    ->route('admin.appointment.index')
+                    ->with('error', 'Appointment not found.');
+            }
+
+            // Load the PDF view
+            $pdf = Pdf::loadView('backend.appointment.summary-appointment', [
+                'appointment' => $appointment
+            ]);
+
+            // Download PDF with a custom filename
+            return $pdf->download('appointment_details_' . $appointment->id . '.pdf');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to export PDF: ' . $e->getMessage());
         }
-
-        // Load the PDF view
-        $pdf = Pdf::loadView('backend.appointment.summary-appointment', [
-            'appointment' => $appointment
-        ]);
-
-        // Download PDF with a custom filename
-        return $pdf->download('appointment_details_'.$appointment->id.'.pdf');
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'Failed to export PDF: ' . $e->getMessage());
     }
-}
 }

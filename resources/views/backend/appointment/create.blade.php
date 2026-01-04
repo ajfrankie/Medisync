@@ -132,8 +132,24 @@
                                 </div>
                             </div>
 
-                            <!-- Status -->
                             <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="next_appointment_date" class="form-label">Next Appointment Date</label>
+                                    <input type="date"
+                                        class="form-control @error('next_appointment_date') is-invalid @enderror"
+                                        name="next_appointment_date" id="next_appointment_date">
+                                    @error('next_appointment_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+
+
+                        </div>
+                        <div class="row mt-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status1" class="form-label">Status</label>
                                     <select id="status1"
@@ -146,11 +162,14 @@
                                         @else
                                             <option value="Pending" {{ old('status') == 'Pending' ? 'selected' : '' }}>
                                                 Pending</option>
-                                            <option value="Confirmed" {{ old('status') == 'Confirmed' ? 'selected' : '' }}>
+                                            <option value="Confirmed"
+                                                {{ old('status') == 'Confirmed' ? 'selected' : '' }}>
                                                 Confirmed</option>
-                                            <option value="Completed" {{ old('status') == 'Completed' ? 'selected' : '' }}>
+                                            <option value="Completed"
+                                                {{ old('status') == 'Completed' ? 'selected' : '' }}>
                                                 Completed</option>
-                                            <option value="Cancelled" {{ old('status') == 'Cancelled' ? 'selected' : '' }}>
+                                            <option value="Cancelled"
+                                                {{ old('status') == 'Cancelled' ? 'selected' : '' }}>
                                                 Cancelled</option>
                                             <option value="Next Appointment"
                                                 {{ old('status') == 'Next Appointment' ? 'selected' : '' }}>Next
@@ -163,11 +182,8 @@
                                     @enderror
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="row mt-4">
                             <!-- Notes -->
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="mb-3">
                                     <label for="notes" class="form-label">Notes (Optional)</label>
                                     <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
