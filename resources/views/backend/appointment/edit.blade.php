@@ -116,7 +116,20 @@
                                 </div>
                             </div>
 
-                            <!-- Appointment Time -->
+                            {{-- <!-- Appointment Time -->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="appointment_time" class="form-label">Appointment Time</label>
+                                    <input type="time"
+                                        class="form-control @error('appointment_time') is-invalid @enderror"
+                                        name="appointment_time" id="appointment_time"
+                                        value="{{ $appointment->appointment_time }}">
+                                    @error('appointment_time')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div> --}}
+
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="appointment_time" class="form-label">Appointment Time</label>
@@ -130,8 +143,26 @@
                                 </div>
                             </div>
 
-                            <!-- Status -->
+                            <!-- Appointment Time -->
                             <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="next_appointment_date" class="form-label">Next Appointment Date</label>
+                                    <input type="date"
+                                        class="form-control @error('next_appointment_date') is-invalid @enderror"
+                                        name="next_appointment_date" id="next_appointment_date"
+                                        value="{{ $appointment->next_appointment_date }}">
+                                    @error('next_appointment_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row mt-4">
+                            <!-- Notes -->
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status1" class="form-label">Status</label>
                                     <select id="status1"
@@ -157,11 +188,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <!-- Notes -->
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="mb-3">
                                     <label for="notes" class="form-label">Notes (Optional)</label>
                                     <textarea name="notes" id="notes" class="form-control" rows="2">{{ $appointment->notes }}</textarea>
@@ -231,6 +258,17 @@
             $('#doctor_id').on('change', function() {
                 fetchDoctorDetails($(this).val());
             });
+        });
+    </script>
+    <script>
+        flatpickr("#appointment_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // 24-hour format (HH:MM)
+            time_24hr: true, // ensures 24-hour time
+            minTime: "09:00",
+            maxTime: "18:00",
+            minuteIncrement: 30
         });
     </script>
 @endsection
