@@ -186,8 +186,10 @@ class DoctorDashboardController extends Controller
             ->whereHas('patient.user', function ($query) {
                 $query->where('gender', 'Male');
             })
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
+
 
 
     public function femalePatientsCount()
@@ -198,8 +200,10 @@ class DoctorDashboardController extends Controller
             ->whereHas('patient.user', function ($query) {
                 $query->where('gender', 'Female');
             })
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
+
 
 
     public function under18PatientsCount()
@@ -208,13 +212,10 @@ class DoctorDashboardController extends Controller
 
         return $doctor->appointments()
             ->whereHas('patient.user', function ($query) {
-                $query->whereDate(
-                    'dob',
-                    '>',
-                    now()->subYears(18)
-                );
+                $query->whereDate('dob', '>', now()->subYears(18));
             })
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
 
 
@@ -224,32 +225,30 @@ class DoctorDashboardController extends Controller
 
         return $doctor->appointments()
             ->whereHas('patient.user', function ($query) {
-                $query->whereDate(
-                    'dob',
-                    '<=',
-                    now()->subYears(18)
-                );
+                $query->whereDate('dob', '<=', now()->subYears(18));
             })
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
 
     public function bmiSummary()
     {
         $doctor = Auth::user()->doctor;
 
-        $appointments = $doctor->appointments()
+        $patients = $doctor->appointments()
             ->with('patient')
-            ->get();
+            ->get()
+            ->pluck('patient')
+            ->unique('id');
 
         $underweight = 0;
         $normal = 0;
         $overweight = 0;
         $obese = 0;
 
-        foreach ($appointments as $appointment) {
-            $patient = $appointment->patient;
+        foreach ($patients as $patient) {
 
-            if (!$patient || !$patient->height|| !$patient->weight) {
+            if (!$patient || !$patient->height || !$patient->weight) {
                 continue;
             }
 
@@ -274,7 +273,7 @@ class DoctorDashboardController extends Controller
             'normal' => $normal,
             'overweight' => $overweight,
             'obese' => $obese,
-            'total' => $total
+            'total' => $total,
         ];
     }
 }
