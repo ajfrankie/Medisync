@@ -43,9 +43,9 @@ class EhrRecord extends Model
         return $this->belongsTo(Doctor::class);
     }
 
-    public function vitals()
+    public function vital()
     {
-        return $this->hasOne(Vital::class, 'ehr_id');
+      return $this->hasOne(Vital::class, 'ehr_id')->latest('recorded_at');
     }
 
     // public function prescriptions()

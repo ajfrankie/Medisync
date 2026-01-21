@@ -108,40 +108,29 @@ class AdminDashboardController extends Controller
         return round($percentage, 2);
     }
 
+    //Sugar Summary
     public function adminSugarSummary()
     {
-        $patients = Patient::with([
-            'ehrRecords.vitals' => function ($query) {
-                $query->whereNotNull('blood_sugar')
-                    ->latest();
-            }
-        ])->get();
+        $patients = Patient::with('ehrRecords.vital')->get();
 
-        $low = 0;
-        $good = 0;
-        $high = 0;
+        $low = $good = $high = 0;
 
         foreach ($patients as $patient) {
 
-            // Get latest vital across all ehr records
             $latestVital = $patient->ehrRecords
-                ->flatMap(fn($ehr) => $ehr->vitals)
-                ->sortByDesc('created_at')
+                ->pluck('vital')
+                ->filter() // removes NULL vitals
+                ->filter(fn($v) => !is_null($v->blood_sugar))
+                ->sortByDesc('recorded_at')
                 ->first();
 
-            if (!$latestVital) {
-                continue;
-            }
+            if (!$latestVital) continue;
 
-            $sugar = $latestVital->blood_sugar;
+            $sugar = (int) $latestVital->blood_sugar;
 
-            if ($sugar < 70) {
-                $low++;
-            } elseif ($sugar <= 140) {
-                $good++;
-            } else {
-                $high++;
-            }
+            if ($sugar < 70) $low++;
+            elseif ($sugar <= 140) $good++;
+            else $high++;
         }
 
         return [
@@ -152,44 +141,33 @@ class AdminDashboardController extends Controller
         ];
     }
 
+
     //BloodPressure Summary
     public function adminBloodPressureSummary()
     {
-        $patients = Patient::with([
-            'ehrRecords.vitals' => function ($query) {
-                $query->whereNotNull('blood_pressure')
-                    ->latest();
-            }
-        ])->get();
+        $patients = Patient::with('ehrRecords.vital')->get();
 
-        $low = 0;
-        $normal = 0;
-        $high = 0;
+        $low = $normal = $high = 0;
 
         foreach ($patients as $patient) {
 
             $latestVital = $patient->ehrRecords
-                ->flatMap(fn($ehr) => $ehr->vitals)
-                ->sortByDesc('created_at')
+                ->pluck('vital')
+                ->filter()
+                ->filter(fn($v) => !empty($v->blood_pressure))
+                ->sortByDesc('recorded_at')
                 ->first();
 
-            if (!$latestVital || !$latestVital->blood_pressure) {
-                continue;
-            }
+            if (!$latestVital) continue;
 
-            // Expecting format: "120/80"
             [$systolic, $diastolic] = explode('/', $latestVital->blood_pressure);
 
             $systolic = (int) $systolic;
             $diastolic = (int) $diastolic;
 
-            if ($systolic < 90 || $diastolic < 60) {
-                $low++;
-            } elseif ($systolic <= 120 && $diastolic <= 80) {
-                $normal++;
-            } else {
-                $high++;
-            }
+            if ($systolic < 90 || $diastolic < 60) $low++;
+            elseif ($systolic <= 120 && $diastolic <= 80) $normal++;
+            else $high++;
         }
 
         return [
@@ -199,41 +177,32 @@ class AdminDashboardController extends Controller
             'total' => $low + $normal + $high,
         ];
     }
+
+
 
     //PulseRate Summary
     public function adminPulseRateSummary()
     {
-        $patients = \App\Models\Patient::with([
-            'ehrRecords.vitals' => function ($query) {
-                $query->whereNotNull('pulse_rate')
-                    ->latest();
-            }
-        ])->get();
+        $patients = Patient::with('ehrRecords.vital')->get();
 
-        $low = 0;
-        $normal = 0;
-        $high = 0;
+        $low = $normal = $high = 0;
 
         foreach ($patients as $patient) {
 
             $latestVital = $patient->ehrRecords
-                ->flatMap(fn($ehr) => $ehr->vitals)
-                ->sortByDesc('created_at')
+                ->pluck('vital')
+                ->filter()
+                ->filter(fn($v) => !is_null($v->pulse_rate))
+                ->sortByDesc('recorded_at')
                 ->first();
 
-            if (!$latestVital || $latestVital->pulse_rate === null) {
-                continue;
-            }
+            if (!$latestVital) continue;
 
             $pulse = (int) $latestVital->pulse_rate;
 
-            if ($pulse < 60) {
-                $low++;
-            } elseif ($pulse <= 100) {
-                $normal++;
-            } else {
-                $high++;
-            }
+            if ($pulse < 60) $low++;
+            elseif ($pulse <= 100) $normal++;
+            else $high++;
         }
 
         return [
@@ -244,9 +213,11 @@ class AdminDashboardController extends Controller
         ];
     }
 
+
+
     public function adminBMISummary()
     {
-        $patients = \App\Models\Patient::whereNotNull('height')
+        $patients = Patient::whereNotNull('height')
             ->whereNotNull('weight')
             ->get();
 
