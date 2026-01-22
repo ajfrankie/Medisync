@@ -183,26 +183,26 @@
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.dashboard') }}" class="waves-effect">
+                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                        <a href="{{ route('admin.ai-chat.chat') }}" class="waves-effect">
                             <i class="bx bx-chat"></i>
                             <span>AI Chatbot Logs</span>
                         </a>
-                    </li> --}}
+                    </li>
 
-                    <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
+                    {{-- <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.notification.index') }}" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>
                         </a>
-                    </li>
+                    </li> --}}
 
-                    <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
+                    {{-- <li class="{{ request()->routeIs('admin.dashboard') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.dashboard') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>AI Assistant</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.vital.index') }}" class="waves-effect">
