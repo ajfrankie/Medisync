@@ -10,7 +10,7 @@
             Dashboards
         @endslot
         @slot('title')
-            Dashboard
+            Overview
         @endslot
     @endcomponent
 
@@ -71,7 +71,7 @@
                         <div class="col-xl-8">
                             <div class="pt-4">
 
-                                <div class="row">
+                                {{-- <div class="row">
 
                                     <!-- Pending (warning) -->
                                     <div class="col-3">
@@ -105,7 +105,7 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div> --}}
 
                                 {{-- VIEW PROFILE BUTTON (Right Side + Secondary Color) --}}
                                 <div class="mt-4 d-flex justify-content-end">

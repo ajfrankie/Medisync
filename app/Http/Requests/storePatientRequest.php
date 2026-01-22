@@ -17,8 +17,8 @@ class StorePatientRequest extends FormRequest
         return [
             'user_id' => ['required', 'uuid', 'exists:users,id'],
             'blood_group' => ['required', 'in:A+,A-,B+,B-,AB+,AB-,O+,O-'],
-            'marital_status' => ['required', 'in:Single,Married,Divorced,Widowed'],
-            'occupation' => ['required', 'string', 'max:255'],
+            'marital_status' => ['nullable', 'in:Single,Married,Divorced,Widowed'],
+            'occupation' => ['nullable', 'string', 'max:255'],
             'height' => ['required', 'string', 'max:10'], // e.g., "180 cm"
             'weight' => ['required', 'string', 'max:10'], // e.g., "75 kg"
             'past_surgeries' => ['required', 'in:Yes,No'],

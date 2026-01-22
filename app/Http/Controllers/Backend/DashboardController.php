@@ -16,8 +16,8 @@ class DashboardController extends Controller
             'notifications' => $this->notifications(),
             'totalPendingAppointments' => $this->totalPendingAppointments(),
             'totalCompletedAppointments' => $this->totalCompletedAppointments(),
-            'totalCancledAppointments' => $this->totalCancledAppointments(),
-            'totalConfirmedAppointments' => $this->totoalConfirmedAppointments(),
+            'totalCancledAppointments' => $this->totalCancelledAppointments(),
+            'totalConfirmedAppointments' => $this->totalConfirmedAppointments(),
         ]);
     }
 
@@ -26,7 +26,7 @@ class DashboardController extends Controller
      */
     public function getUserRole()
     {
-        return Auth::user()->role_id;  
+        return Auth::user()->role_id;
         // 1 = Doctor 
         // 2 = Patient 
         // 3 = Admin Officer
@@ -41,12 +41,12 @@ class DashboardController extends Controller
         $role = $this->getUserRole();
         $user = Auth::user();
 
-        if ($role == 1 && $user->doctor) {  
+        if ($role == 1 && $user->doctor) {
             // Doctor → Only doctor's appointments
             return $user->doctor->appointments();
         }
 
-        if ($role == 2 && $user->patient) { 
+        if ($role == 2 && $user->patient) {
             // Patient → Only their appointments
             return $user->patient->appointments();
         }
@@ -76,8 +76,10 @@ class DashboardController extends Controller
     {
         return $this->appointmentQuery()
             ->where('status', 'Pending')
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
+
 
     /**
      * Count Completed Appointments (role-based)
@@ -86,26 +88,31 @@ class DashboardController extends Controller
     {
         return $this->appointmentQuery()
             ->where('status', 'Completed')
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
+
 
     /**
      * Count Cancelled Appointments (role-based)
      */
-    public function totalCancledAppointments()
+    public function totalCancelledAppointments()
     {
         return $this->appointmentQuery()
             ->where('status', 'Cancelled')
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
+
 
     /**
      * Count Confirmed Appointments (role-based)
      */
-    public function totoalConfirmedAppointments()
+    public function totalConfirmedAppointments()
     {
         return $this->appointmentQuery()
             ->where('status', 'Confirmed')
-            ->count();
+            ->distinct('patient_id')
+            ->count('patient_id');
     }
 }
