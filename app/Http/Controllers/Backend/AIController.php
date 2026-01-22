@@ -228,4 +228,11 @@ class AIController extends Controller
             return "AI Error: " . $e->getMessage();
         }
     }
+
+    public function chat(Request $request)
+    {
+        $chats = ChatLog::query()->paginate(10);
+
+        return view('backend.chat.chat', compact('chats', 'request'));
+    }
 }
