@@ -100,7 +100,7 @@ class DoctorDashboardController extends Controller
 
         // Get only the count of Pending appointments for the current month
         $cancledAppointmentsByMonth = $doctor->appointments()
-            ->where('status', 'Cancled')
+            ->where('status', 'Cancelled')
             ->whereMonth('appointment_date', now()->month)
             ->whereYear('appointment_date', now()->year)
             ->count();
