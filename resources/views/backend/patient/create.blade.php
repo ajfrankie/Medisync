@@ -216,9 +216,6 @@
                                     <select class="form-select select2 @error('gn_division_id') is-invalid @enderror"
                                         id="gn_division_id" name="gn_division_id">
                                         <option value="">Select Gn Division...</option>
-                                        @foreach ($gn_divisions as $gn_division)
-                                            <option value="{{ $gn_division->id }}">{{ $gn_division->name }}</option>
-                                        @endforeach
                                     </select>
                                     @error('gn_division_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -292,6 +289,48 @@
                 placeholder: "Select Patient",
                 allowClear: true
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#district_id').on('change', function() {
+                let districtId = $(this).val();
+                let gnSelect = $('#gn_division_id');
+
+                gnSelect.empty().append('<option value="">Loading...</option>');
+
+                if (!districtId) {
+                    gnSelect.html('<option value="">Select Gn Division...</option>');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('patient.getGnDivisions', '') }}/" + districtId,
+                    type: 'GET',
+                    success: function(data) {
+                        gnSelect.empty().append(
+                            '<option value="">Select Gn Division...</option>');
+
+                        if (data.length === 0) {
+                            gnSelect.append('<option value="">No GN Divisions found</option>');
+                        }
+
+                        $.each(data, function(index, item) {
+                            gnSelect.append(
+                                `<option value="${item.id}">${item.name}</option>`
+                            );
+                        });
+
+                        gnSelect.trigger('change'); // for select2
+                    },
+                    error: function() {
+                        gnSelect.empty().append('<option value="">Error loading data</option>');
+                    }
+                });
+            });
+
         });
     </script>
 @endsection

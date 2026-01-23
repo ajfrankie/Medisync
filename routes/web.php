@@ -98,6 +98,8 @@ Route::prefix('/admin')->group(function () {
         Route::get('/showPatient/{id}', [PatientController::class, 'showPatient'])->name('admin.patient.showPatient');
         Route::get('/editPatient/{id}', [PatientController::class, 'editPatient'])->name('admin.patient.editPatient');
         Route::put('updatePatient/{id}', [PatientController::class, 'updatePatient'])->name('admin.patient.updatePatient');
+        Route::get('/get-gn-divisions/{districtId}',[PatientController::class, 'getGnDivisions'])->name('patient.getGnDivisions');
+
     });
 
     //appointments
@@ -189,4 +191,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/history', [AIController::class, 'history'])->name('admin.ai-chat.history');
         Route::get('/chat', [AIController::class, 'chat'])->name('admin.ai-chat.chat');
     });
+
+
+    
 });

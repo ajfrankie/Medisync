@@ -259,4 +259,14 @@ class PatientController extends Controller
         return redirect()->route('admin.patient.showPatient', $patient->id)
             ->with('success', 'Patient profile updated successfully.');
     }
+
+
+    public function getGnDivisions($districtId)
+    {
+        $gnDivisions = GnDivision::where('district_id', $districtId)
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name']);
+
+        return response()->json($gnDivisions);
+    }
 }

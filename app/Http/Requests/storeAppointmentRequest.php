@@ -19,7 +19,7 @@ class storeAppointmentRequest extends FormRequest
         return [
             'doctor_id' => 'required|exists:doctors,id',
             'patient_id' => 'required|exists:patients,id',
-            'appointment_date' => 'required|date',
+            'appointment_date' => 'required|date|after_or_equal:today',
             'appointment_time' => 'required|date_format:H:i',
             'next_appointment_date' => 'nullable|date|after_or_equal:appointment_date',
             'status' => 'nullable|string',
@@ -35,6 +35,7 @@ class storeAppointmentRequest extends FormRequest
             'patient_id.required' => 'Please select a patient.',
             'patient_id.exists' => 'The selected patient does not exist.',
             'appointment_date.required' => 'Appointment date is required.',
+            'appointment_date.after_or_equal' => 'Appointment date must be today or later.',
             'appointment_date.date' => 'Please provide a valid date.',
             'appointment_time.required' => 'Appointment time is required.',
             'appointment_time.date_format' => 'Please use a valid time format (HH:MM).',
