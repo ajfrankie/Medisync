@@ -174,7 +174,7 @@ class DoctorDashboardController extends Controller
             'completed' => $completed,
             'pending' => $pending,
             'cancelled' => $cancelled,
-            'confirmed' => $confirmed,
+            'confirmed' => $confirmed,2107
         ];
     }
 
