@@ -263,18 +263,18 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
+                    {{-- <li class="{{ request()->routeIs('admin.vital.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.vital.index') }}" class="waves-effect">
                             <i class="bx bx-chip"></i>
                             <span>Vitals</span>
                         </a>
-                    </li>
-                    <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
+                    </li> --}}
+                    {{-- <li class="{{ request()->routeIs('admin.notification.index') ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.notification.index') }}" class="waves-effect">
                             <i class="bx bx-bell"></i>
                             <span>Notifications</span>
                         </a>
-                    </li>
+                    </li> --}}
                 @endif
 
             </ul>

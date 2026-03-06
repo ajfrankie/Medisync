@@ -41,7 +41,7 @@ class PatientDashboardController extends Controller
         $patient = $user->patient;
 
         return $patient->appointments()
-            ->where('status', 'confirmed')
+            ->where('status', 'Confirmed')
             ->orderBy('appointment_date', 'asc')
             ->value('appointment_date');
     }
@@ -74,7 +74,7 @@ class PatientDashboardController extends Controller
 
         // Get only the count of Pending appointments for the current month
         $cancleAppointment = $patient->appointments()
-            ->where('status', 'Completed')
+            ->where('status', 'Cancelled')
             ->count();
 
         return $cancleAppointment;
@@ -125,20 +125,15 @@ class PatientDashboardController extends Controller
 
     public function sugarDetails()
     {
-        $user = Auth::user();
-        $patient = $user->patient;
+        $patient = Auth::user()->patient;
 
-        $vital = $patient->ehrRecords()
-            ->with('vitals')
-            ->latest()
-            ->first()
-            ?->vitals()
+        $ehr = $patient->ehrRecords()
+            ->with('vital')
             ->latest()
             ->first();
 
-        $bloodSugar = $vital?->blood_sugar; // mg/dL
+        $bloodSugar = $ehr?->vital?->blood_sugar;
 
-        // Defaults
         $status = 'No Data';
         $color = 'secondary';
         $percentage = 0;
@@ -167,38 +162,25 @@ class PatientDashboardController extends Controller
         ];
     }
 
+
     public function bloodPressure()
     {
-        $user = Auth::user();
-        $patient = $user->patient;
+        $patient = Auth::user()->patient;
 
-        // Get latest vital record
-        $vital = $patient->ehrRecords()
-            ->with('vitals')
-            ->latest()
-            ->first()
-            ?->vitals()
+        $ehr = $patient->ehrRecords()
+            ->with('vital')
             ->latest()
             ->first();
 
-        $bloodPressure = $vital?->blood_pressure; // assuming stored as "systolic/diastolic" like "120/80"
+        $bloodPressure = $ehr?->vital?->blood_pressure;
 
-        // Defaults
         $status = 'No Data';
         $color = 'secondary';
         $percentage = 0;
 
         if ($bloodPressure) {
-            // Split into systolic & diastolic
-            [$systolic, $diastolic] = explode('/', $bloodPressure);
+            [$systolic, $diastolic] = array_map('intval', explode('/', $bloodPressure));
 
-            $systolic = (int) $systolic;
-            $diastolic = (int) $diastolic;
-
-            // Simple categorization based on standard ranges
-            // Normal: 90-120 / 60-80
-            // High: >= 130 / >= 80
-            // Low: < 90 / < 60
             if ($systolic < 90 || $diastolic < 60) {
                 $status = 'Low';
                 $color = 'danger';
@@ -222,32 +204,23 @@ class PatientDashboardController extends Controller
         ];
     }
 
+
     public function pulseRate()
     {
-        $user = Auth::user();
-        $patient = $user->patient;
+        $patient = Auth::user()->patient;
 
-        // Get latest vital record
-        $vital = $patient->ehrRecords()
-            ->with('vitals')
-            ->latest()
-            ->first()
-            ?->vitals()
+        $ehr = $patient->ehrRecords()
+            ->with('vital')
             ->latest()
             ->first();
 
-        $pulse = $vital?->pulse_rate; // assuming numeric value (bpm)
+        $pulse = $ehr?->vital?->pulse_rate;
 
-        // Defaults
         $status = 'No Data';
         $color = 'secondary';
         $percentage = 0;
 
         if ($pulse !== null) {
-            // Categorize based on normal resting heart rate
-            // Normal: 60-100 bpm
-            // Low: <60 bpm
-            // High: >100 bpm
             if ($pulse < 60) {
                 $status = 'Low';
                 $color = 'danger';
@@ -270,6 +243,7 @@ class PatientDashboardController extends Controller
             'percentage' => $percentage,
         ];
     }
+
 
     public function BMIcalculate()
     {
